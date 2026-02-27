@@ -10,7 +10,7 @@ export function AdminShell({ email, children }: AdminShellProps) {
   return (
     <main className="min-h-screen pb-14 pt-6">
       <header className="section-shell mb-7">
-        <div className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-6">
+        <div className="admin-surface flex flex-wrap items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-6">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-cyan-100/80">Admin</p>
             <p className="text-sm text-white/75">{email}</p>

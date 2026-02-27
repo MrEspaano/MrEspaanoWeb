@@ -59,7 +59,7 @@ export function AdminLoginForm({ error }: AdminLoginFormProps) {
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6 py-10">
-      <div className="glass-panel w-full max-w-xl rounded-3xl p-8 shadow-glass sm:p-10">
+      <div className="admin-surface w-full max-w-xl rounded-3xl p-8 sm:p-10">
         <p className="text-xs uppercase tracking-[0.28em] text-cyan-100/80">Admin access</p>
         <h1 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Logga in</h1>
         <p className="mt-4 text-sm text-white/75">

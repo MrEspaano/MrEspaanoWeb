@@ -200,7 +200,7 @@ export function AdminProjectsClient({ projects }: AdminProjectsClientProps) {
   return (
     <section className="section-shell">
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
-        <aside className="glass-panel rounded-3xl p-4 sm:p-5">
+        <aside className="admin-surface rounded-3xl p-4 sm:p-5">
           <div className="mb-4 flex items-center justify-between">
             <h1 className="text-xl font-bold text-white">Projekt</h1>
             <button
@@ -243,7 +243,7 @@ export function AdminProjectsClient({ projects }: AdminProjectsClientProps) {
           </div>
         </aside>
 
-        <div className="glass-panel rounded-3xl p-5 sm:p-7">
+        <div className="admin-surface rounded-3xl p-5 sm:p-7">
           <h2 className="text-2xl font-bold text-white">{isEditMode ? "Redigera projekt" : "Skapa projekt"}</h2>
           <p className="mt-2 text-sm text-white/70">
             Media laddas till <code>project-media</code>-bucketen. Tags och tech stack skrivs kommaseparerat.
