@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CSSProperties, ReactNode, useMemo, useState } from "react";
 import { HubModuleKey, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
@@ -30,6 +31,7 @@ function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset
 export function HomeHub({ projects, settings, previewMode = false }: HomeHubProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategoryFilter>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [logoVisible, setLogoVisible] = useState(true);
   const { scrollY } = useScroll();
   const design = normalizeHubDesignConfig(settings.designConfig);
 
@@ -153,6 +155,18 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           </div>
 
           <nav className="flex items-center gap-2">
+            {logoVisible ? (
+              <div className="mr-1 hidden overflow-hidden rounded-full border border-sky-200/70 bg-white/65 p-1 shadow-[0_10px_24px_rgba(58,102,162,0.18)] sm:block">
+                <Image
+                  src="/brand/mrespaano-logo.png"
+                  alt="MrEspaano logga"
+                  width={52}
+                  height={52}
+                  className="h-[52px] w-[52px] rounded-full object-cover"
+                  onError={() => setLogoVisible(false)}
+                />
+              </div>
+            ) : null}
             <Link
               href="/projects"
               className="glass-chip px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/85"
