@@ -23,6 +23,7 @@ const settingsEditorSchema = z.object({
 });
 
 type SettingsEditorValues = z.infer<typeof settingsEditorSchema>;
+type PreviewPreset = "desktop" | "laptop" | "tablet" | "mobile";
 
 interface AdminSettingsFormProps {
   settings: SiteSettings;
@@ -86,6 +87,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
   const router = useRouter();
   const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [previewPreset, setPreviewPreset] = useState<PreviewPreset>("desktop");
   const [designConfig, setDesignConfig] = useState<HubDesignConfig>(
     normalizeHubDesignConfig(settings.designConfig ?? DEFAULT_HUB_DESIGN_CONFIG)
   );
@@ -131,6 +133,13 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
     [values, settings, designConfig]
   );
 
+  const previewWidth = {
+    desktop: 1440,
+    laptop: 1280,
+    tablet: 1024,
+    mobile: 390
+  }[previewPreset];
+
   const updateModule = (moduleKey: HubModuleKey, patch: Partial<HubModuleConfig>) => {
     setDesignConfig((previous) => ({
       ...previous,
@@ -173,8 +182,8 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
   };
 
   return (
-    <section className="section-shell">
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,560px)_minmax(0,1fr)]">
+    <section className="mx-auto w-full max-w-[1900px] px-4 sm:px-6 lg:px-8">
+      <div className="grid gap-6 xl:grid-cols-[minmax(430px,560px)_minmax(0,1fr)]">
         <div className="glass-panel rounded-3xl p-6 shadow-glass sm:p-8">
           <h1 className="text-3xl font-bold text-white">Site + Design settings</h1>
           <p className="mt-2 text-sm text-white/70">Allt här uppdateras i live preview direkt.</p>
@@ -499,13 +508,36 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
           </form>
         </div>
 
-        <div className="glass-panel sticky top-4 h-[85vh] overflow-hidden rounded-3xl p-3">
-          <div className="mb-2 flex items-center justify-between px-2">
+        <div className="glass-panel sticky top-4 h-[88vh] overflow-hidden rounded-3xl p-3">
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-2">
             <p className="text-xs uppercase tracking-[0.22em] text-white/70">Live preview</p>
-            <p className="text-xs text-white/65">Uppdateras direkt</p>
+            <div className="flex items-center gap-1">
+              {(
+                [
+                  { key: "desktop", label: "Desktop" },
+                  { key: "laptop", label: "Laptop" },
+                  { key: "tablet", label: "Tablet" },
+                  { key: "mobile", label: "Mobil" }
+                ] as { key: PreviewPreset; label: string }[]
+              ).map((preset) => (
+                <button
+                  key={preset.key}
+                  type="button"
+                  onClick={() => setPreviewPreset(preset.key)}
+                  className={cn(
+                    "glass-chip px-2.5 py-1 text-[11px] font-semibold",
+                    previewPreset === preset.key ? "border-cyan-50/75 bg-cyan-50/30 text-slate-900" : "text-white/85"
+                  )}
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="h-[calc(100%-1.75rem)] overflow-auto rounded-2xl border border-white/20">
-            <HomeHub settings={previewSettings} projects={projects} previewMode />
+          <div className="h-[calc(100%-2.5rem)] overflow-auto rounded-2xl border border-white/20 bg-slate-950/20 p-2">
+            <div style={{ width: `${previewWidth}px` }} className="min-h-full max-w-none">
+              <HomeHub settings={previewSettings} projects={projects} previewMode />
+            </div>
           </div>
         </div>
       </div>
