@@ -39,7 +39,7 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
   const shadow = useMotionTemplate`0 26px 80px rgba(20, 39, 79, ${shadowAlpha})`;
 
   return (
-    <section ref={hostRef} className="relative h-[170px] sm:h-[190px]" aria-label="Kategoriövergång">
+    <section ref={hostRef} className="relative mt-6 h-[170px] sm:mt-8 sm:h-[190px]" aria-label="Kategoriövergång">
       <div className="section-shell sticky top-4 z-30">
         <motion.div
           style={{
