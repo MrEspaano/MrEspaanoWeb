@@ -1,0 +1,13 @@
+Use case: text reveal section backdrop
+Primary request: smooth spectrum glass sheet with subtle motion and depth
+Scene/background: wide luminous panel with faint structural reflections
+Subject: abstract flowing glass texture behind editorial typography
+Action: minimal horizontal drift and micro shimmer
+Camera: locked wide shot, slight movement only
+Lighting/mood: elegant, readable, balanced contrast
+Color palette: frosted white, light azure, cyan, muted navy
+Style/format: luxury web hero surface, photoreal CGI
+Timing/beats: gentle movement throughout 4 seconds
+Audio: none
+Constraints: no logos, no words, no people, under-18 safe
+Avoid: clutter, high noise, dark heavy shadows, washed-out whites

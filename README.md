@@ -156,6 +156,29 @@ git push -u origin main
 
 Se `.env.example`.
 
+## Sora media (premium visuals)
+
+Du kan generera extra premium-bilder till hubben via Sora-skillen (thumbnails från videojobb):
+
+1. Sätt API-nyckel lokalt:
+
+```bash
+export OPENAI_API_KEY=...
+```
+
+2. Kör generatorn:
+
+```bash
+bash scripts/sora-generate-hub-media.sh
+```
+
+3. Resultat sparas i:
+
+- `public/sora/*.webp`
+- `tmp/sora/*.json`
+
+Om `public/sora/hero-glass-atrium.webp` finns används den automatiskt i hero-ytan.
+
 ## Kvalitetscheck
 
 ```bash

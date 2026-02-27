@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CSSProperties, ReactNode, useMemo, useState } from "react";
+import { STATUS_LABELS } from "@/lib/constants";
 import { HubModuleKey, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { FeaturedCarousel } from "@/components/hub/featured-carousel";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
@@ -10,7 +12,7 @@ import { ProjectStoryFeed } from "@/components/hub/project-story-feed";
 import { StickyCategoryMorph } from "@/components/hub/sticky-category-morph";
 import { TextRevealSection } from "@/components/hub/text-reveal-section";
 import { normalizeHubDesignConfig } from "@/lib/design-config";
-import { cn } from "@/lib/utils";
+import { cn, mapStatusBadgeClass } from "@/lib/utils";
 
 interface HomeHubProps {
   projects: Project[];
@@ -30,6 +32,7 @@ function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset
 export function HomeHub({ projects, settings, previewMode = false }: HomeHubProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategoryFilter>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
+  const [soraHeroMissing, setSoraHeroMissing] = useState(false);
   const { scrollY } = useScroll();
   const design = normalizeHubDesignConfig(settings.designConfig);
 
@@ -49,6 +52,8 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
     () => filteredProjects.find((project) => project.slug === selectedSlug) ?? null,
     [filteredProjects, selectedSlug]
   );
+  const heroProject = filteredProjects[0] ?? projects[0] ?? null;
+  const nextProject = filteredProjects[1] ?? projects[1] ?? null;
 
   const displayFontClass = {
     syne: "font-display-syne",
@@ -171,47 +176,113 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
         </motion.div>
       </header>
 
-      <section
-        className="section-shell relative z-10 pt-16 sm:pt-20"
-        style={{ maxWidth: `${design.hero.maxWidth}px`, opacity: design.hero.opacity }}
-      >
+      <section className="section-shell relative z-10 pt-16 sm:pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl"
+          className="grid items-end gap-8 lg:grid-cols-[1.02fr_0.98fr]"
+          style={{ maxWidth: `${design.hero.maxWidth}px`, opacity: design.hero.opacity }}
         >
-          <p className="text-xs uppercase tracking-[0.28em] text-sky-700/75">Hypermodern showcase</p>
-          <h1
-            className="mt-4 text-4xl font-bold leading-[1.03] text-slate-800 sm:text-5xl lg:text-6xl"
-            style={{ transform: `scale(${design.hero.titleScale})`, transformOrigin: "left top" }}
-          >
-            {settings.tagline}
-          </h1>
-          <p
-            className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-700"
-            style={{ transform: `scale(${design.hero.bodyScale})`, transformOrigin: "left top" }}
-          >
-            {settings.bio}
-          </p>
+          <div className="max-w-4xl">
+            <p className="text-xs uppercase tracking-[0.28em] text-sky-700/75">Hypermodern showcase</p>
+            <h1
+              className="mt-4 text-4xl font-bold leading-[1.03] text-slate-800 sm:text-5xl lg:text-6xl"
+              style={{ transform: `scale(${design.hero.titleScale})`, transformOrigin: "left top" }}
+            >
+              {settings.tagline}
+            </h1>
+            <p
+              className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-700"
+              style={{ transform: `scale(${design.hero.bodyScale})`, transformOrigin: "left top" }}
+            >
+              {settings.bio}
+            </p>
 
-          <div
-            className="mt-8 flex flex-wrap items-center gap-3"
-            style={{ transform: `scale(${design.hero.ctaScale})`, transformOrigin: "left center" }}
-          >
-            <Link
-              href="#home-feed"
-              className="rounded-full border border-sky-300/85 bg-sky-300/72 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-sky-300/95"
+            <div
+              className="mt-8 flex flex-wrap items-center gap-3"
+              style={{ transform: `scale(${design.hero.ctaScale})`, transformOrigin: "left center" }}
             >
-              {settings.heroCtaPrimary}
-            </Link>
-            <Link
-              href="/projects"
-              className="glass-chip px-6 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
-            >
-              {settings.heroCtaSecondary}
-            </Link>
+              <Link
+                href="#home-feed"
+                className="rounded-full border border-sky-300/85 bg-sky-300/72 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-sky-300/95"
+              >
+                {settings.heroCtaPrimary}
+              </Link>
+              <Link
+                href="/projects"
+                className="glass-chip px-6 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
+              >
+                {settings.heroCtaSecondary}
+              </Link>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <span className="glass-chip px-3 py-1.5 text-xs font-semibold text-slate-700">{projects.length} projekt</span>
+              <span className="glass-chip px-3 py-1.5 text-xs text-slate-600">Sora pipeline redo</span>
+              <span className="glass-chip px-3 py-1.5 text-xs text-slate-600">Premium motion-system</span>
+            </div>
           </div>
+
+          <aside className="glass-elevated overflow-hidden rounded-[2rem] p-3 sm:p-4">
+            <div className="relative overflow-hidden rounded-2xl border border-white/30">
+              <div className="relative aspect-[7/8]">
+                {!soraHeroMissing ? (
+                  <Image
+                    src="/sora/hero-glass-atrium.webp"
+                    alt="Sora-genererad hero visual"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 44vw"
+                    className="hub-media object-cover"
+                    priority
+                    onError={() => setSoraHeroMissing(true)}
+                  />
+                ) : heroProject?.visuals.coverUrl ? (
+                  <Image
+                    src={heroProject.visuals.coverUrl}
+                    alt={`Highlight för ${heroProject.title}`}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 44vw"
+                    className="hub-media object-cover"
+                    priority
+                  />
+                ) : (
+                  <div className="h-full w-full bg-[radial-gradient(circle_at_20%_18%,rgba(227,246,255,0.9),rgba(119,173,223,0.42)_42%,rgba(89,123,176,0.55)_78%)]" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/38 via-transparent to-transparent" />
+              </div>
+
+              {heroProject ? (
+                <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/40 bg-white/70 p-3 backdrop-blur-md">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="line-clamp-1 text-base font-semibold text-slate-900">{heroProject.title}</p>
+                    <span
+                      className={cn(
+                        "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                        mapStatusBadgeClass(heroProject.status)
+                      )}
+                    >
+                      {STATUS_LABELS[heroProject.status]}
+                    </span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-sm text-slate-700">{heroProject.shortDescription}</p>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <div className="glass-panel rounded-2xl px-3 py-2">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-sky-700/70">Quality</p>
+                <p className="mt-1 text-sm font-semibold text-slate-800">Editorial + glass balance</p>
+              </div>
+              <div className="glass-panel rounded-2xl px-3 py-2">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-sky-700/70">Next Focus</p>
+                <p className="mt-1 line-clamp-1 text-sm font-semibold text-slate-800">
+                  {nextProject?.title ?? "Lägg till fler projekt"}
+                </p>
+              </div>
+            </div>
+          </aside>
         </motion.div>
       </section>
 

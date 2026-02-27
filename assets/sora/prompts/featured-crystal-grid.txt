@@ -1,0 +1,13 @@
+Use case: featured section media background
+Primary request: clean crystal grid with reflective blue highlights
+Scene/background: minimal studio space with layered translucent cards
+Subject: geometric crystal tiles with subtle depth
+Action: slight parallax drift with smooth motion
+Camera: medium lens, slow lateral move
+Lighting/mood: bright, precise, premium interface feel
+Color palette: pearl white, electric blue, ice cyan, steel
+Style/format: modern product visualization, sharp and refined
+Timing/beats: continuous smooth motion in 4 seconds
+Audio: none
+Constraints: no people, no logos, no text, under-18 safe
+Avoid: blur haze, low contrast, noisy textures

@@ -1,0 +1,13 @@
+Use case: homepage hero visual
+Primary request: premium abstract glass atrium with floating translucent panels
+Scene/background: bright editorial atrium with soft daylight and clean depth
+Subject: layered glass forms and refined architectural lines
+Action: subtle camera drift forward for 4 seconds
+Camera: wide 28mm, slow push-in, stable movement
+Lighting/mood: crisp daylight, welcoming, calm confidence
+Color palette: arctic white, sky blue, silver, soft cyan
+Style/format: hyperreal premium CGI, minimal luxury web aesthetic
+Timing/beats: gentle movement only, no abrupt cuts
+Audio: none
+Constraints: no logos, no text overlays, no humans, under-18 safe
+Avoid: flicker, heavy grain, muddy shadows, dark purple cast
