@@ -10,7 +10,7 @@ interface FeaturedCarouselProps {
 }
 
 export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
-  const featured = projects.slice(0, 4);
+  const featured = projects.slice(0, 3);
 
   return (
     <section className="section-shell py-12 sm:py-14" aria-label="Utvalda projekt">
@@ -25,28 +25,22 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
       </div>
 
       <div className="glass-elevated rounded-[2rem] p-3 sm:p-4">
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {featured.map((project, index) => (
             <motion.article
               key={project.id}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.35 }}
-              whileHover={{ y: -8, scale: 1.012 }}
+              whileHover={{ y: -10, scale: 1.04, zIndex: 10 }}
               transition={{
                 duration: 0.45,
                 delay: index * 0.06,
                 ease: [0.22, 1, 0.36, 1]
               }}
-              className={`glass-panel flex h-full flex-col rounded-3xl p-4 sm:p-5 ${
-                index === 0 ? "md:col-span-2 xl:col-span-2" : ""
-              }`}
+              className="glass-panel flex h-full flex-col rounded-3xl p-4 sm:p-5"
             >
-              <div
-                className={`relative mb-4 overflow-hidden rounded-2xl border border-white/[0.26] ${
-                  index === 0 ? "aspect-[16/8.8]" : "aspect-[4/3]"
-                }`}
-              >
+              <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-2xl border border-white/[0.26]">
                 {project.visuals.coverUrl ? (
                   <Image
                     src={project.visuals.coverUrl}
@@ -62,12 +56,8 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
               </div>
 
               <div className="flex flex-1 flex-col">
-                <h3 className={`font-semibold leading-tight text-slate-800 ${index === 0 ? "text-3xl" : "text-[1.55rem]"}`}>
-                  {project.title}
-                </h3>
-                <p className={`mt-2 leading-relaxed text-slate-600 ${index === 0 ? "line-clamp-3 text-base" : "line-clamp-2 text-sm"}`}>
-                  {project.shortDescription}
-                </p>
+                <h3 className="text-[1.55rem] font-semibold leading-tight text-slate-800">{project.title}</h3>
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{project.shortDescription}</p>
 
                 <div className="mt-4 flex flex-1 items-end justify-between gap-3">
                   <div className="flex flex-wrap gap-1.5">
