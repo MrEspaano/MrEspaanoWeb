@@ -58,7 +58,7 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
             <p className="text-[10px] uppercase tracking-[0.24em] text-white/[0.6] sm:text-xs">Sticky</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
+          <div className="mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-2 sm:gap-3">
             {CATEGORY_OPTIONS.map((option) => (
               <motion.button
                 key={option.value}
