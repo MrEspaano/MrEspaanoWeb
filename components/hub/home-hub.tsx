@@ -157,13 +157,13 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           <nav className="flex items-center gap-2">
             <div className="mr-1 hidden sm:block">
               {logoVisible ? (
-                <div className="overflow-hidden rounded-full border border-sky-200/70 bg-white/65 p-1 shadow-[0_10px_24px_rgba(58,102,162,0.18)]">
+                <div className="overflow-hidden rounded-2xl border border-sky-200/70 bg-white/65 p-1 shadow-[0_10px_24px_rgba(58,102,162,0.18)]">
                   <Image
                     src="/brand/mrespaano-logo.png"
                     alt="MrEspaano logga"
-                    width={52}
-                    height={52}
-                    className="h-[52px] w-[52px] rounded-full object-cover"
+                    width={124}
+                    height={74}
+                    className="h-[56px] w-[96px] rounded-xl object-contain object-center"
                     onError={() => setLogoVisible(false)}
                   />
                 </div>
