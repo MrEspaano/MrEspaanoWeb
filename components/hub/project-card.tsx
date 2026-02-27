@@ -21,7 +21,7 @@ function LinkChip({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="glass-chip inline-flex items-center gap-1 px-3 py-1 text-xs font-medium transition hover:scale-[1.02]"
+      className="glass-chip inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
       onClick={(event) => event.stopPropagation()}
     >
       {label}
@@ -36,7 +36,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
       layout
       className={cn(
         "glass-panel group relative rounded-3xl p-4 sm:p-5",
-        active ? "ring-1 ring-cyan-100/75" : "ring-1 ring-transparent"
+        active ? "ring-1 ring-sky-300/90" : "ring-1 ring-transparent"
       )}
       animate={{
         y: active ? -3 : 0,
@@ -52,7 +52,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
         <button
           type="button"
           onClick={() => onOpen(project.slug)}
-          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-100"
+          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
           aria-label={`Öppna projekt: ${project.title}`}
         />
 
@@ -72,7 +72,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
           ) : (
             <div className="h-full w-full bg-[radial-gradient(circle_at_24%_24%,rgba(221,246,255,0.7),rgba(66,93,147,0.45)_35%,rgba(36,53,95,0.86)_72%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.08] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-sky-100/12 to-transparent" />
         </motion.div>
       </div>
 
@@ -81,7 +81,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
           <motion.h3
             layoutId={`project-title-${project.slug}`}
             id={`project-title-${project.slug}`}
-            className="text-2xl font-semibold leading-tight text-white"
+            className="text-2xl font-semibold leading-tight text-slate-800"
           >
             {project.title}
           </motion.h3>
@@ -95,43 +95,47 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
           </span>
         </div>
 
-        <p className="max-w-3xl text-sm leading-relaxed text-white/[0.84] sm:text-base">{project.shortDescription}</p>
+        <p className="max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">{project.shortDescription}</p>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
           {project.tags.slice(0, 4).map((tag) => (
-            <span key={tag} className="glass-chip px-2.5 py-1 text-[11px] font-medium text-white/[0.86]">
+            <span key={tag} className="glass-chip px-2.5 py-1 text-[11px] font-medium text-slate-600">
               #{tag}
             </span>
           ))}
           {project.techStack.slice(0, 3).map((tech) => (
             <span
               key={tech}
-              className="glass-chip border-cyan-50/[0.45] bg-cyan-50/20 px-2.5 py-1 text-[11px] text-cyan-50"
+              className="glass-chip border-sky-300/65 bg-sky-100/85 px-2.5 py-1 text-[11px] text-sky-800"
             >
               {tech}
             </span>
           ))}
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center gap-2 pt-5">
-          {project.links.demoUrl ? <LinkChip href={project.links.demoUrl} label="Demo" /> : null}
-          {project.links.repoUrl ? <LinkChip href={project.links.repoUrl} label="Repo" /> : null}
-          {project.links.caseStudyUrl ? <LinkChip href={project.links.caseStudyUrl} label="Case" /> : null}
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-5">
+          <div className="flex flex-wrap items-center gap-2">
+            {project.links.demoUrl ? <LinkChip href={project.links.demoUrl} label="Demo" /> : null}
+            {project.links.repoUrl ? <LinkChip href={project.links.repoUrl} label="Repo" /> : null}
+            {project.links.caseStudyUrl ? <LinkChip href={project.links.caseStudyUrl} label="Case" /> : null}
+          </div>
 
-          <button
-            type="button"
-            onClick={() => onOpen(project.slug)}
-            className="glass-chip ml-auto px-3 py-1.5 text-xs font-semibold transition hover:scale-[1.03]"
-          >
-            Öppna
-          </button>
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onOpen(project.slug)}
+              className="glass-chip px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
+            >
+              Öppna
+            </button>
 
-          <Link
-            href={`/projects/${project.slug}`}
-            className="glass-chip inline-flex px-3 py-1.5 text-xs font-semibold transition hover:scale-[1.03]"
-          >
-            Full vy
-          </Link>
+            <Link
+              href={`/projects/${project.slug}`}
+              className="glass-chip inline-flex px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
+            >
+              Full vy
+            </Link>
+          </div>
         </div>
       </div>
     </motion.article>

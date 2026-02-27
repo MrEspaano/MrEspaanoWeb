@@ -30,16 +30,16 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
   const y = useTransform(scrollYProgress, [0, 1], [0, -18]);
   const borderRadius = useTransform(scrollYProgress, [0, 1], [32, 20]);
   const paddingY = useTransform(scrollYProgress, [0, 1], [20, 10]);
-  const blur = useTransform(scrollYProgress, [0, 1], [10, 18]);
+  const blur = useTransform(scrollYProgress, [0, 1], [7, 12]);
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["10%", "100%"]);
-  const saturation = useTransform(scrollYProgress, [0, 1], [1.25, 1.05]);
-  const shadowAlpha = useTransform(scrollYProgress, [0, 1], [0.35, 0.22]);
+  const saturation = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  const shadowAlpha = useTransform(scrollYProgress, [0, 1], [0.2, 0.14]);
 
   const backdropFilter = useMotionTemplate`blur(${blur}px) saturate(${saturation})`;
   const shadow = useMotionTemplate`0 26px 80px rgba(20, 39, 79, ${shadowAlpha})`;
 
   return (
-    <section ref={hostRef} className="relative mt-6 h-[170px] sm:mt-8 sm:h-[190px]" aria-label="Kategoriövergång">
+    <section ref={hostRef} className="relative mt-10 h-[170px] sm:mt-12 sm:h-[190px]" aria-label="Kategoriövergång">
       <div className="section-shell sticky top-4 z-30">
         <motion.div
           style={{
@@ -54,8 +54,8 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
           className="glass-elevated relative mx-auto max-w-4xl px-4 sm:px-6"
         >
           <div className="mb-3 flex items-center justify-between gap-4">
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/[0.72] sm:text-xs">Filtrera projekt</p>
-            <p className="text-[10px] uppercase tracking-[0.24em] text-white/[0.6] sm:text-xs">Sticky</p>
+            <p className="text-[10px] uppercase tracking-[0.24em] text-sky-700/70 sm:text-xs">Filtrera projekt</p>
+            <p className="text-[10px] uppercase tracking-[0.24em] text-slate-500/80 sm:text-xs">Sticky</p>
           </div>
 
           <div className="mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-2 sm:gap-3">
@@ -69,8 +69,8 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
                 className={cn(
                   "rounded-2xl border px-4 py-2 text-sm font-semibold transition sm:px-5 sm:py-2.5",
                   selected === option.value
-                    ? "border-cyan-50/75 bg-cyan-50/[0.35] text-slate-900"
-                    : "border-white/[0.26] bg-white/[0.17] text-white/[0.88] hover:border-white/[0.42] hover:bg-white/[0.22]"
+                    ? "border-sky-300/85 bg-sky-200/72 text-slate-900"
+                    : "border-sky-100/80 bg-white/74 text-slate-700 hover:-translate-y-0.5 hover:border-sky-200/90 hover:bg-white/90"
                 )}
                 aria-pressed={selected === option.value}
               >
@@ -79,9 +79,9 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
             ))}
           </div>
 
-          <div className="mt-3 h-1.5 w-full rounded-full bg-white/20">
+          <div className="mt-3 h-1.5 w-full rounded-full bg-sky-200/55">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-cyan-100 via-white to-sky-100"
+              className="h-full rounded-full bg-gradient-to-r from-sky-400/75 via-sky-300/85 to-blue-300/75"
               style={{ width: progressWidth }}
             />
           </div>

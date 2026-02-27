@@ -38,9 +38,9 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
   return (
     <section ref={sectionRef} className="section-shell py-16 sm:py-20" aria-label="Text reveal">
       <div className="glass-elevated rounded-[2rem] p-7 sm:p-11">
-        <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Bonus moment</p>
+        <p className="text-xs uppercase tracking-[0.28em] text-sky-700/75">Bonus moment</p>
 
-        <motion.p className="mt-5 max-w-[22ch] text-3xl font-semibold leading-[1.18] text-white/[0.38] sm:text-5xl lg:text-6xl">
+        <motion.p className="mt-5 max-w-[24ch] text-3xl font-semibold leading-[1.18] text-slate-900/42 sm:text-5xl lg:text-6xl">
           {words.map((word, index) => {
             const start = (index / words.length) * 0.82;
             const end = start + 0.2;
@@ -51,7 +51,7 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
                 key={`${word}-${index}`}
                 className="inline-block"
                 style={{
-                  opacity: 0.2 + localProgress * 0.8,
+                  opacity: 0.42 + localProgress * 0.58,
                   transform: `translateY(${(1 - localProgress) * 12}px)`,
                   marginRight: "0.34em"
                 }}
@@ -63,7 +63,7 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
         </motion.p>
 
         <motion.div
-          className="mt-8 h-[2px] rounded-full bg-gradient-to-r from-cyan-100/[0.85] via-white/[0.9] to-emerald-100/[0.85]"
+          className="mt-8 h-[2px] rounded-full bg-gradient-to-r from-sky-400/80 via-sky-300/70 to-blue-300/65"
           style={{ clipPath: clip, filter: shineFilter }}
         />
       </div>

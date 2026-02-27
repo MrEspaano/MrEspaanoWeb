@@ -51,9 +51,9 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
     contentMaxWidth: 1280,
     bodyFont: "manrope",
     displayFont: "syne",
-    mediaSaturation: 1.2,
-    mediaContrast: 1.08,
-    mediaBrightness: 1.03
+    mediaSaturation: 1.33,
+    mediaContrast: 1.14,
+    mediaBrightness: 1.07
   },
   hero: {
     maxWidth: 1024,
@@ -114,9 +114,9 @@ export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
       contentMaxWidth: clamp(Number(value.global?.contentMaxWidth ?? 1280), 960, 1560),
       bodyFont: parseBodyFont(value.global?.bodyFont),
       displayFont: parseDisplayFont(value.global?.displayFont),
-      mediaSaturation: clamp(Number(value.global?.mediaSaturation ?? 1.2), 0.7, 1.6),
-      mediaContrast: clamp(Number(value.global?.mediaContrast ?? 1.08), 0.7, 1.5),
-      mediaBrightness: clamp(Number(value.global?.mediaBrightness ?? 1.03), 0.7, 1.35)
+      mediaSaturation: clamp(Number(value.global?.mediaSaturation ?? 1.33), 0.7, 1.6),
+      mediaContrast: clamp(Number(value.global?.mediaContrast ?? 1.14), 0.7, 1.5),
+      mediaBrightness: clamp(Number(value.global?.mediaBrightness ?? 1.07), 0.7, 1.35)
     },
     hero: {
       maxWidth: clamp(Number(value.hero?.maxWidth ?? 1024), 620, 1440),

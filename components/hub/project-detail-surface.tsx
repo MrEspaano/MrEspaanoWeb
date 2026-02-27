@@ -20,7 +20,7 @@ function ExternalProjectLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="glass-chip inline-flex px-4 py-2 text-sm font-semibold transition hover:scale-[1.02]"
+      className="glass-chip inline-flex px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/90"
     >
       {label}
     </Link>
@@ -46,7 +46,7 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
           type="button"
           aria-label="Stäng projektvy"
           onClick={onClose}
-          className="glass-chip absolute right-4 top-4 z-10 p-2.5 text-white/[0.88] transition hover:scale-[1.06]"
+          className="glass-chip absolute right-4 top-4 z-10 p-2.5 text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/90"
         >
           <X size={16} />
         </button>
@@ -70,7 +70,7 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
             ) : (
               <div className="h-full w-full bg-[radial-gradient(circle_at_24%_20%,rgba(224,247,255,0.68),rgba(70,93,151,0.42)_36%,rgba(36,52,92,0.88)_72%)]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.12] via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-sky-100/14 via-transparent to-transparent" />
           </motion.div>
 
           {project.visuals.galleryUrls?.length ? (
@@ -87,13 +87,13 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
         <div>
           <motion.h2
             layoutId={mode === "modal" ? `project-title-${project.slug}` : undefined}
-            className="text-3xl font-bold leading-tight text-white sm:text-4xl"
+            className="text-3xl font-bold leading-tight text-slate-800 sm:text-4xl"
           >
             {project.title}
           </motion.h2>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="glass-chip border-cyan-50/50 bg-cyan-50/[0.24] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-50">
+            <span className="glass-chip border-sky-300/75 bg-sky-100/85 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-sky-800">
               {CATEGORY_LABELS[project.category]}
             </span>
             <span
@@ -106,11 +106,11 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
             </span>
           </div>
 
-          <p className="mt-5 text-base leading-relaxed text-white/[0.88]">{project.longDescription}</p>
+          <p className="mt-5 text-base leading-relaxed text-slate-700">{project.longDescription}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span key={tag} className="glass-chip px-3 py-1 text-xs font-medium text-white/[0.86]">
+              <span key={tag} className="glass-chip px-3 py-1 text-xs font-medium text-slate-600">
                 #{tag}
               </span>
             ))}
@@ -120,7 +120,7 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
             {project.techStack.map((tech) => (
               <span
                 key={tech}
-                className="glass-chip border-white/30 bg-white/[0.18] px-3 py-1 text-xs font-medium text-white/[0.88]"
+                className="glass-chip border-sky-200/70 bg-white/85 px-3 py-1 text-xs font-medium text-slate-700"
               >
                 {tech}
               </span>

@@ -121,7 +121,7 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
 
   return (
     <main
-      className={cn("hub-root relative min-h-screen overflow-x-clip pb-24", displayFontClass, bodyFontClass)}
+      className={cn("hub-root relative min-h-screen overflow-x-clip pb-28", displayFontClass, bodyFontClass)}
       style={
         {
           "--hub-max-width": `${design.global.contentMaxWidth}px`,
@@ -133,11 +133,11 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
     >
       <motion.div
         style={{ y: orbY1, scale: orbScale }}
-        className="pointer-events-none absolute -top-16 left-[6%] h-72 w-72 rounded-full bg-cyan-100/40 blur-[90px]"
+        className="pointer-events-none absolute -top-24 left-[8%] h-80 w-80 rounded-full bg-sky-200/50 blur-[88px]"
       />
       <motion.div
         style={{ y: orbY2, scale: orbScale }}
-        className="pointer-events-none absolute -top-10 right-[8%] h-80 w-80 rounded-full bg-violet-100/[0.32] blur-[110px]"
+        className="pointer-events-none absolute -top-16 right-[8%] h-80 w-80 rounded-full bg-blue-200/40 blur-[102px]"
       />
 
       <header className="section-shell relative z-20 pt-7 sm:pt-9">
@@ -145,21 +145,24 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           initial={{ opacity: 0, y: -16, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          className="glass-elevated flex items-center justify-between gap-4 rounded-[1.5rem] px-4 py-3 sm:px-6"
+          className="glass-elevated flex items-center justify-between gap-4 rounded-[1.6rem] px-4 py-3 sm:px-6"
         >
           <div>
-            <p className="text-[11px] uppercase tracking-[0.24em] text-white/[0.72]">Personal Hub</p>
-            <p className="text-lg font-semibold text-white/[0.96]">{settings.displayName}</p>
+            <p className="text-[11px] uppercase tracking-[0.24em] text-sky-700/75">Personal Hub</p>
+            <p className="text-lg font-semibold text-slate-800">{settings.displayName}</p>
           </div>
 
           <nav className="flex items-center gap-2">
-            <Link href="/projects" className="glass-chip px-4 py-2 text-sm font-semibold transition hover:scale-[1.02]">
+            <Link
+              href="/projects"
+              className="glass-chip px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/85"
+            >
               Alla projekt
             </Link>
             {!previewMode ? (
               <Link
                 href="/admin"
-                className="rounded-full border border-cyan-100/70 bg-cyan-100/[0.32] px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-cyan-100/50"
+                className="rounded-full border border-sky-200/80 bg-sky-200/50 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:-translate-y-0.5 hover:bg-sky-200/70"
               >
                 Admin
               </Link>
@@ -169,7 +172,7 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
       </header>
 
       <section
-        className="section-shell relative z-10 pt-12 sm:pt-16"
+        className="section-shell relative z-10 pt-16 sm:pt-20"
         style={{ maxWidth: `${design.hero.maxWidth}px`, opacity: design.hero.opacity }}
       >
         <motion.div
@@ -178,15 +181,15 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           transition={{ duration: 0.85, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl"
         >
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Hypermodern showcase</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-sky-700/75">Hypermodern showcase</p>
           <h1
-            className="mt-4 text-4xl font-bold leading-[1.03] text-white sm:text-5xl lg:text-6xl"
+            className="mt-4 text-4xl font-bold leading-[1.03] text-slate-800 sm:text-5xl lg:text-6xl"
             style={{ transform: `scale(${design.hero.titleScale})`, transformOrigin: "left top" }}
           >
             {settings.tagline}
           </h1>
           <p
-            className="mt-5 max-w-3xl text-lg leading-relaxed text-white/[0.84]"
+            className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-700"
             style={{ transform: `scale(${design.hero.bodyScale})`, transformOrigin: "left top" }}
           >
             {settings.bio}
@@ -198,11 +201,14 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           >
             <Link
               href="#home-feed"
-              className="rounded-full border border-cyan-100/70 bg-cyan-100/[0.34] px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-cyan-100/[0.55]"
+              className="rounded-full border border-sky-300/85 bg-sky-300/72 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-sky-300/95"
             >
               {settings.heroCtaPrimary}
             </Link>
-            <Link href="/projects" className="glass-chip px-6 py-3 text-sm font-semibold transition hover:scale-[1.02]">
+            <Link
+              href="/projects"
+              className="glass-chip px-6 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
+            >
               {settings.heroCtaSecondary}
             </Link>
           </div>

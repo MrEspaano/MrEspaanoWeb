@@ -122,31 +122,31 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
     >
       <section className="section-shell">
         <div className="glass-elevated rounded-[2rem] p-6 sm:p-8">
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Project Explorer</p>
-          <h1 className="mt-3 text-4xl font-bold leading-tight text-white sm:text-5xl">
+          <p className="text-xs uppercase tracking-[0.28em] text-sky-700/75">Projektöversikt</p>
+          <h1 className="mt-3 text-4xl font-bold leading-tight text-slate-800 sm:text-5xl">
             {settings.displayName} / Projekt
           </h1>
-          <p className="mt-4 max-w-3xl text-white/[0.84]">
+          <p className="mt-4 max-w-3xl text-slate-600">
             Filtrera efter kategori och tags, sök i titel och metadata, och öppna projekt i modal eller full route.
           </p>
 
           <div className="mt-7 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
             <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/[0.7]">Sök</span>
+              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">Sök</span>
               <input
                 value={query}
                 onChange={(event) => updateSearchParams({ q: event.target.value || null, project: null })}
                 placeholder="Sök på titel eller tag..."
-                className="glass-input w-full px-4 py-3 text-sm focus:border-cyan-50/75 focus:outline-none"
+                className="glass-input w-full px-4 py-3 text-sm focus:border-sky-300/90 focus:outline-none"
               />
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/[0.7]">Sortera</span>
+              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">Sortera</span>
               <select
                 value={sort}
                 onChange={(event) => updateSearchParams({ sort: event.target.value, project: null })}
-                className="glass-input w-full px-4 py-3 text-sm focus:border-cyan-50/75 focus:outline-none"
+                className="glass-input w-full px-4 py-3 text-sm focus:border-sky-300/90 focus:outline-none"
               >
                 <option value="newest">Nyast först</option>
                 <option value="oldest">Äldst först</option>
@@ -166,8 +166,8 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
                   className={cn(
                     "glass-chip px-4 py-2 text-sm font-semibold transition",
                     value === category
-                      ? "border-cyan-50/70 bg-cyan-50/[0.34] text-slate-900"
-                      : "text-white/[0.86] hover:border-white/[0.46] hover:bg-white/[0.22]"
+                      ? "border-sky-300/80 bg-sky-200/72 text-slate-900"
+                      : "text-slate-700 hover:-translate-y-0.5 hover:border-sky-200/90 hover:bg-white/90"
                   )}
                 >
                   {label}
@@ -188,8 +188,8 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
                   className={cn(
                     "glass-chip px-3 py-1.5 text-xs font-medium transition",
                     selected
-                      ? "border-emerald-100/75 bg-emerald-100/[0.34] text-emerald-50"
-                      : "text-white/[0.82] hover:border-white/[0.46] hover:bg-white/[0.22]"
+                      ? "border-sky-300/80 bg-sky-100/85 text-sky-800"
+                      : "text-slate-600 hover:-translate-y-0.5 hover:border-sky-200/90 hover:bg-white/90"
                   )}
                 >
                   #{tag}
@@ -199,8 +199,11 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <p className="text-sm text-white/[0.84]">{filtered.length} projekt matchar filtreringen</p>
-            <Link href="/" className="glass-chip px-4 py-1.5 text-xs font-semibold transition hover:scale-[1.02]">
+            <p className="text-sm text-slate-600">{filtered.length} projekt matchar filtreringen</p>
+            <Link
+              href="/"
+              className="glass-chip px-4 py-1.5 text-xs font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/90"
+            >
               Till startsidan
             </Link>
           </div>
@@ -210,8 +213,8 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
       <ProjectStoryFeed
         projects={filtered}
         onOpenProject={(slug) => updateSearchParams({ project: slug })}
-        title="Story Feed"
-        subtitle="Scrollen styr progressionen och aktivt kort får tydlig visuell prioritet i den nya glass-layouten."
+        title="Projekt-feed"
+        subtitle="Scrollen styr progressionen och aktivt kort får tydlig visuell prioritet i den ljusa soft-glass-layouten."
       />
 
       <ProjectDetailModal

@@ -40,24 +40,24 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
   }, [activeIndex, projects.length]);
 
   return (
-    <section ref={sectionRef} className="relative py-14 sm:py-20" aria-label={title ?? "Projektfeed"}>
+    <section ref={sectionRef} className="relative py-16 sm:py-20" aria-label={title ?? "Projektfeed"}>
       <div className="section-shell">
         {(title || subtitle) && (
           <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
             <div>
-              {title ? <h2 className="text-3xl font-bold text-white sm:text-4xl">{title}</h2> : null}
+              {title ? <h2 className="text-3xl font-bold text-slate-800 sm:text-4xl">{title}</h2> : null}
               {subtitle ? (
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/[0.82] sm:text-base">{subtitle}</p>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">{subtitle}</p>
               ) : null}
             </div>
-            <p className="glass-chip px-4 py-2 text-xs uppercase tracking-[0.17em] text-white/[0.86]">Scroll-driven</p>
+            <p className="glass-chip px-4 py-2 text-xs uppercase tracking-[0.17em] text-slate-600">Scroll-driven</p>
           </div>
         )}
 
         <div className="glass-elevated relative rounded-[2rem] p-3 sm:p-4">
-          <div className="absolute right-3 top-8 hidden h-[84%] w-px overflow-hidden rounded-full bg-white/[0.24] lg:block">
+          <div className="absolute right-3 top-8 hidden h-[84%] w-px overflow-hidden rounded-full bg-sky-200/65 lg:block">
             <motion.div
-              className="w-full origin-top bg-gradient-to-b from-cyan-50 via-white/95 to-sky-100"
+              className="w-full origin-top bg-gradient-to-b from-sky-400/80 via-sky-300/75 to-blue-300/65"
               animate={{ height: `${activeProgress * 100}%` }}
               transition={{ duration: 0.35, ease: [0.2, 0.9, 0.2, 1] }}
             />
@@ -69,7 +69,7 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
                 key={project.id}
                 initial={{ opacity: 0.45, y: 26 }}
                 animate={{
-                  opacity: index === activeIndex ? 1 : 0.82,
+                  opacity: index === activeIndex ? 1 : 0.88,
                   y: index === activeIndex ? 0 : 9
                 }}
                 transition={{ duration: 0.44, ease: [0.22, 1, 0.36, 1] }}

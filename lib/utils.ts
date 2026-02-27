@@ -33,12 +33,12 @@ export function toOptionalUrl(input: string | null | undefined) {
 
 export function mapStatusBadgeClass(status: "live" | "wip" | "archived") {
   if (status === "live") {
-    return "border-emerald-100/55 bg-emerald-100/18 text-emerald-50";
+    return "border-emerald-300/80 bg-emerald-100/80 text-emerald-800";
   }
 
   if (status === "wip") {
-    return "border-amber-100/55 bg-amber-100/18 text-amber-50";
+    return "border-amber-300/80 bg-amber-100/80 text-amber-800";
   }
 
-  return "border-slate-100/45 bg-slate-100/14 text-slate-100";
+  return "border-slate-300/80 bg-slate-100/85 text-slate-700";
 }
