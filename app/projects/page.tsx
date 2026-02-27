@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ProjectsExplorer } from "@/components/hub/projects-explorer";
 import { MissingConfigNotice } from "@/components/ui/missing-config-notice";
 import { isSupabaseConfigured } from "@/lib/env";
@@ -10,5 +11,9 @@ export default async function ProjectsPage() {
 
   const [projects, settings] = await Promise.all([getProjects(), getSiteSettings()]);
 
-  return <ProjectsExplorer projects={projects} settings={settings} />;
+  return (
+    <Suspense fallback={<MissingConfigNotice />}>
+      <ProjectsExplorer projects={projects} settings={settings} />
+    </Suspense>
+  );
 }
