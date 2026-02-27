@@ -39,7 +39,7 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
   const shadow = useMotionTemplate`0 26px 80px rgba(20, 39, 79, ${shadowAlpha})`;
 
   return (
-    <section ref={hostRef} className="relative h-[220px] sm:h-[255px]" aria-label="Kategoriövergång">
+    <section ref={hostRef} className="relative h-[170px] sm:h-[190px]" aria-label="Kategoriövergång">
       <div className="section-shell sticky top-4 z-30">
         <motion.div
           style={{
@@ -51,11 +51,11 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
             backdropFilter,
             boxShadow: shadow
           }}
-          className="glass-elevated relative mx-auto max-w-5xl px-4 sm:px-6"
+          className="glass-elevated relative mx-auto max-w-4xl px-4 sm:px-6"
         >
-          <div className="mb-4 flex items-center justify-between gap-4">
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/[0.74] sm:text-xs">Category Morph</p>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-white/[0.62] sm:text-xs">Sticky aktiv</p>
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-white/[0.72] sm:text-xs">Filtrera projekt</p>
+            <p className="text-[10px] uppercase tracking-[0.24em] text-white/[0.6] sm:text-xs">Sticky</p>
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-3">
@@ -79,7 +79,7 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
             ))}
           </div>
 
-          <div className="mt-4 h-1.5 w-full rounded-full bg-white/20">
+          <div className="mt-3 h-1.5 w-full rounded-full bg-white/20">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-cyan-100 via-white to-sky-100"
               style={{ width: progressWidth }}

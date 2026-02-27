@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useMemo, useState } from "react";
-import { CATEGORY_LABELS } from "@/lib/constants";
 import { Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { FeaturedCarousel } from "@/components/hub/featured-carousel";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
@@ -54,14 +53,14 @@ export function HomeHub({ projects, settings }: HomeHubProps) {
           initial={{ opacity: 0, y: -16, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          className="glass-elevated flex flex-wrap items-center justify-between gap-4 rounded-[1.75rem] px-4 py-3 sm:px-6"
+          className="glass-elevated flex items-center justify-between gap-4 rounded-[1.5rem] px-4 py-3 sm:px-6"
         >
           <div>
             <p className="text-[11px] uppercase tracking-[0.24em] text-white/[0.72]">Personal Hub</p>
             <p className="text-lg font-semibold text-white/[0.96]">{settings.displayName}</p>
           </div>
 
-          <nav className="flex flex-wrap items-center gap-2">
+          <nav className="flex items-center gap-2">
             <Link href="/projects" className="glass-chip px-4 py-2 text-sm font-semibold transition hover:scale-[1.02]">
               Alla projekt
             </Link>
@@ -75,18 +74,18 @@ export function HomeHub({ projects, settings }: HomeHubProps) {
         </motion.div>
       </header>
 
-      <section className="section-shell relative z-10 pt-14 sm:pt-20">
+      <section className="section-shell relative z-10 pt-12 sm:pt-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl"
+          className="max-w-4xl"
         >
           <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Hypermodern showcase</p>
-          <h1 className="mt-4 text-4xl font-bold leading-[1.02] text-white sm:text-6xl lg:text-7xl">
+          <h1 className="mt-4 text-4xl font-bold leading-[1.03] text-white sm:text-5xl lg:text-6xl">
             {settings.tagline}
           </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-white/[0.84]">{settings.bio}</p>
+          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-white/[0.84]">{settings.bio}</p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
@@ -98,12 +97,6 @@ export function HomeHub({ projects, settings }: HomeHubProps) {
             <Link href="/projects" className="glass-chip px-6 py-3 text-sm font-semibold transition hover:scale-[1.02]">
               {settings.heroCtaSecondary}
             </Link>
-          </div>
-
-          <div className="mt-9 flex flex-wrap gap-2.5 text-xs">
-            <span className="glass-chip px-3 py-1.5">{CATEGORY_LABELS.app}</span>
-            <span className="glass-chip px-3 py-1.5">{CATEGORY_LABELS.game}</span>
-            <span className="glass-chip px-3 py-1.5">{CATEGORY_LABELS.site}</span>
           </div>
         </motion.div>
       </section>
