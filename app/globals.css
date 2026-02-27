@@ -93,6 +93,7 @@ h6 {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0));
     opacity: 0.3;
     pointer-events: none;
+    z-index: 0;
   }
 
   .glass-elevated {
@@ -110,6 +111,13 @@ h6 {
     height: 56%;
     background: radial-gradient(circle at 28% 44%, rgba(223, 247, 255, 0.34), transparent 56%);
     pointer-events: none;
+    z-index: 0;
+  }
+
+  .glass-panel > *,
+  .glass-elevated > * {
+    position: relative;
+    z-index: 1;
   }
 
   .glass-chip {

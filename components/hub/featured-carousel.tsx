@@ -42,7 +42,7 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
                     alt={project.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover saturate-[1.14] contrast-[1.06] brightness-[1.03] transition duration-700 hover:scale-[1.045]"
+                    className="object-cover saturate-[1.22] contrast-[1.1] brightness-[1.05] transition duration-700 hover:scale-[1.045]"
                   />
                 ) : (
                   <div className="h-full w-full bg-[radial-gradient(circle_at_25%_24%,rgba(219,245,255,0.68),rgba(61,91,148,0.45)_38%,rgba(35,48,86,0.84)_72%)]" />

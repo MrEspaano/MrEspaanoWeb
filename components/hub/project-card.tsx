@@ -64,7 +64,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 40vw"
               className={cn(
-                "object-cover saturate-[1.16] contrast-[1.08] brightness-[1.04] transition duration-700",
+                "object-cover saturate-[1.24] contrast-[1.12] brightness-[1.06] transition duration-700",
                 active ? "scale-[1.05]" : "scale-100 group-hover:scale-[1.035]"
               )}
               priority={emphasize}
