@@ -20,7 +20,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
       <div className="section-shell mb-8">
         <Link
           href="/projects"
-          className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm text-white/80 transition hover:border-white/40 hover:bg-white/10"
+          className="glass-chip inline-flex items-center px-4 py-2 text-sm font-semibold transition hover:scale-[1.02]"
         >
           Tillbaka till projekt
         </Link>

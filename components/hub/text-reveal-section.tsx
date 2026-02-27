@@ -28,7 +28,7 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
   });
 
   const clip = useTransform(scrollYProgress, [0, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
-  const shine = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
+  const shine = useTransform(scrollYProgress, [0, 1], [0.55, 1]);
   const shineFilter = useMotionTemplate`brightness(${shine})`;
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
@@ -36,14 +36,14 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
   });
 
   return (
-    <section ref={sectionRef} className="section-shell py-14 sm:py-20" aria-label="Text reveal">
-      <div className="glass-panel rounded-3xl p-7 sm:p-12">
-        <p className="text-xs uppercase tracking-[0.28em] text-cyan-100/80">Bonus moment</p>
+    <section ref={sectionRef} className="section-shell py-16 sm:py-20" aria-label="Text reveal">
+      <div className="glass-elevated rounded-[2rem] p-7 sm:p-11">
+        <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Bonus moment</p>
 
-        <motion.p className="mt-6 text-2xl font-semibold leading-[1.25] text-white/28 sm:text-4xl lg:text-5xl">
+        <motion.p className="mt-5 max-w-[22ch] text-3xl font-semibold leading-[1.18] text-white/[0.38] sm:text-5xl lg:text-6xl">
           {words.map((word, index) => {
-            const start = (index / words.length) * 0.85;
-            const end = start + 0.23;
+            const start = (index / words.length) * 0.82;
+            const end = start + 0.2;
             const localProgress = clamp((progress - start) / (end - start));
 
             return (
@@ -51,18 +51,21 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
                 key={`${word}-${index}`}
                 className="inline-block"
                 style={{
-                  opacity: 0.22 + localProgress * 0.78,
-                  transform: `translateY(${(1 - localProgress) * 14}px)`
+                  opacity: 0.2 + localProgress * 0.8,
+                  transform: `translateY(${(1 - localProgress) * 12}px)`,
+                  marginRight: "0.34em"
                 }}
               >
                 {word}
-                {" "}
               </span>
             );
           })}
         </motion.p>
 
-        <motion.div className="mt-8 h-[2px] rounded-full bg-gradient-to-r from-cyan-200/80 to-emerald-200/90" style={{ clipPath: clip, filter: shineFilter }} />
+        <motion.div
+          className="mt-8 h-[2px] rounded-full bg-gradient-to-r from-cyan-100/[0.85] via-white/[0.9] to-emerald-100/[0.85]"
+          style={{ clipPath: clip, filter: shineFilter }}
+        />
       </div>
     </section>
   );

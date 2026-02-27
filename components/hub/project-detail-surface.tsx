@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { CATEGORY_LABELS, STATUS_LABELS } from "@/lib/constants";
 import { Project } from "@/lib/types";
-import { mapStatusBadgeClass } from "@/lib/utils";
+import { cn, mapStatusBadgeClass } from "@/lib/utils";
 
 interface ProjectDetailSurfaceProps {
   project: Project;
@@ -20,7 +20,7 @@ function ExternalProjectLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white transition hover:border-white/35 hover:bg-white/20"
+      className="glass-chip inline-flex px-4 py-2 text-sm font-semibold transition hover:scale-[1.02]"
     >
       {label}
     </Link>
@@ -30,28 +30,33 @@ function ExternalProjectLink({ href, label }: { href: string; label: string }) {
 export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSurfaceProps) {
   return (
     <motion.article
-      initial={{ opacity: 0, y: 14, scale: 0.98 }}
+      initial={{ opacity: 0, y: 12, scale: 0.985 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 10, scale: 0.98 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="glass-panel relative overflow-hidden rounded-3xl p-4 shadow-glass sm:p-8"
+      exit={{ opacity: 0, y: 10, scale: 0.985 }}
+      transition={{
+        type: "spring",
+        stiffness: 180,
+        damping: 24,
+        mass: 0.9
+      }}
+      className="glass-elevated relative overflow-hidden rounded-[1.9rem] p-4 sm:p-8"
     >
       {mode === "modal" && onClose ? (
         <button
           type="button"
           aria-label="Stäng projektvy"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 rounded-full border border-white/20 bg-white/10 p-2 text-white/80 transition hover:border-white/35 hover:text-white"
+          className="glass-chip absolute right-4 top-4 z-10 p-2.5 text-white/[0.88] transition hover:scale-[1.06]"
         >
           <X size={16} />
         </button>
       ) : null}
 
-      <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[1.16fr_1fr]">
         <div>
           <motion.div
             layoutId={mode === "modal" ? `project-cover-${project.slug}` : undefined}
-            className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10"
+            className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/30"
           >
             {project.visuals.coverUrl ? (
               <Image
@@ -63,15 +68,15 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
                 priority
               />
             ) : (
-              <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,rgba(118,211,255,0.5),rgba(20,28,48,0.85)_45%),linear-gradient(140deg,rgba(255,130,161,0.32),rgba(16,24,48,0.92))]" />
+              <div className="h-full w-full bg-[radial-gradient(circle_at_24%_20%,rgba(224,247,255,0.68),rgba(70,93,151,0.42)_36%,rgba(36,52,92,0.88)_72%)]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.28] via-transparent to-transparent" />
           </motion.div>
 
           {project.visuals.galleryUrls?.length ? (
             <div className="mt-4 grid grid-cols-2 gap-3">
               {project.visuals.galleryUrls.slice(0, 4).map((src) => (
-                <div key={src} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10">
+                <div key={src} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/25">
                   <Image src={src} alt="Projektgalleri" fill sizes="30vw" className="object-cover" />
                 </div>
               ))}
@@ -82,27 +87,30 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
         <div>
           <motion.h2
             layoutId={mode === "modal" ? `project-title-${project.slug}` : undefined}
-            className="text-3xl font-bold text-white sm:text-4xl"
+            className="text-3xl font-bold leading-tight text-white sm:text-4xl"
           >
             {project.title}
           </motion.h2>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="rounded-full border border-cyan-300/40 bg-cyan-300/14 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-100">
+            <span className="glass-chip border-cyan-50/50 bg-cyan-50/[0.24] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cyan-50">
               {CATEGORY_LABELS[project.category]}
             </span>
             <span
-              className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${mapStatusBadgeClass(project.status)}`}
+              className={cn(
+                "rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide",
+                mapStatusBadgeClass(project.status)
+              )}
             >
               {STATUS_LABELS[project.status]}
             </span>
           </div>
 
-          <p className="mt-5 text-base leading-relaxed text-white/82">{project.longDescription}</p>
+          <p className="mt-5 text-base leading-relaxed text-white/[0.88]">{project.longDescription}</p>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
-              <span key={tag} className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs text-white/82">
+              <span key={tag} className="glass-chip px-3 py-1 text-xs font-medium text-white/[0.86]">
                 #{tag}
               </span>
             ))}
@@ -112,7 +120,7 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
             {project.techStack.map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-white/15 bg-white/6 px-3 py-1 text-xs font-medium text-white/85"
+                className="glass-chip border-white/30 bg-white/[0.18] px-3 py-1 text-xs font-medium text-white/[0.88]"
               >
                 {tech}
               </span>

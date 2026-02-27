@@ -21,7 +21,8 @@ function LinkChip({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 transition hover:border-white/35 hover:bg-white/20"
+      className="glass-chip inline-flex items-center gap-1 px-3 py-1 text-xs font-medium transition hover:scale-[1.02]"
+      onClick={(event) => event.stopPropagation()}
     >
       {label}
       <ExternalLink size={12} />
@@ -34,31 +35,28 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
     <motion.article
       layout
       className={cn(
-        "group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/[0.12] to-white/[0.04] p-4 shadow-card sm:p-5",
-        active ? "ring-2 ring-accent/50" : "ring-1 ring-transparent"
+        "glass-panel group relative rounded-3xl p-4 sm:p-5",
+        active ? "ring-1 ring-cyan-100/75" : "ring-1 ring-transparent"
       )}
       animate={{
-        y: active ? -2 : 0,
-        scale: active ? 1 : 0.985
+        y: active ? -3 : 0,
+        scale: active ? 1 : 0.988
       }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
       data-project-card={project.slug}
       id={`project-${project.slug}`}
       aria-labelledby={`project-title-${project.slug}`}
       style={{ scrollSnapAlign: "center" }}
     >
-      <button
-        type="button"
-        onClick={() => onOpen(project.slug)}
-        className="absolute inset-0 z-20 rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-        aria-label={`Öppna projekt: ${project.title}`}
-      />
+      <div className="relative mb-4 overflow-hidden rounded-2xl border border-white/[0.28]">
+        <button
+          type="button"
+          onClick={() => onOpen(project.slug)}
+          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-100"
+          aria-label={`Öppna projekt: ${project.title}`}
+        />
 
-      <div className="pointer-events-none relative z-10">
-        <motion.div
-          layoutId={`project-cover-${project.slug}`}
-          className="relative mb-4 aspect-[16/9] overflow-hidden rounded-2xl border border-white/10"
-        >
+        <motion.div layoutId={`project-cover-${project.slug}`} className="relative aspect-[16/9]">
           {project.visuals.coverUrl ? (
             <Image
               src={project.visuals.coverUrl}
@@ -66,29 +64,30 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 40vw"
               className={cn(
-                "object-cover transition duration-500",
-                active ? "scale-[1.04]" : "scale-100 group-hover:scale-[1.03]"
+                "object-cover transition duration-700",
+                active ? "scale-[1.05]" : "scale-100 group-hover:scale-[1.035]"
               )}
               priority={emphasize}
             />
           ) : (
-            <div className="h-full w-full bg-[radial-gradient(circle_at_30%_20%,rgba(118,211,255,0.5),rgba(20,28,48,0.85)_45%),linear-gradient(140deg,rgba(255,130,161,0.32),rgba(16,24,48,0.92))]" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_24%_24%,rgba(221,246,255,0.7),rgba(66,93,147,0.45)_35%,rgba(36,53,95,0.86)_72%)]" />
           )}
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-white/5" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.22] to-transparent" />
         </motion.div>
+      </div>
 
+      <div className="flex min-h-[248px] flex-col">
         <div className="mb-3 flex items-start justify-between gap-3">
           <motion.h3
             layoutId={`project-title-${project.slug}`}
             id={`project-title-${project.slug}`}
-            className="text-xl font-semibold text-white sm:text-2xl"
+            className="text-2xl font-semibold leading-tight text-white"
           >
             {project.title}
           </motion.h3>
           <span
             className={cn(
-              "rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide",
+              "rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide",
               mapStatusBadgeClass(project.status)
             )}
           >
@@ -96,36 +95,40 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
           </span>
         </div>
 
-        <p
-          className={cn(
-            "max-w-3xl text-sm leading-relaxed text-white/78 transition duration-500 sm:text-base",
-            active ? "translate-y-0 opacity-100" : "translate-y-2 opacity-80"
-          )}
-        >
-          {project.shortDescription}
-        </p>
+        <p className="max-w-3xl text-sm leading-relaxed text-white/[0.84] sm:text-base">{project.shortDescription}</p>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {project.tags.slice(0, 4).map((tag) => (
-            <span key={tag} className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs text-white/80">
+            <span key={tag} className="glass-chip px-2.5 py-1 text-[11px] font-medium text-white/[0.86]">
               #{tag}
             </span>
           ))}
           {project.techStack.slice(0, 3).map((tech) => (
-            <span key={tech} className="rounded-full border border-cyan-200/25 bg-cyan-200/12 px-3 py-1 text-xs text-cyan-100">
+            <span
+              key={tech}
+              className="glass-chip border-cyan-50/[0.45] bg-cyan-50/20 px-2.5 py-1 text-[11px] text-cyan-50"
+            >
               {tech}
             </span>
           ))}
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center gap-2">
+        <div className="mt-auto flex flex-wrap items-center gap-2 pt-5">
           {project.links.demoUrl ? <LinkChip href={project.links.demoUrl} label="Demo" /> : null}
           {project.links.repoUrl ? <LinkChip href={project.links.repoUrl} label="Repo" /> : null}
           {project.links.caseStudyUrl ? <LinkChip href={project.links.caseStudyUrl} label="Case" /> : null}
 
+          <button
+            type="button"
+            onClick={() => onOpen(project.slug)}
+            className="glass-chip ml-auto px-3 py-1.5 text-xs font-semibold transition hover:scale-[1.03]"
+          >
+            Öppna
+          </button>
+
           <Link
             href={`/projects/${project.slug}`}
-            className="pointer-events-auto ml-auto inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white transition hover:border-white/35 hover:bg-white/20"
+            className="glass-chip inline-flex px-3 py-1.5 text-xs font-semibold transition hover:scale-[1.03]"
           >
             Full vy
           </Link>

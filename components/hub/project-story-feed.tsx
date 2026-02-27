@@ -18,7 +18,7 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start 60%", "end 40%"]
+    offset: ["start 60%", "end 38%"]
   });
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
@@ -46,33 +46,33 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
           <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
             <div>
               {title ? <h2 className="text-3xl font-bold text-white sm:text-4xl">{title}</h2> : null}
-              {subtitle ? <p className="mt-2 max-w-2xl text-sm text-white/70 sm:text-base">{subtitle}</p> : null}
+              {subtitle ? (
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/[0.82] sm:text-base">{subtitle}</p>
+              ) : null}
             </div>
-            <p className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.16em] text-white/70">
-              Scroll-driven
-            </p>
+            <p className="glass-chip px-4 py-2 text-xs uppercase tracking-[0.17em] text-white/[0.86]">Scroll-driven</p>
           </div>
         )}
 
-        <div className="relative">
-          <div className="absolute right-1 top-2 hidden h-[82%] w-px overflow-hidden rounded-full bg-white/15 lg:block">
+        <div className="glass-elevated relative rounded-[2rem] p-3 sm:p-4">
+          <div className="absolute right-3 top-8 hidden h-[84%] w-px overflow-hidden rounded-full bg-white/[0.24] lg:block">
             <motion.div
-              className="w-full origin-top bg-gradient-to-b from-cyan-200 via-white/85 to-emerald-200"
+              className="w-full origin-top bg-gradient-to-b from-cyan-50 via-white/95 to-sky-100"
               animate={{ height: `${activeProgress * 100}%` }}
-              transition={{ duration: 0.35 }}
+              transition={{ duration: 0.35, ease: [0.2, 0.9, 0.2, 1] }}
             />
           </div>
 
-          <div className="space-y-6 [scroll-snap-type:y_proximity]">
+          <div className="space-y-5 [scroll-snap-type:y_proximity]">
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0.45, y: 26 }}
                 animate={{
-                  opacity: index === activeIndex ? 1 : 0.78,
-                  y: index === activeIndex ? 0 : 10
+                  opacity: index === activeIndex ? 1 : 0.82,
+                  y: index === activeIndex ? 0 : 9
                 }}
-                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.44, ease: [0.22, 1, 0.36, 1] }}
               >
                 <ProjectCard
                   project={project}

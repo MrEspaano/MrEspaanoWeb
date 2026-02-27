@@ -4,6 +4,8 @@ import { MissingConfigNotice } from "@/components/ui/missing-config-notice";
 import { isSupabaseConfigured } from "@/lib/env";
 import { getProjects, getSiteSettings } from "@/lib/supabase/queries";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   if (!isSupabaseConfigured()) {
     return <MissingConfigNotice />;

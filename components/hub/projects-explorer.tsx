@@ -76,7 +76,10 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
   }, [category, projects, query, selectedTags, sort]);
 
   const selectedProject = useMemo(
-    () => filtered.find((project) => project.slug === selectedSlug) ?? projects.find((project) => project.slug === selectedSlug) ?? null,
+    () =>
+      filtered.find((project) => project.slug === selectedSlug) ??
+      projects.find((project) => project.slug === selectedSlug) ??
+      null,
     [filtered, projects, selectedSlug]
   );
 
@@ -104,32 +107,34 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
   };
 
   return (
-    <main className="min-h-screen pb-20 pt-8 sm:pt-12">
+    <main className="relative min-h-screen pb-24 pt-8 sm:pt-12">
       <section className="section-shell">
-        <div className="glass-panel rounded-3xl p-6 shadow-glass sm:p-8">
-          <p className="text-xs uppercase tracking-[0.3em] text-cyan-100/80">Project Explorer</p>
-          <h1 className="mt-3 text-4xl font-bold text-white sm:text-5xl">{settings.displayName} / Projekt</h1>
-          <p className="mt-4 max-w-3xl text-white/75">
+        <div className="glass-elevated rounded-[2rem] p-6 sm:p-8">
+          <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Project Explorer</p>
+          <h1 className="mt-3 text-4xl font-bold leading-tight text-white sm:text-5xl">
+            {settings.displayName} / Projekt
+          </h1>
+          <p className="mt-4 max-w-3xl text-white/[0.84]">
             Filtrera efter kategori och tags, sök i titel och metadata, och öppna projekt i modal eller full route.
           </p>
 
           <div className="mt-7 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
             <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/60">Sök</span>
+              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/[0.7]">Sök</span>
               <input
                 value={query}
                 onChange={(event) => updateSearchParams({ q: event.target.value || null, project: null })}
                 placeholder="Sök på titel eller tag..."
-                className="w-full rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/45 focus:border-cyan-200/70 focus:outline-none"
+                className="glass-input w-full px-4 py-3 text-sm focus:border-cyan-50/75 focus:outline-none"
               />
             </label>
 
             <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/60">Sortera</span>
+              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/[0.7]">Sortera</span>
               <select
                 value={sort}
                 onChange={(event) => updateSearchParams({ sort: event.target.value, project: null })}
-                className="w-full rounded-2xl border border-white/20 bg-slate-900/85 px-4 py-3 text-sm text-white focus:border-cyan-200/70 focus:outline-none"
+                className="glass-input w-full px-4 py-3 text-sm focus:border-cyan-50/75 focus:outline-none"
               >
                 <option value="newest">Nyast först</option>
                 <option value="oldest">Äldst först</option>
@@ -147,10 +152,10 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
                   type="button"
                   onClick={() => updateSearchParams({ category: value === "all" ? null : value, project: null })}
                   className={cn(
-                    "rounded-full border px-4 py-2 text-sm font-semibold transition",
+                    "glass-chip px-4 py-2 text-sm font-semibold transition",
                     value === category
-                      ? "border-cyan-200/70 bg-cyan-200/22 text-cyan-50"
-                      : "border-white/18 bg-white/8 text-white/75 hover:border-white/35"
+                      ? "border-cyan-50/70 bg-cyan-50/[0.34] text-slate-900"
+                      : "text-white/[0.86] hover:border-white/[0.46] hover:bg-white/[0.22]"
                   )}
                 >
                   {label}
@@ -169,10 +174,10 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
                   type="button"
                   onClick={() => toggleTag(tag)}
                   className={cn(
-                    "rounded-full border px-3 py-1.5 text-xs font-medium transition",
+                    "glass-chip px-3 py-1.5 text-xs font-medium transition",
                     selected
-                      ? "border-emerald-200/65 bg-emerald-200/18 text-emerald-50"
-                      : "border-white/18 bg-white/6 text-white/70 hover:border-white/35"
+                      ? "border-emerald-100/75 bg-emerald-100/[0.34] text-emerald-50"
+                      : "text-white/[0.82] hover:border-white/[0.46] hover:bg-white/[0.22]"
                   )}
                 >
                   #{tag}
@@ -182,13 +187,8 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <p className="text-sm text-white/70">
-              {filtered.length} projekt matchar filtreringen
-            </p>
-            <Link
-              href="/"
-              className="rounded-full border border-white/20 bg-white/8 px-4 py-1.5 text-xs font-semibold text-white transition hover:border-white/35"
-            >
+            <p className="text-sm text-white/[0.84]">{filtered.length} projekt matchar filtreringen</p>
+            <Link href="/" className="glass-chip px-4 py-1.5 text-xs font-semibold transition hover:scale-[1.02]">
               Till startsidan
             </Link>
           </div>
@@ -199,10 +199,14 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
         projects={filtered}
         onOpenProject={(slug) => updateSearchParams({ project: slug })}
         title="Story Feed"
-        subtitle="Scrollen styr progressionen och aktivt kort får tydlig visuell prioritet."
+        subtitle="Scrollen styr progressionen och aktivt kort får tydlig visuell prioritet i den nya glass-layouten."
       />
 
-      <ProjectDetailModal project={selectedProject} isOpen={Boolean(selectedProject)} onClose={() => updateSearchParams({ project: null })} />
+      <ProjectDetailModal
+        project={selectedProject}
+        isOpen={Boolean(selectedProject)}
+        onClose={() => updateSearchParams({ project: null })}
+      />
     </main>
   );
 }

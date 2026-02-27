@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --bg: 228 26% 10%;
-  --fg: 214 64% 95%;
-  --muted: 221 18% 66%;
-  --accent: 193 93% 68%;
-  --card: 226 28% 14%;
-  --line: 218 30% 32%;
+  --bg: 220 36% 18%;
+  --fg: 214 58% 96%;
+  --muted: 216 33% 81%;
+  --accent: 197 87% 74%;
+  --card: 220 34% 24%;
+  --line: 216 31% 72%;
 }
 
 * {
@@ -21,13 +21,29 @@ body {
 }
 
 body {
+  position: relative;
+  min-height: 100vh;
   font-family: "Manrope", "Avenir Next", "Segoe UI", "SF Pro Text", sans-serif;
   background-image:
-    radial-gradient(circle at 0% 0%, rgba(106, 183, 255, 0.22), transparent 35%),
-    radial-gradient(circle at 100% 0%, rgba(255, 138, 158, 0.2), transparent 42%),
-    radial-gradient(circle at 50% 100%, rgba(122, 247, 210, 0.15), transparent 42%),
-    linear-gradient(150deg, #0b1020 0%, #10172d 45%, #14192e 100%);
+    radial-gradient(circle at 12% 0%, rgba(192, 231, 255, 0.42), transparent 33%),
+    radial-gradient(circle at 88% 2%, rgba(231, 196, 255, 0.31), transparent 36%),
+    radial-gradient(circle at 50% 90%, rgba(156, 238, 228, 0.26), transparent 42%),
+    linear-gradient(148deg, #172241 0%, #1f2d4f 40%, #26355a 100%);
   background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 18% 28%, rgba(255, 255, 255, 0.24), transparent 38%),
+    radial-gradient(ellipse at 78% 20%, rgba(255, 255, 255, 0.18), transparent 34%),
+    radial-gradient(ellipse at 48% 72%, rgba(185, 255, 239, 0.14), transparent 40%);
+  mix-blend-mode: screen;
+  opacity: 0.38;
+  z-index: 0;
 }
 
 h1,
@@ -37,12 +53,13 @@ h4,
 h5,
 h6 {
   font-family: "Syne", "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
 }
 
 ::selection {
-  background-color: rgba(132, 221, 255, 0.26);
-  color: #ffffff;
+  background-color: rgba(177, 234, 255, 0.42);
+  color: #fff;
 }
 
 ::-webkit-scrollbar {
@@ -50,17 +67,59 @@ h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(6, 8, 18, 0.9);
+  background: rgba(26, 35, 62, 0.72);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(132, 221, 255, 0.4);
+  background: linear-gradient(180deg, rgba(191, 239, 255, 0.65), rgba(163, 205, 255, 0.5));
   border-radius: 999px;
 }
 
 @layer components {
   .glass-panel {
-    @apply border border-white/10 bg-white/5 backdrop-blur-2xl;
+    @apply relative overflow-hidden border border-white/25 bg-white/[0.13] backdrop-blur-2xl;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.36),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.09),
+      0 22px 60px rgba(17, 30, 63, 0.26);
+  }
+
+  .glass-panel::before {
+    content: "";
+    position: absolute;
+    inset: 1px 1px auto 1px;
+    height: 42%;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0));
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .glass-elevated {
+    @apply relative overflow-hidden border border-white/30 bg-white/[0.16] backdrop-blur-[28px];
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.48),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+      0 28px 80px rgba(16, 34, 71, 0.34);
+  }
+
+  .glass-elevated::after {
+    content: "";
+    position: absolute;
+    inset: -20% -20% auto;
+    height: 56%;
+    background: radial-gradient(circle at 28% 44%, rgba(223, 247, 255, 0.34), transparent 56%);
+    pointer-events: none;
+  }
+
+  .glass-chip {
+    @apply rounded-full border border-white/30 bg-white/[0.15] text-white/90 backdrop-blur-md;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34);
+  }
+
+  .glass-input {
+    @apply rounded-2xl border border-white/25 bg-white/[0.15] text-white placeholder:text-white/60 backdrop-blur-md;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26);
   }
 
   .section-shell {

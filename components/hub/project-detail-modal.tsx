@@ -70,28 +70,37 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[80]"
           aria-hidden={!isOpen}
         >
           <motion.button
             type="button"
             aria-label="Stäng projektmodal"
-            className="absolute inset-0 bg-slate-950/65 backdrop-blur-md"
+            className="absolute inset-0 bg-slate-900/[0.34] backdrop-blur-[16px]"
             onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           />
 
-          <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl items-center justify-center p-4 sm:p-8">
+          <motion.div
+            className="relative z-10 mx-auto flex h-full w-full max-w-6xl items-center justify-center p-4 sm:p-8"
+            initial={{ y: 18, scale: 0.985 }}
+            animate={{ y: 0, scale: 1 }}
+            exit={{ y: 14, scale: 0.986 }}
+            transition={{ type: "spring", stiffness: 170, damping: 23, mass: 0.92 }}
+          >
             <div
               role="dialog"
               aria-modal="true"
               aria-label={project.title}
               ref={panelRef}
-              className="max-h-[92vh] w-full overflow-auto rounded-3xl"
+              className="max-h-[92vh] w-full overflow-auto rounded-[1.9rem]"
             >
               <ProjectDetailSurface project={project} mode="modal" onClose={onClose} />
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       ) : null}
     </AnimatePresence>
