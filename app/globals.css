@@ -143,7 +143,7 @@ h6 {
   }
 
   .admin-subsurface {
-    @apply rounded-2xl border border-white/16 bg-white/6;
+    @apply rounded-2xl border border-white/15 bg-white/10;
   }
 
   .section-shell {
