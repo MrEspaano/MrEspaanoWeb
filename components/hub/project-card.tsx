@@ -64,7 +64,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 40vw"
               className={cn(
-                "object-cover transition duration-700",
+                "object-cover saturate-[1.16] contrast-[1.08] brightness-[1.04] transition duration-700",
                 active ? "scale-[1.05]" : "scale-100 group-hover:scale-[1.035]"
               )}
               priority={emphasize}
@@ -72,7 +72,7 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
           ) : (
             <div className="h-full w-full bg-[radial-gradient(circle_at_24%_24%,rgba(221,246,255,0.7),rgba(66,93,147,0.45)_35%,rgba(36,53,95,0.86)_72%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.22] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.08] to-transparent" />
         </motion.div>
       </div>
 

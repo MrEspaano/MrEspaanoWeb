@@ -63,14 +63,14 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
                 src={project.visuals.coverUrl}
                 alt={`Omslag för ${project.title}`}
                 fill
-                className="object-cover"
+                className="object-cover saturate-[1.14] contrast-[1.06] brightness-[1.03]"
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 priority
               />
             ) : (
               <div className="h-full w-full bg-[radial-gradient(circle_at_24%_20%,rgba(224,247,255,0.68),rgba(70,93,151,0.42)_36%,rgba(36,52,92,0.88)_72%)]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.28] via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/[0.12] via-transparent to-transparent" />
           </motion.div>
 
           {project.visuals.galleryUrls?.length ? (
