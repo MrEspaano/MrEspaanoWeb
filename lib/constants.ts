@@ -69,6 +69,7 @@ export const DEFAULT_VIEW: BoardViewState = {
 
 function createDefaultModuleStyle(): ModuleDesignStyle {
   return {
+    visible: true,
     offsetX: 0,
     offsetY: 0,
     widthPercent: 100,

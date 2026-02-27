@@ -50,6 +50,7 @@ export interface BoardSettings {
 }
 
 export interface ModuleDesignStyle {
+  visible: boolean;
   offsetX: number;
   offsetY: number;
   widthPercent: number;

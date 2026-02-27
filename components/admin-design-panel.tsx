@@ -60,6 +60,18 @@ export function AdminDesignPanel({
 
       <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         <label className="rounded-lg border border-board-border p-2 text-xs">
+          Synlighet
+          <div className="mt-2 flex items-center justify-between rounded-md border border-board-border px-3 py-2 text-sm">
+            <span>{currentStyle.visible ? "Synlig" : "Dold"}</span>
+            <input
+              type="checkbox"
+              checked={currentStyle.visible}
+              onChange={(event) => onUpdateStyle(currentModule, { visible: event.target.checked })}
+            />
+          </div>
+        </label>
+
+        <label className="rounded-lg border border-board-border p-2 text-xs">
           X-position: {currentStyle.offsetX}px
           <input
             type="range"

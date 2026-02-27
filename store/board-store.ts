@@ -127,6 +127,9 @@ function clamp(value: number, min: number, max: number) {
 
 function normalizeModuleStylePartial(partial: Partial<ModuleDesignStyle>) {
   const next: Partial<ModuleDesignStyle> = {};
+  if (typeof partial.visible === "boolean") {
+    next.visible = partial.visible;
+  }
   if (typeof partial.offsetX === "number") {
     next.offsetX = clamp(Math.round(partial.offsetX), -900, 900);
   }

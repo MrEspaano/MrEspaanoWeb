@@ -71,6 +71,7 @@ function normalizeModuleStyle(value: unknown): ModuleDesignStyle {
   const candidate = value as Partial<ModuleDesignStyle>;
 
   return {
+    visible: typeof candidate.visible === "boolean" ? candidate.visible : DEFAULT_MODULE_STYLE.visible,
     offsetX: typeof candidate.offsetX === "number" ? clamp(candidate.offsetX, -900, 900) : DEFAULT_MODULE_STYLE.offsetX,
     offsetY: typeof candidate.offsetY === "number" ? clamp(candidate.offsetY, -900, 900) : DEFAULT_MODULE_STYLE.offsetY,
     widthPercent:

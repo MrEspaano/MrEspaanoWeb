@@ -23,11 +23,17 @@ export function DesignModuleShell({
 }: DesignModuleShellProps) {
   const moduleStyle = design.modules[moduleId];
   const isSelected = design.enabled && canEdit && design.selectedModule === moduleId;
+  const isHidden = !moduleStyle.visible;
+
+  if (isHidden && !(design.enabled && canEdit)) {
+    return null;
+  }
 
   const style: CSSProperties = {
+    display: isHidden ? "block" : undefined,
     width: `${moduleStyle.widthPercent}%`,
     minHeight: moduleStyle.minHeight > 0 ? `${moduleStyle.minHeight}px` : undefined,
-    opacity: moduleStyle.opacity,
+    opacity: isHidden ? 0.35 : moduleStyle.opacity,
     fontSize: `${Math.round(moduleStyle.fontScale * 100)}%`,
     fontFamily: FONT_FAMILY_STACKS[moduleStyle.fontFamily],
     transform:
@@ -55,7 +61,7 @@ export function DesignModuleShell({
               : "border-board-border bg-board-panel/95 text-board-muted"
           }`}
         >
-          {MODULE_LABELS[moduleId]}
+          {MODULE_LABELS[moduleId]} {isHidden ? "(Dold)" : ""}
         </div>
       ) : null}
       {design.enabled && canEdit ? (
