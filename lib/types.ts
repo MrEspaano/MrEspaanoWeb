@@ -78,6 +78,7 @@ export interface HubDesignConfig {
   };
   modules: {
     order: HubModuleKey[];
+    textRevealCopy: string;
     stickyCategoryMorph: HubModuleConfig;
     featured: HubModuleConfig;
     textReveal: HubModuleConfig;

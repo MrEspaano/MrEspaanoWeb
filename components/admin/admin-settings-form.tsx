@@ -379,6 +379,26 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
 
             <div className="space-y-5 rounded-2xl border border-white/15 bg-white/5 p-4">
               <h2 className="text-lg font-semibold text-white">Moduler</h2>
+
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/60">Text reveal copy</span>
+                <textarea
+                  rows={4}
+                  value={designConfig.modules.textRevealCopy}
+                  onChange={(event) =>
+                    setDesignConfig((previous) => ({
+                      ...previous,
+                      modules: {
+                        ...previous.modules,
+                        textRevealCopy: event.target.value
+                      }
+                    }))
+                  }
+                  className="glass-input w-full px-3 py-2 text-sm focus:outline-none"
+                />
+                <p className="mt-1 text-xs text-white/60">Minst 20 tecken. Visas i “Bonus moment”-sektionen.</p>
+              </label>
+
               <div className="space-y-3">
                 {designConfig.modules.order.map((moduleKey, index) => {
                   const moduleConfig = designConfig.modules[moduleKey];

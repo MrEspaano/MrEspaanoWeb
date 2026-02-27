@@ -28,6 +28,7 @@ export const hubDesignConfigSchema = z.object({
   }),
   modules: z.object({
     order: z.array(z.enum(MODULE_KEYS as [HubModuleKey, ...HubModuleKey[]])).min(4).max(4),
+    textRevealCopy: z.string().min(20).max(400),
     stickyCategoryMorph: moduleSchema,
     featured: moduleSchema,
     textReveal: moduleSchema,
@@ -45,6 +46,9 @@ const defaultModule: HubModuleConfig = {
   scale: 1,
   yOffset: 0
 };
+
+const DEFAULT_TEXT_REVEAL_COPY =
+  "Varje projekt ska kännas som en story: tydlig riktning, precision i detaljer och rörelse som guidar upplevelsen istället för att distrahera.";
 
 export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
   global: {
@@ -64,6 +68,7 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
   },
   modules: {
     order: [...MODULE_KEYS],
+    textRevealCopy: DEFAULT_TEXT_REVEAL_COPY,
     stickyCategoryMorph: { ...defaultModule },
     featured: { ...defaultModule },
     textReveal: { ...defaultModule },
@@ -127,6 +132,10 @@ export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
     },
     modules: {
       order: normalizeOrder(value.modules?.order),
+      textRevealCopy:
+        typeof value.modules?.textRevealCopy === "string" && value.modules.textRevealCopy.trim().length >= 20
+          ? value.modules.textRevealCopy.trim().slice(0, 400)
+          : DEFAULT_TEXT_REVEAL_COPY,
       stickyCategoryMorph: normalizeModule(value.modules?.stickyCategoryMorph),
       featured: normalizeModule(value.modules?.featured),
       textReveal: normalizeModule(value.modules?.textReveal),

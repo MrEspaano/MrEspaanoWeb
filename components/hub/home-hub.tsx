@@ -96,7 +96,7 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           design.modules.textReveal.yOffset
         )}
       >
-        <TextRevealSection text="Varje projekt ska kännas som en story: tydlig riktning, precision i detaljer och rörelse som guidar upplevelsen istället för att distrahera." />
+        <TextRevealSection text={design.modules.textRevealCopy} />
       </div>
     ),
     storyFeed: (
