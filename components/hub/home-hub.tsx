@@ -155,18 +155,24 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           </div>
 
           <nav className="flex items-center gap-2">
-            {logoVisible ? (
-              <div className="mr-1 hidden overflow-hidden rounded-full border border-sky-200/70 bg-white/65 p-1 shadow-[0_10px_24px_rgba(58,102,162,0.18)] sm:block">
-                <Image
-                  src="/brand/mrespaano-logo.png"
-                  alt="MrEspaano logga"
-                  width={52}
-                  height={52}
-                  className="h-[52px] w-[52px] rounded-full object-cover"
-                  onError={() => setLogoVisible(false)}
-                />
-              </div>
-            ) : null}
+            <div className="mr-1 hidden sm:block">
+              {logoVisible ? (
+                <div className="overflow-hidden rounded-full border border-sky-200/70 bg-white/65 p-1 shadow-[0_10px_24px_rgba(58,102,162,0.18)]">
+                  <Image
+                    src="/brand/mrespaano-logo.png"
+                    alt="MrEspaano logga"
+                    width={52}
+                    height={52}
+                    className="h-[52px] w-[52px] rounded-full object-cover"
+                    onError={() => setLogoVisible(false)}
+                  />
+                </div>
+              ) : (
+                <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full border border-sky-200/80 bg-gradient-to-br from-sky-100 to-cyan-100 text-sm font-extrabold text-slate-800 shadow-[0_10px_24px_rgba(58,102,162,0.18)]">
+                  ME
+                </div>
+              )}
+            </div>
             <Link
               href="/projects"
               className="glass-chip px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/85"
