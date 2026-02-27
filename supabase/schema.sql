@@ -28,6 +28,7 @@ create table if not exists public.site_settings (
   hero_cta_primary text not null,
   hero_cta_secondary text not null,
   social_links jsonb not null default '{}'::jsonb,
+  design_config jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
 );
 
@@ -206,7 +207,8 @@ insert into public.site_settings (
   bio,
   hero_cta_primary,
   hero_cta_secondary,
-  social_links
+  social_links,
+  design_config
 )
 values (
   true,
@@ -215,6 +217,10 @@ values (
   'En levande hubb där alla projekt samlas med fokus på design, animation och produktkvalitet.',
   'Utforska projekt',
   'Kontakta mig',
-  '{"github": "https://github.com/", "linkedin": "https://linkedin.com/", "x": "https://x.com/", "email": "mailto:hej@example.com"}'::jsonb
+  '{"github": "https://github.com/", "linkedin": "https://linkedin.com/", "x": "https://x.com/", "email": "mailto:hej@example.com"}'::jsonb,
+  '{}'::jsonb
 )
 on conflict (id) do nothing;
+
+alter table public.site_settings
+add column if not exists design_config jsonb not null default '{}'::jsonb;

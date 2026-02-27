@@ -23,7 +23,7 @@ body {
 body {
   position: relative;
   min-height: 100vh;
-  font-family: "Manrope", "Avenir Next", "Segoe UI", "SF Pro Text", sans-serif;
+  font-family: var(--body-font, "Manrope"), "Avenir Next", "Segoe UI", "SF Pro Text", sans-serif;
   background-image:
     radial-gradient(circle at 12% 0%, rgba(192, 231, 255, 0.42), transparent 33%),
     radial-gradient(circle at 88% 2%, rgba(231, 196, 255, 0.31), transparent 36%),
@@ -52,7 +52,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Syne", "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+  font-family: var(--display-font, "Syne"), "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
   letter-spacing: -0.018em;
   line-height: 1.08;
 }
@@ -131,10 +131,59 @@ h6 {
   }
 
   .section-shell {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-10;
+    max-width: var(--hub-max-width, 1280px);
   }
 
   .hover-lift {
     @apply transition-transform duration-300 ease-out hover:-translate-y-1;
   }
+}
+
+.hub-root {
+  --hub-max-width: 1280px;
+  --hub-media-saturation: 1.2;
+  --hub-media-contrast: 1.08;
+  --hub-media-brightness: 1.03;
+  font-family: var(--hub-body-font, var(--body-font, "Manrope")), "Avenir Next", "Segoe UI", "SF Pro Text", sans-serif;
+}
+
+.hub-root h1,
+.hub-root h2,
+.hub-root h3,
+.hub-root h4,
+.hub-root h5,
+.hub-root h6 {
+  font-family: var(--hub-display-font, var(--display-font, "Syne")), "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+.hub-root .hub-media {
+  filter:
+    saturate(var(--hub-media-saturation))
+    contrast(var(--hub-media-contrast))
+    brightness(var(--hub-media-brightness));
+}
+
+.hub-root.font-display-syne {
+  --hub-display-font: "Syne";
+}
+
+.hub-root.font-display-space {
+  --hub-display-font: "Space Grotesk";
+}
+
+.hub-root.font-display-sora {
+  --hub-display-font: "Sora";
+}
+
+.hub-root.font-body-manrope {
+  --hub-body-font: "Manrope";
+}
+
+.hub-root.font-body-inter {
+  --hub-body-font: "Inter";
+}
+
+.hub-root.font-body-system {
+  --hub-body-font: "SF Pro Text";
 }

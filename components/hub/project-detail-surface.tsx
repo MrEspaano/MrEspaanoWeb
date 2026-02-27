@@ -63,7 +63,7 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
                 src={project.visuals.coverUrl}
                 alt={`Omslag för ${project.title}`}
                 fill
-                className="object-cover saturate-[1.14] contrast-[1.06] brightness-[1.03]"
+                className="hub-media object-cover"
                 sizes="(max-width: 1024px) 100vw, 60vw"
                 priority
               />
@@ -77,7 +77,7 @@ export function ProjectDetailSurface({ project, mode, onClose }: ProjectDetailSu
             <div className="mt-4 grid grid-cols-2 gap-3">
               {project.visuals.galleryUrls.slice(0, 4).map((src) => (
                 <div key={src} className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/25">
-                  <Image src={src} alt="Projektgalleri" fill sizes="30vw" className="object-cover" />
+                  <Image src={src} alt="Projektgalleri" fill sizes="30vw" className="hub-media object-cover" />
                 </div>
               ))}
             </div>

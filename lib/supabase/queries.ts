@@ -1,4 +1,5 @@
 import { DEFAULT_SITE_SETTINGS } from "@/lib/constants";
+import { normalizeHubDesignConfig } from "@/lib/design-config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSignedMediaUrl, createSignedMediaUrls } from "@/lib/supabase/media";
 import { DbProjectRow, DbSiteSettingsRow, Project, SiteSettings } from "@/lib/types";
@@ -33,6 +34,7 @@ function mapSettingsRow(row: DbSiteSettingsRow): SiteSettings {
     heroCtaPrimary: row.hero_cta_primary,
     heroCtaSecondary: row.hero_cta_secondary,
     socialLinks: row.social_links ?? {},
+    designConfig: normalizeHubDesignConfig(row.design_config),
     updatedAt: row.updated_at
   };
 }
@@ -60,7 +62,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
       .from("site_settings")
-      .select("id, display_name, tagline, bio, hero_cta_primary, hero_cta_secondary, social_links, updated_at")
+      .select("id, display_name, tagline, bio, hero_cta_primary, hero_cta_secondary, social_links, design_config, updated_at")
       .eq("id", true)
       .maybeSingle();
 

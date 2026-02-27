@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { AuthError, requireAdminContext } from "@/lib/auth";
+import { normalizeHubDesignConfig } from "@/lib/design-config";
 import { settingsFormSchema } from "@/lib/validation";
 
 function handleError(error: unknown) {
@@ -23,6 +24,7 @@ export async function PUT(request: Request) {
       bio: body.bio,
       heroCtaPrimary: body.heroCtaPrimary,
       heroCtaSecondary: body.heroCtaSecondary,
+      designConfig: normalizeHubDesignConfig(body.designConfig),
       socialLinks: {
         github: body.github || undefined,
         linkedin: body.linkedin || undefined,
@@ -42,6 +44,7 @@ export async function PUT(request: Request) {
       bio: parsed.data.bio,
       hero_cta_primary: parsed.data.heroCtaPrimary,
       hero_cta_secondary: parsed.data.heroCtaSecondary,
+      design_config: parsed.data.designConfig,
       social_links: {
         github: parsed.data.socialLinks.github,
         linkedin: parsed.data.socialLinks.linkedin,

@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { CSSProperties, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
 import { ProjectStoryFeed } from "@/components/hub/project-story-feed";
 import { CATEGORY_LABELS, STATUS_SORT_ORDER } from "@/lib/constants";
 import { Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { normalizeHubDesignConfig } from "@/lib/design-config";
 
 interface ProjectsExplorerProps {
   projects: Project[];
@@ -25,6 +26,7 @@ function parseCategory(value: string | null): ProjectCategoryFilter {
 }
 
 export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) {
+  const design = normalizeHubDesignConfig(settings.designConfig);
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -107,7 +109,17 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
   };
 
   return (
-    <main className="relative min-h-screen pb-24 pt-8 sm:pt-12">
+    <main
+      className="hub-root relative min-h-screen pb-24 pt-8 sm:pt-12"
+      style={
+        {
+          "--hub-max-width": `${design.global.contentMaxWidth}px`,
+          "--hub-media-saturation": String(design.global.mediaSaturation),
+          "--hub-media-contrast": String(design.global.mediaContrast),
+          "--hub-media-brightness": String(design.global.mediaBrightness)
+        } as CSSProperties
+      }
+    >
       <section className="section-shell">
         <div className="glass-elevated rounded-[2rem] p-6 sm:p-8">
           <p className="text-xs uppercase tracking-[0.28em] text-cyan-50/[0.78]">Project Explorer</p>

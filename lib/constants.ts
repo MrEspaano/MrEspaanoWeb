@@ -1,4 +1,5 @@
 import { ProjectCategory, ProjectStatus } from "@/lib/types";
+import { DEFAULT_HUB_DESIGN_CONFIG } from "@/lib/design-config";
 
 export const CATEGORY_LABELS: Record<ProjectCategory, string> = {
   app: "Appar",
@@ -31,5 +32,6 @@ export const DEFAULT_SITE_SETTINGS = {
     x: "https://x.com/",
     email: "mailto:hej@example.com"
   },
+  designConfig: DEFAULT_HUB_DESIGN_CONFIG,
   updatedAt: new Date().toISOString()
 };

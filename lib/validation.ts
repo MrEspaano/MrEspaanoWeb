@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hubDesignConfigSchema } from "@/lib/design-config";
 
 export const projectLinksSchema = z.object({
   demoUrl: z.string().url().optional(),
@@ -33,6 +34,7 @@ export const settingsFormSchema = z.object({
   bio: z.string().min(20).max(1200),
   heroCtaPrimary: z.string().min(2).max(80),
   heroCtaSecondary: z.string().min(2).max(80),
+  designConfig: hubDesignConfigSchema,
   socialLinks: z.object({
     github: z.string().url().optional(),
     linkedin: z.string().url().optional(),

@@ -188,5 +188,6 @@ set
   bio = 'Jag bygger digitala produkter med fokus på tydlig upplevelse, stark design och teknisk precision.',
   hero_cta_primary = 'Utforska projekt',
   hero_cta_secondary = 'Alla case',
-  social_links = '{"github": "https://github.com/", "linkedin": "https://linkedin.com/", "x": "https://x.com/", "email": "mailto:hej@example.com"}'::jsonb
+  social_links = '{"github": "https://github.com/", "linkedin": "https://linkedin.com/", "x": "https://x.com/", "email": "mailto:hej@example.com"}'::jsonb,
+  design_config = coalesce(design_config, '{}'::jsonb)
 where id = true;

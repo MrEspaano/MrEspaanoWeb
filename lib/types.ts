@@ -1,5 +1,8 @@
 export type ProjectCategory = "app" | "game" | "site";
 export type ProjectCategoryFilter = ProjectCategory | "all";
+export type HubModuleKey = "stickyCategoryMorph" | "featured" | "textReveal" | "storyFeed";
+export type HubDisplayFont = "syne" | "space-grotesk" | "sora";
+export type HubBodyFont = "manrope" | "inter" | "system";
 
 export type ProjectStatus = "live" | "wip" | "archived";
 
@@ -46,7 +49,40 @@ export interface SiteSettings {
     email?: string;
     [key: string]: string | undefined;
   };
+  designConfig: HubDesignConfig;
   updatedAt: string;
+}
+
+export interface HubModuleConfig {
+  visible: boolean;
+  opacity: number;
+  scale: number;
+  yOffset: number;
+}
+
+export interface HubDesignConfig {
+  global: {
+    contentMaxWidth: number;
+    bodyFont: HubBodyFont;
+    displayFont: HubDisplayFont;
+    mediaSaturation: number;
+    mediaContrast: number;
+    mediaBrightness: number;
+  };
+  hero: {
+    maxWidth: number;
+    titleScale: number;
+    bodyScale: number;
+    ctaScale: number;
+    opacity: number;
+  };
+  modules: {
+    order: HubModuleKey[];
+    stickyCategoryMorph: HubModuleConfig;
+    featured: HubModuleConfig;
+    textReveal: HubModuleConfig;
+    storyFeed: HubModuleConfig;
+  };
 }
 
 export interface Profile {
@@ -79,5 +115,6 @@ export interface DbSiteSettingsRow {
   hero_cta_primary: string;
   hero_cta_secondary: string;
   social_links: SiteSettings["socialLinks"] | null;
+  design_config: HubDesignConfig | null;
   updated_at: string;
 }
