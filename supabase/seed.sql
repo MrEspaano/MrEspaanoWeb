@@ -1,0 +1,192 @@
+-- Seeddata: 12 projekt med blandade kategorier och status
+insert into public.projects (
+  slug,
+  title,
+  short_description,
+  long_description,
+  category,
+  tags,
+  status,
+  links,
+  visuals,
+  tech_stack,
+  created_at
+)
+values
+  (
+    'aurora-boardflow',
+    'Aurora BoardFlow',
+    'AI-driven planeringsapp för team med smarta tidslinjer och realtidsprioritering.',
+    'Aurora BoardFlow är en produktivitetsapp med fokus på tydlig planering, snabb navigering och samarbete i realtid. Projektet utforskar hur animation och datavisualisering kan göra komplex projektstyrning begriplig på sekunder.',
+    'app',
+    array['productivity', 'ai', 'realtime'],
+    'live',
+    '{"demoUrl": "https://example.com/aurora", "repoUrl": "https://github.com/example/aurora-boardflow", "caseStudyUrl": "https://example.com/case/aurora"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Next.js', 'TypeScript', 'Supabase'],
+    now() - interval '2 days'
+  ),
+  (
+    'pulse-mailer',
+    'Pulse Mailer',
+    'Automatiserad outbound-motor med personaliserade sekvenser och tydlig performance-vy.',
+    'Pulse Mailer hjälper små team att driva outbound med hög kvalitet. Fokus ligger på redaktionell copy, mätbarhet och ett arbetsflöde där varje steg känns snabbt men kontrollerat.',
+    'app',
+    array['automation', 'sales', 'analytics'],
+    'wip',
+    '{"demoUrl": "https://example.com/pulse", "repoUrl": "https://github.com/example/pulse-mailer"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['React', 'Supabase', 'Framer Motion'],
+    now() - interval '9 days'
+  ),
+  (
+    'neon-dungeon-run',
+    'Neon Dungeon Run',
+    'Tempo-baserat actionspel med procedural generation och progressiv svårighetskurva.',
+    'Neon Dungeon Run är ett experiment i hur tydlig game feel och rytmiska animationer kan förstärka spelbarhet. Spelet använder procedural ban-design och tydlig feedback för varje beslut spelaren tar.',
+    'game',
+    array['action', 'procedural', 'indie'],
+    'live',
+    '{"demoUrl": "https://example.com/neon-dungeon", "repoUrl": "https://github.com/example/neon-dungeon-run"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Godot', 'TypeScript', 'WebGL'],
+    now() - interval '14 days'
+  ),
+  (
+    'fjord-survival-prototype',
+    'Fjord Survival Prototype',
+    'Low-poly survival-prototyp med systems-driven crafting och dynamiskt väder.',
+    'En spelprototyp som utforskar långsamt tempo, tydlig atmosfär och systemisk progression. Målet är att hitta balansen mellan emergent gameplay och ett avskalat visuellt språk.',
+    'game',
+    array['survival', 'prototype', 'systems'],
+    'wip',
+    '{"repoUrl": "https://github.com/example/fjord-survival"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Unity', 'C#', 'Blender'],
+    now() - interval '20 days'
+  ),
+  (
+    'atelier-portfolio',
+    'Atelier Portfolio',
+    'Editorial portfolio-site med motion-first navigation och modulärt innehåll.',
+    'Atelier Portfolio är en visuellt driven hemsida för kreativa team. Fokus ligger på typografi, rytm i scroll och ett CMS-likt arbetsflöde där innehåll snabbt kan bytas ut utan kodändringar.',
+    'site',
+    array['portfolio', 'editorial', 'motion'],
+    'live',
+    '{"demoUrl": "https://example.com/atelier", "caseStudyUrl": "https://example.com/case/atelier"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Next.js', 'Tailwind', 'Framer Motion'],
+    now() - interval '28 days'
+  ),
+  (
+    'northstar-commerce',
+    'Northstar Commerce',
+    'Headless e-handelslösning med snabb checkout och personaliserade produktflöden.',
+    'Northstar Commerce byggdes för att kombinera hög prestanda med tydlig storytelling runt produkterna. Projektet fokuserade på A/B-testning, sökoptimering och konverteringsorienterad UX.',
+    'site',
+    array['ecommerce', 'headless', 'ux'],
+    'archived',
+    '{"demoUrl": "https://example.com/northstar", "repoUrl": "https://github.com/example/northstar-commerce"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Next.js', 'Stripe', 'Supabase'],
+    now() - interval '36 days'
+  ),
+  (
+    'lumen-notes',
+    'Lumen Notes',
+    'Minimal anteckningsapp med markdown, sync och AI-assisterade sammanfattningar.',
+    'Lumen Notes är en personlig kunskapshubb som binder samman anteckningar, snippets och research. Målet var ett fokuserat gränssnitt utan friktion men med kraftfull sök- och taggstruktur.',
+    'app',
+    array['notes', 'markdown', 'ai'],
+    'live',
+    '{"demoUrl": "https://example.com/lumen-notes"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['React', 'Supabase', 'OpenAI API'],
+    now() - interval '45 days'
+  ),
+  (
+    'signal-arena',
+    'Signal Arena',
+    'PvP minispel med korta matcher och responsiv netcode för browser.',
+    'Signal Arena är byggt för snabba matcher och tydlig kompetitiv feedback. Projektet fokuserar på matchmaking, latenshantering och läsbar HUD i högt tempo.',
+    'game',
+    array['pvp', 'multiplayer', 'browser'],
+    'archived',
+    '{"repoUrl": "https://github.com/example/signal-arena"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['WebSockets', 'Node.js', 'PixiJS'],
+    now() - interval '57 days'
+  ),
+  (
+    'studio-os',
+    'Studio OS',
+    'Intern operativ dashboard för design- och utvecklingsteam.',
+    'Studio OS samlar roadmap, briefar, assets och release-status i ett flöde. Projektets mål var att minska handoff-friktion mellan design och utveckling med tydliga processkomponenter.',
+    'app',
+    array['dashboard', 'operations', 'team'],
+    'wip',
+    '{"repoUrl": "https://github.com/example/studio-os", "caseStudyUrl": "https://example.com/case/studio-os"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Next.js', 'Postgres', 'Supabase Auth'],
+    now() - interval '63 days'
+  ),
+  (
+    'polar-journal',
+    'Polar Journal',
+    'Personlig journaling-site med tidslinje, humörspårning och textfokus.',
+    'Polar Journal designades för långsiktig användning och låg mental belastning. Projektet testar semantisk sök, data-visualisering av vanor och en typografidriven skrivupplevelse.',
+    'site',
+    array['journal', 'wellbeing', 'timeline'],
+    'live',
+    '{"demoUrl": "https://example.com/polar-journal"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Next.js', 'TypeScript', 'D3'],
+    now() - interval '71 days'
+  ),
+  (
+    'glyph-racer',
+    'Glyph Racer',
+    'Stylat arcade-racingspel med generativa banor och leaderboard.',
+    'Glyph Racer kombinerar minimalistisk estetik med hög fart och stark feedbackloop. Fokus var på input-känsla, snabb restart och visuellt distinkta bansegment.',
+    'game',
+    array['arcade', 'racing', 'leaderboard'],
+    'wip',
+    '{"demoUrl": "https://example.com/glyph-racer"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Three.js', 'WebAudio', 'TypeScript'],
+    now() - interval '83 days'
+  ),
+  (
+    'atlas-landing-system',
+    'Atlas Landing System',
+    'Designsystem för landningssidor med modulära block och hög återanvändning.',
+    'Atlas Landing System standardiserar hur kampanjsidor byggs och mäts. Projektet fokuserade på komponentkvalitet, visuell konsekvens och snabb iteration för marknadsteam.',
+    'site',
+    array['design-system', 'marketing', 'conversion'],
+    'archived',
+    '{"repoUrl": "https://github.com/example/atlas-landing-system", "caseStudyUrl": "https://example.com/case/atlas"}'::jsonb,
+    '{"coverPath": null, "galleryPaths": []}'::jsonb,
+    array['Next.js', 'Tailwind', 'Storybook'],
+    now() - interval '96 days'
+  )
+on conflict (slug) do update set
+  title = excluded.title,
+  short_description = excluded.short_description,
+  long_description = excluded.long_description,
+  category = excluded.category,
+  tags = excluded.tags,
+  status = excluded.status,
+  links = excluded.links,
+  visuals = excluded.visuals,
+  tech_stack = excluded.tech_stack,
+  created_at = excluded.created_at;
+
+update public.site_settings
+set
+  display_name = 'Erik Espaano',
+  tagline = 'Hypermodern hub för appar, spel och hemsidor',
+  bio = 'Jag bygger digitala produkter med fokus på tydlig upplevelse, stark design och teknisk precision.',
+  hero_cta_primary = 'Utforska projekt',
+  hero_cta_secondary = 'Alla case',
+  social_links = '{"github": "https://github.com/", "linkedin": "https://linkedin.com/", "x": "https://x.com/", "email": "mailto:hej@example.com"}'::jsonb
+where id = true;
