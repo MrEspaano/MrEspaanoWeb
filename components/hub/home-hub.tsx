@@ -256,17 +256,17 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
-            className="glass-elevated rounded-[1.8rem] p-5 sm:p-7"
+            className="relative flex items-center justify-center p-2 sm:p-4"
           >
-            <p className="text-xs uppercase tracking-[0.24em] text-blue-200/80">Brand</p>
-            <div className="mt-4 flex min-h-[440px] items-center justify-center rounded-2xl border border-slate-600/75 bg-slate-950/80 p-5">
+            <div className="pointer-events-none absolute inset-0 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_45%,rgba(63,142,255,0.18),transparent_56%)] blur-[2px]" />
+            <div className="relative flex min-h-[500px] w-full items-center justify-center p-2">
               {logoVisible ? (
                 <Image
                   src="/brand/mrespaano-logo.png"
                   alt="MrEspaano logga"
                   width={760}
                   height={760}
-                  className="h-auto w-full max-w-[520px] object-contain"
+                  className="h-auto w-full max-w-[620px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)]"
                   priority
                   onError={() => setLogoVisible(false)}
                 />
