@@ -387,12 +387,54 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                   onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, titleScale: next } }))}
                 />
                 <NumberField
+                  label="Titel maxbredd"
+                  value={designConfig.hero.titleMaxWidth}
+                  min={360}
+                  max={1400}
+                  step={10}
+                  suffix="px"
+                  onChange={(next) =>
+                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, titleMaxWidth: next } }))
+                  }
+                />
+                <NumberField
+                  label="Titel radhöjd"
+                  value={designConfig.hero.titleLineHeight}
+                  min={0.8}
+                  max={1.4}
+                  step={0.01}
+                  onChange={(next) =>
+                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, titleLineHeight: next } }))
+                  }
+                />
+                <NumberField
                   label="Brödtext skala"
                   value={designConfig.hero.bodyScale}
                   min={0.7}
                   max={1.3}
                   step={0.01}
                   onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, bodyScale: next } }))}
+                />
+                <NumberField
+                  label="Brödtext maxbredd"
+                  value={designConfig.hero.bodyMaxWidth}
+                  min={320}
+                  max={1280}
+                  step={10}
+                  suffix="px"
+                  onChange={(next) =>
+                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, bodyMaxWidth: next } }))
+                  }
+                />
+                <NumberField
+                  label="Brödtext radhöjd"
+                  value={designConfig.hero.bodyLineHeight}
+                  min={1.1}
+                  max={2.2}
+                  step={0.01}
+                  onChange={(next) =>
+                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, bodyLineHeight: next } }))
+                  }
                 />
                 <NumberField
                   label="CTA skala"

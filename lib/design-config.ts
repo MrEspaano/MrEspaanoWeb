@@ -34,7 +34,11 @@ export const hubDesignConfigSchema = z.object({
   hero: z.object({
     maxWidth: z.number().min(620).max(1440),
     titleScale: z.number().min(0.7).max(1.4),
+    titleMaxWidth: z.number().min(360).max(1400),
+    titleLineHeight: z.number().min(0.8).max(1.4),
     bodyScale: z.number().min(0.7).max(1.3),
+    bodyMaxWidth: z.number().min(320).max(1280),
+    bodyLineHeight: z.number().min(1.1).max(2.2),
     ctaScale: z.number().min(0.7).max(1.3),
     opacity: z.number().min(0.2).max(1)
   }),
@@ -78,7 +82,11 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
   hero: {
     maxWidth: 1320,
     titleScale: 1,
+    titleMaxWidth: 980,
+    titleLineHeight: 0.99,
     bodyScale: 1,
+    bodyMaxWidth: 860,
+    bodyLineHeight: 1.7,
     ctaScale: 1,
     opacity: 1
   },
@@ -160,7 +168,11 @@ export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
     hero: {
       maxWidth: clamp(Number(value.hero?.maxWidth ?? 1320), 620, 1440),
       titleScale: clamp(Number(value.hero?.titleScale ?? 1), 0.7, 1.4),
+      titleMaxWidth: clamp(Number(value.hero?.titleMaxWidth ?? 980), 360, 1400),
+      titleLineHeight: clamp(Number(value.hero?.titleLineHeight ?? 0.99), 0.8, 1.4),
       bodyScale: clamp(Number(value.hero?.bodyScale ?? 1), 0.7, 1.3),
+      bodyMaxWidth: clamp(Number(value.hero?.bodyMaxWidth ?? 860), 320, 1280),
+      bodyLineHeight: clamp(Number(value.hero?.bodyLineHeight ?? 1.7), 1.1, 2.2),
       ctaScale: clamp(Number(value.hero?.ctaScale ?? 1), 0.7, 1.3),
       opacity: clamp(Number(value.hero?.opacity ?? 1), 0.2, 1)
     },

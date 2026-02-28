@@ -184,25 +184,6 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
                 Admin
               </Link>
             ) : null}
-
-            <div className="ml-1 hidden sm:block">
-              {logoVisible ? (
-                <div className="overflow-hidden rounded-2xl border border-slate-500/80 bg-slate-950/80 p-1 shadow-[0_18px_40px_rgba(2,8,24,0.5)]">
-                  <Image
-                    src="/brand/mrespaano-logo.png"
-                    alt="MrEspaano logga"
-                    width={124}
-                    height={74}
-                    className="h-[56px] w-[96px] rounded-xl object-contain object-center"
-                    onError={() => setLogoVisible(false)}
-                  />
-                </div>
-              ) : (
-                <div className="flex h-[58px] w-[58px] items-center justify-center rounded-full border border-blue-300/45 bg-slate-900/80 text-sm font-extrabold text-blue-100 shadow-[0_18px_40px_rgba(2,8,24,0.5)]">
-                  ME
-                </div>
-              )}
-            </div>
           </nav>
         </motion.div>
       </header>
@@ -219,13 +200,23 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
             <p className="text-xs uppercase tracking-[0.28em] text-blue-200/80">Dark editorial showcase</p>
             <h1
               className="mt-4 text-4xl font-semibold leading-[0.99] text-slate-100 sm:text-5xl lg:text-6xl"
-              style={{ transform: `scale(${design.hero.titleScale})`, transformOrigin: "left top" }}
+              style={{
+                maxWidth: `${design.hero.titleMaxWidth}px`,
+                lineHeight: design.hero.titleLineHeight,
+                transform: `scale(${design.hero.titleScale})`,
+                transformOrigin: "left top"
+              }}
             >
               {settings.tagline}
             </h1>
             <p
-              className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-300"
-              style={{ transform: `scale(${design.hero.bodyScale})`, transformOrigin: "left top" }}
+              className="mt-6 text-lg leading-relaxed text-slate-300"
+              style={{
+                maxWidth: `${design.hero.bodyMaxWidth}px`,
+                lineHeight: design.hero.bodyLineHeight,
+                transform: `scale(${design.hero.bodyScale})`,
+                transformOrigin: "left top"
+              }}
             >
               {settings.bio}
             </p>
@@ -256,10 +247,10 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
-            className="relative flex items-center justify-center p-2 sm:p-4"
+            className="relative flex items-start justify-center p-2 pt-0 sm:p-4 sm:pt-2"
           >
             <div className="pointer-events-none absolute inset-0 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_45%,rgba(63,142,255,0.18),transparent_56%)] blur-[2px]" />
-            <div className="relative flex min-h-[500px] w-full items-center justify-center p-2">
+            <div className="relative flex min-h-[500px] w-full items-start justify-center p-2 pt-0 sm:pt-2">
               {logoVisible ? (
                 <Image
                   src="/brand/mrespaano-logo.png"

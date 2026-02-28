@@ -78,7 +78,11 @@ export interface HubDesignConfig {
   hero: {
     maxWidth: number;
     titleScale: number;
+    titleMaxWidth: number;
+    titleLineHeight: number;
     bodyScale: number;
+    bodyMaxWidth: number;
+    bodyLineHeight: number;
     ctaScale: number;
     opacity: number;
   };
