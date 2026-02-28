@@ -12,27 +12,18 @@ export function AdminShell({ email, children }: AdminShellProps) {
       <header className="section-shell mb-7">
         <div className="admin-surface flex flex-wrap items-center justify-between gap-4 rounded-2xl px-4 py-3 sm:px-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-cyan-100/80">Admin</p>
-            <p className="text-sm text-white/75">{email}</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-blue-200/80">Admin</p>
+            <p className="text-sm text-slate-300">{email}</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Link
-              href="/admin/projects"
-              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/20"
-            >
+            <Link href="/admin/projects" className="btn-secondary-dark px-4 py-2 text-sm">
               Projekt
             </Link>
-            <Link
-              href="/admin/settings"
-              className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/35 hover:bg-white/20"
-            >
+            <Link href="/admin/settings" className="btn-secondary-dark px-4 py-2 text-sm">
               Inställningar
             </Link>
-            <Link
-              href="/"
-              className="rounded-full border border-cyan-200/40 bg-cyan-200/15 px-4 py-2 text-sm font-semibold text-cyan-50 transition hover:border-cyan-200/70"
-            >
+            <Link href="/" className="btn-primary-amber px-4 py-2 text-sm">
               Publik vy
             </Link>
             <AdminSignOutButton />

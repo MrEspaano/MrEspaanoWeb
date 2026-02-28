@@ -70,14 +70,14 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.24, ease: [0.2, 0.92, 0.22, 1] }}
+          transition={{ duration: 0.18, ease: [0.2, 0.9, 0.2, 1] }}
           className="fixed inset-0 z-[80]"
           aria-hidden={!isOpen}
         >
           <motion.button
             type="button"
             aria-label="Stäng projektmodal"
-            className="absolute inset-0 bg-slate-50/[0.46] backdrop-blur-[10px]"
+            className="absolute inset-0 bg-slate-950/78 backdrop-blur-[8px]"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -88,8 +88,8 @@ export function ProjectDetailModal({ project, isOpen, onClose }: ProjectDetailMo
             className="relative z-10 mx-auto flex h-full w-full max-w-6xl items-center justify-center p-4 sm:p-8"
             initial={{ y: 18, scale: 0.985 }}
             animate={{ y: 0, scale: 1 }}
-            exit={{ y: 14, scale: 0.986 }}
-            transition={{ type: "spring", stiffness: 210, damping: 28, mass: 0.82 }}
+            exit={{ y: 10, scale: 0.988 }}
+            transition={{ type: "spring", stiffness: 260, damping: 32, mass: 0.8 }}
           >
             <div
               role="dialog"

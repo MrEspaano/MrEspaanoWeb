@@ -1,5 +1,13 @@
 import { z } from "zod";
-import { HubBodyFont, HubDesignConfig, HubDisplayFont, HubModuleConfig, HubModuleKey } from "@/lib/types";
+import {
+  HubBodyFont,
+  HubDesignConfig,
+  HubDisplayFont,
+  HubModuleConfig,
+  HubModuleKey,
+  HubMotionPreset,
+  HubThemeMode
+} from "@/lib/types";
 
 const MODULE_KEYS: HubModuleKey[] = ["stickyCategoryMorph", "featured", "textReveal", "storyFeed"];
 
@@ -17,7 +25,11 @@ export const hubDesignConfigSchema = z.object({
     displayFont: z.enum(["syne", "space-grotesk", "sora"]),
     mediaSaturation: z.number().min(0.7).max(1.6),
     mediaContrast: z.number().min(0.7).max(1.5),
-    mediaBrightness: z.number().min(0.7).max(1.35)
+    mediaBrightness: z.number().min(0.7).max(1.35),
+    themeMode: z.enum(["dark-editorial", "dark-neon", "hybrid"]),
+    accentStrength: z.number().min(0.6).max(1.6),
+    panelContrast: z.number().min(0.7).max(1.5),
+    motionPreset: z.enum(["balanced", "high-energy", "minimal"])
   }),
   hero: z.object({
     maxWidth: z.number().min(620).max(1440),
@@ -54,13 +66,17 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
   global: {
     contentMaxWidth: 1280,
     bodyFont: "manrope",
-    displayFont: "syne",
-    mediaSaturation: 1.33,
-    mediaContrast: 1.14,
-    mediaBrightness: 1.07
+    displayFont: "sora",
+    mediaSaturation: 1.22,
+    mediaContrast: 1.17,
+    mediaBrightness: 1.06,
+    themeMode: "dark-editorial",
+    accentStrength: 1,
+    panelContrast: 1,
+    motionPreset: "high-energy"
   },
   hero: {
-    maxWidth: 1024,
+    maxWidth: 1320,
     titleScale: 1,
     bodyScale: 1,
     ctaScale: 1,
@@ -84,10 +100,24 @@ function parseBodyFont(value: unknown): HubBodyFont {
 }
 
 function parseDisplayFont(value: unknown): HubDisplayFont {
-  if (value === "space-grotesk" || value === "sora") {
+  if (value === "syne" || value === "space-grotesk" || value === "sora") {
     return value;
   }
-  return "syne";
+  return "sora";
+}
+
+function parseThemeMode(value: unknown): HubThemeMode {
+  if (value === "dark-neon" || value === "hybrid") {
+    return value;
+  }
+  return "dark-editorial";
+}
+
+function parseMotionPreset(value: unknown): HubMotionPreset {
+  if (value === "balanced" || value === "minimal") {
+    return value;
+  }
+  return "high-energy";
 }
 
 function normalizeModule(raw: unknown): HubModuleConfig {
@@ -119,12 +149,16 @@ export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
       contentMaxWidth: clamp(Number(value.global?.contentMaxWidth ?? 1280), 960, 1560),
       bodyFont: parseBodyFont(value.global?.bodyFont),
       displayFont: parseDisplayFont(value.global?.displayFont),
-      mediaSaturation: clamp(Number(value.global?.mediaSaturation ?? 1.33), 0.7, 1.6),
-      mediaContrast: clamp(Number(value.global?.mediaContrast ?? 1.14), 0.7, 1.5),
-      mediaBrightness: clamp(Number(value.global?.mediaBrightness ?? 1.07), 0.7, 1.35)
+      mediaSaturation: clamp(Number(value.global?.mediaSaturation ?? 1.22), 0.7, 1.6),
+      mediaContrast: clamp(Number(value.global?.mediaContrast ?? 1.17), 0.7, 1.5),
+      mediaBrightness: clamp(Number(value.global?.mediaBrightness ?? 1.06), 0.7, 1.35),
+      themeMode: parseThemeMode(value.global?.themeMode),
+      accentStrength: clamp(Number(value.global?.accentStrength ?? 1), 0.6, 1.6),
+      panelContrast: clamp(Number(value.global?.panelContrast ?? 1), 0.7, 1.5),
+      motionPreset: parseMotionPreset(value.global?.motionPreset)
     },
     hero: {
-      maxWidth: clamp(Number(value.hero?.maxWidth ?? 1024), 620, 1440),
+      maxWidth: clamp(Number(value.hero?.maxWidth ?? 1320), 620, 1440),
       titleScale: clamp(Number(value.hero?.titleScale ?? 1), 0.7, 1.4),
       bodyScale: clamp(Number(value.hero?.bodyScale ?? 1), 0.7, 1.3),
       ctaScale: clamp(Number(value.hero?.ctaScale ?? 1), 0.7, 1.3),

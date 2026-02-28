@@ -21,7 +21,7 @@ function LinkChip({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="glass-chip inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
+      className="glass-chip inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-slate-200 transition hover:-translate-y-0.5 hover:border-slate-400/90 hover:bg-slate-800/95"
       onClick={(event) => event.stopPropagation()}
     >
       {label}
@@ -36,23 +36,23 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
       layout
       className={cn(
         "glass-panel group relative rounded-3xl p-4 sm:p-5",
-        active ? "ring-1 ring-sky-300/90" : "ring-1 ring-transparent"
+        active ? "border-amber-300/50" : "border-slate-700/80"
       )}
       animate={{
-        y: active ? -3 : 0,
-        scale: active ? 1 : 0.988
+        y: active ? -4 : 0,
+        scale: active ? 1 : 0.992
       }}
-      transition={{ duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.38, ease: [0.2, 0.9, 0.2, 1] }}
       data-project-card={project.slug}
       id={`project-${project.slug}`}
       aria-labelledby={`project-title-${project.slug}`}
       style={{ scrollSnapAlign: "center" }}
     >
-      <div className="relative mb-4 overflow-hidden rounded-2xl border border-white/[0.28]">
+      <div className="relative mb-4 overflow-hidden rounded-2xl border border-slate-500/70">
         <button
           type="button"
           onClick={() => onOpen(project.slug)}
-          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
           aria-label={`Öppna projekt: ${project.title}`}
         />
 
@@ -65,14 +65,14 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 40vw"
               className={cn(
                 "hub-media object-cover transition duration-700",
-                active ? "scale-[1.05]" : "scale-100 group-hover:scale-[1.035]"
+                active ? "scale-[1.05]" : "scale-100 group-hover:scale-[1.03]"
               )}
               priority={emphasize}
             />
           ) : (
-            <div className="h-full w-full bg-[radial-gradient(circle_at_24%_24%,rgba(221,246,255,0.7),rgba(66,93,147,0.45)_35%,rgba(36,53,95,0.86)_72%)]" />
+            <div className="h-full w-full bg-[radial-gradient(circle_at_24%_24%,rgba(85,153,255,0.4),rgba(18,35,65,0.9)_55%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-sky-100/12 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/34 to-transparent" />
         </motion.div>
       </div>
 
@@ -81,33 +81,23 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
           <motion.h3
             layoutId={`project-title-${project.slug}`}
             id={`project-title-${project.slug}`}
-            className="text-2xl font-semibold leading-tight text-slate-800"
+            className="text-2xl font-semibold leading-tight text-slate-100"
           >
             {project.title}
           </motion.h3>
-          <span
-            className={cn(
-              "rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide",
-              mapStatusBadgeClass(project.status)
-            )}
-          >
-            {STATUS_LABELS[project.status]}
-          </span>
+          <span className={mapStatusBadgeClass(project.status)}>{STATUS_LABELS[project.status]}</span>
         </div>
 
-        <p className="max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">{project.shortDescription}</p>
+        <p className="max-w-3xl text-sm leading-relaxed text-slate-300 sm:text-base">{project.shortDescription}</p>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
           {project.tags.slice(0, 4).map((tag) => (
-            <span key={tag} className="glass-chip px-2.5 py-1 text-[11px] font-medium text-slate-600">
+            <span key={tag} className="glass-chip px-2.5 py-1 text-[11px] font-medium text-slate-300">
               #{tag}
             </span>
           ))}
           {project.techStack.slice(0, 3).map((tech) => (
-            <span
-              key={tech}
-              className="glass-chip border-sky-300/65 bg-sky-100/85 px-2.5 py-1 text-[11px] text-sky-800"
-            >
+            <span key={tech} className="glass-chip border-blue-300/35 bg-blue-500/14 px-2.5 py-1 text-[11px] text-blue-100">
               {tech}
             </span>
           ))}
@@ -124,15 +114,12 @@ export function ProjectCard({ project, active, onOpen, emphasize }: ProjectCardP
             <button
               type="button"
               onClick={() => onOpen(project.slug)}
-              className="glass-chip px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
+              className="btn-secondary-dark px-3 py-1.5 text-xs"
             >
               Öppna
             </button>
 
-            <Link
-              href={`/projects/${project.slug}`}
-              className="glass-chip inline-flex px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:bg-white/88"
-            >
+            <Link href={`/projects/${project.slug}`} className="btn-primary-amber px-3 py-1.5 text-xs">
               Full vy
             </Link>
           </div>

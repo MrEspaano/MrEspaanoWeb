@@ -3,6 +3,8 @@ export type ProjectCategoryFilter = ProjectCategory | "all";
 export type HubModuleKey = "stickyCategoryMorph" | "featured" | "textReveal" | "storyFeed";
 export type HubDisplayFont = "syne" | "space-grotesk" | "sora";
 export type HubBodyFont = "manrope" | "inter" | "system";
+export type HubThemeMode = "dark-editorial" | "dark-neon" | "hybrid";
+export type HubMotionPreset = "balanced" | "high-energy" | "minimal";
 
 export type ProjectStatus = "live" | "wip" | "archived";
 
@@ -68,6 +70,10 @@ export interface HubDesignConfig {
     mediaSaturation: number;
     mediaContrast: number;
     mediaBrightness: number;
+    themeMode: HubThemeMode;
+    accentStrength: number;
+    panelContrast: number;
+    motionPreset: HubMotionPreset;
   };
   hero: {
     maxWidth: number;

@@ -18,10 +18,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   return (
     <main className="relative min-h-screen pb-20 pt-10 sm:pt-16">
       <div className="section-shell mb-8">
-        <Link
-          href="/projects"
-          className="glass-chip inline-flex items-center px-4 py-2 text-sm font-semibold transition hover:scale-[1.02]"
-        >
+        <Link href="/projects" className="btn-secondary-dark px-4 py-2 text-sm">
           Tillbaka till projekt
         </Link>
       </div>

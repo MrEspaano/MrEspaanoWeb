@@ -45,21 +45,19 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
         {(title || subtitle) && (
           <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
             <div>
-              {title ? <h2 className="text-3xl font-bold text-slate-800 sm:text-4xl">{title}</h2> : null}
-              {subtitle ? (
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">{subtitle}</p>
-              ) : null}
+              {title ? <h2 className="text-3xl font-semibold text-slate-100 sm:text-4xl">{title}</h2> : null}
+              {subtitle ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">{subtitle}</p> : null}
             </div>
-            <p className="glass-chip px-4 py-2 text-xs uppercase tracking-[0.17em] text-slate-600">Scroll-driven</p>
+            <p className="glass-chip px-4 py-2 text-xs uppercase tracking-[0.17em] text-slate-300">Scroll-driven</p>
           </div>
         )}
 
         <div className="glass-elevated relative rounded-[2rem] p-3 sm:p-4">
-          <div className="absolute right-3 top-8 hidden h-[84%] w-px overflow-hidden rounded-full bg-sky-200/65 lg:block">
+          <div className="absolute right-3 top-8 hidden h-[84%] w-px overflow-hidden rounded-full bg-slate-700/85 lg:block">
             <motion.div
-              className="w-full origin-top bg-gradient-to-b from-sky-400/80 via-sky-300/75 to-blue-300/65"
+              className="w-full origin-top bg-gradient-to-b from-amber-400/90 via-orange-400/80 to-blue-400/80"
               animate={{ height: `${activeProgress * 100}%` }}
-              transition={{ duration: 0.35, ease: [0.2, 0.9, 0.2, 1] }}
+              transition={{ duration: 0.32, ease: [0.2, 0.9, 0.2, 1] }}
             />
           </div>
 
@@ -67,12 +65,12 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0.45, y: 26 }}
+                initial={{ opacity: 0.42, y: 26 }}
                 animate={{
-                  opacity: index === activeIndex ? 1 : 0.88,
-                  y: index === activeIndex ? 0 : 9
+                  opacity: index === activeIndex ? 1 : 0.84,
+                  y: index === activeIndex ? 0 : 10
                 }}
-                transition={{ duration: 0.44, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.36, ease: [0.2, 0.9, 0.2, 1] }}
               >
                 <ProjectCard
                   project={project}

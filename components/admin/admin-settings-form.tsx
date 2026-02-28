@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -56,18 +56,10 @@ function NumberField({
 }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">{label}</span>
+      <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">{label}</span>
       <div className="flex items-center gap-3">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(event) => onChange(Number(event.target.value))}
-          className="w-full"
-        />
-        <span className="w-20 text-right text-xs text-slate-700">
+        <input type="range" min={min} max={max} step={step} value={value} onChange={(event) => onChange(Number(event.target.value))} className="w-full" />
+        <span className="w-20 text-right text-xs text-slate-200">
           {value}
           {suffix ?? ""}
         </span>
@@ -91,6 +83,29 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
   const [designConfig, setDesignConfig] = useState<HubDesignConfig>(
     normalizeHubDesignConfig(settings.designConfig ?? DEFAULT_HUB_DESIGN_CONFIG)
   );
+
+  const previewViewportRef = useRef<HTMLDivElement>(null);
+  const [previewFrameWidth, setPreviewFrameWidth] = useState(900);
+
+  useEffect(() => {
+    const target = previewViewportRef.current;
+    if (!target) {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width;
+      if (width) {
+        setPreviewFrameWidth(width);
+      }
+    });
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   const {
     register,
@@ -134,11 +149,16 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
   );
 
   const previewWidth = {
-    desktop: 1440,
-    laptop: 1280,
+    desktop: 1366,
+    laptop: 1200,
     tablet: 1024,
     mobile: 390
   }[previewPreset];
+
+  const previewScale = useMemo(() => {
+    const available = Math.max(300, previewFrameWidth - 16);
+    return Math.min(1, available / previewWidth);
+  }, [previewFrameWidth, previewWidth]);
 
   const updateModule = (moduleKey: HubModuleKey, patch: Partial<HubModuleConfig>) => {
     setDesignConfig((previous) => ({
@@ -182,55 +202,71 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
   };
 
   return (
-    <section className="mx-auto w-full max-w-[1900px] px-4 sm:px-6 lg:px-8">
-      <div className="grid gap-6 xl:grid-cols-[minmax(430px,560px)_minmax(0,1fr)]">
+    <section className="mx-auto w-full max-w-[2200px] px-4 sm:px-6 lg:px-8">
+      <div className="grid gap-6 xl:grid-cols-[minmax(380px,500px)_minmax(0,1fr)]">
         <div className="admin-surface rounded-3xl p-6 sm:p-8">
-          <h1 className="text-3xl font-bold text-white">Site + Design settings</h1>
-          <p className="mt-2 text-sm text-slate-200/90">Allt här uppdateras i live preview direkt.</p>
+          <h1 className="text-3xl font-semibold text-slate-100">Site + Design settings</h1>
+          <p className="mt-2 text-sm text-slate-300">Allt här uppdateras i live preview direkt.</p>
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-7 space-y-6">
             <div className="admin-subsurface space-y-5 p-4">
-              <h2 className="text-lg font-semibold text-white">Innehåll</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Innehåll</h2>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block">
-                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Display name</span>
-                  <input {...register("displayName")} className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
-                  {errors.displayName ? <p className="mt-1 text-xs text-rose-100">{errors.displayName.message}</p> : null}
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Display name</span>
+                  <input
+                    {...register("displayName")}
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                  />
+                  {errors.displayName ? <p className="mt-1 text-xs text-rose-300">{errors.displayName.message}</p> : null}
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Tagline</span>
-                  <input {...register("tagline")} className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
-                  {errors.tagline ? <p className="mt-1 text-xs text-rose-100">{errors.tagline.message}</p> : null}
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Tagline</span>
+                  <input
+                    {...register("tagline")}
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                  />
+                  {errors.tagline ? <p className="mt-1 text-xs text-rose-300">{errors.tagline.message}</p> : null}
                 </label>
               </div>
 
               <label className="block">
-                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Bio</span>
-                <textarea rows={4} {...register("bio")} className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
-                {errors.bio ? <p className="mt-1 text-xs text-rose-100">{errors.bio.message}</p> : null}
+                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Bio</span>
+                <textarea
+                  rows={4}
+                  {...register("bio")}
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                />
+                {errors.bio ? <p className="mt-1 text-xs text-rose-300">{errors.bio.message}</p> : null}
               </label>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block">
-                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Hero CTA Primary</span>
-                  <input {...register("heroCtaPrimary")} className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Hero CTA Primary</span>
+                  <input
+                    {...register("heroCtaPrimary")}
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                  />
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Hero CTA Secondary</span>
-                  <input {...register("heroCtaSecondary")} className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Hero CTA Secondary</span>
+                  <input
+                    {...register("heroCtaSecondary")}
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                  />
                 </label>
               </div>
             </div>
 
             <div className="admin-subsurface space-y-5 p-4">
-              <h2 className="text-lg font-semibold text-white">Global design</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Global design</h2>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block">
-                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Display-font</span>
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Display-font</span>
                   <select
                     value={designConfig.global.displayFont}
                     onChange={(event) =>
@@ -242,7 +278,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                         }
                       }))
                     }
-                    className="glass-input w-full px-3 py-2 text-sm focus:outline-none"
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
                   >
                     <option value="syne">Syne</option>
                     <option value="space-grotesk">Space Grotesk</option>
@@ -251,7 +287,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Brödtext-font</span>
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Brödtext-font</span>
                   <select
                     value={designConfig.global.bodyFont}
                     onChange={(event) =>
@@ -263,7 +299,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                         }
                       }))
                     }
-                    className="glass-input w-full px-3 py-2 text-sm focus:outline-none"
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
                   >
                     <option value="manrope">Manrope</option>
                     <option value="inter">Inter</option>
@@ -331,7 +367,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
             </div>
 
             <div className="admin-subsurface space-y-5 p-4">
-              <h2 className="text-lg font-semibold text-white">Hero</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Hero</h2>
               <NumberField
                 label="Hero maxbredd"
                 value={designConfig.hero.maxWidth}
@@ -378,10 +414,10 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
             </div>
 
             <div className="admin-subsurface space-y-5 p-4">
-              <h2 className="text-lg font-semibold text-white">Moduler</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Moduler</h2>
 
               <label className="block">
-                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-300">Text reveal copy</span>
+                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Text reveal copy</span>
                 <textarea
                   rows={4}
                   value={designConfig.modules.textRevealCopy}
@@ -394,9 +430,9 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                       }
                     }))
                   }
-                  className="glass-input w-full px-3 py-2 text-sm focus:outline-none"
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
                 />
-                <p className="mt-1 text-xs text-slate-300">Minst 20 tecken. Visas i “Bonus moment”-sektionen.</p>
+                <p className="mt-1 text-xs text-slate-400">Minst 20 tecken. Visas i “Bonus moment”-sektionen.</p>
               </label>
 
               <div className="space-y-3">
@@ -404,11 +440,11 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                   const moduleConfig = designConfig.modules[moduleKey];
 
                   return (
-                    <div key={moduleKey} className="rounded-xl border border-white/20 bg-white/10 p-3">
+                    <div key={moduleKey} className="rounded-xl border border-slate-700/85 bg-slate-900/66 p-3">
                       <div className="mb-3 flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <p className="text-sm font-semibold text-white">{MODULE_LABELS[moduleKey]}</p>
-                          <label className="flex items-center gap-1 text-xs text-slate-200">
+                          <p className="text-sm font-semibold text-slate-100">{MODULE_LABELS[moduleKey]}</p>
+                          <label className="flex items-center gap-1 text-xs text-slate-300">
                             <input
                               type="checkbox"
                               checked={moduleConfig.visible}
@@ -433,7 +469,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                                 }
                               }));
                             }}
-                            className="glass-chip px-2 py-1 text-xs"
+                            className="btn-secondary-dark px-2 py-1 text-xs"
                           >
                             Upp
                           </button>
@@ -451,7 +487,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                                 }
                               }));
                             }}
-                            className="glass-chip px-2 py-1 text-xs"
+                            className="btn-secondary-dark px-2 py-1 text-xs"
                           >
                             Ner
                           </button>
@@ -492,16 +528,28 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
             </div>
 
             <div className="admin-subsurface space-y-4 p-4">
-              <h2 className="text-lg font-semibold text-white">Sociala länkar</h2>
+              <h2 className="text-lg font-semibold text-slate-100">Sociala länkar</h2>
               <div className="grid gap-4 md:grid-cols-2">
-                <input {...register("github")} placeholder="GitHub URL" className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
+                <input
+                  {...register("github")}
+                  placeholder="GitHub URL"
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                />
                 <input
                   {...register("linkedin")}
                   placeholder="LinkedIn URL"
-                  className="glass-input w-full px-3 py-2 text-sm focus:outline-none"
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
                 />
-                <input {...register("x")} placeholder="X URL" className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
-                <input {...register("email")} placeholder="Kontakt e-post" className="glass-input w-full px-3 py-2 text-sm focus:outline-none" />
+                <input
+                  {...register("x")}
+                  placeholder="X URL"
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                />
+                <input
+                  {...register("email")}
+                  placeholder="Kontakt e-post"
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                />
               </div>
             </div>
 
@@ -510,8 +558,8 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 className={cn(
                   "rounded-xl border px-3 py-2 text-sm",
                   feedback.type === "error"
-                    ? "border-rose-300/45 bg-rose-400/10 text-rose-100"
-                    : "border-emerald-300/45 bg-emerald-400/10 text-emerald-100"
+                    ? "border-rose-400/40 bg-rose-500/12 text-rose-200"
+                    : "border-emerald-400/40 bg-emerald-500/12 text-emerald-200"
                 )}
               >
                 {feedback.message}
@@ -521,14 +569,14 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
             <button
               type="submit"
               disabled={isSubmitting}
-              className="rounded-xl border border-sky-200/70 bg-sky-200/70 px-5 py-2 text-sm font-semibold text-slate-900 transition hover:bg-sky-200/85 disabled:cursor-not-allowed disabled:opacity-60"
+              className="btn-primary-amber px-5 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? "Sparar..." : "Spara inställningar"}
             </button>
           </form>
         </div>
 
-        <div className="admin-surface sticky top-4 h-[88vh] overflow-hidden rounded-3xl p-3">
+        <div className="admin-surface sticky top-4 h-[90vh] overflow-hidden rounded-3xl p-3">
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-2">
             <p className="text-xs uppercase tracking-[0.22em] text-slate-300">Live preview</p>
             <div className="flex items-center gap-1">
@@ -546,7 +594,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                   onClick={() => setPreviewPreset(preset.key)}
                   className={cn(
                     "glass-chip px-2.5 py-1 text-[11px] font-semibold",
-                    previewPreset === preset.key ? "border-sky-200/80 bg-sky-100/85 text-slate-900" : "text-slate-300"
+                    previewPreset === preset.key ? "border-amber-300/70 bg-amber-400/88 text-slate-900" : "text-slate-300"
                   )}
                 >
                   {preset.label}
@@ -554,8 +602,11 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
               ))}
             </div>
           </div>
-          <div className="h-[calc(100%-2.5rem)] overflow-auto rounded-2xl border border-white/25 bg-slate-900/35 p-2">
-            <div style={{ width: `${previewWidth}px` }} className="min-h-full max-w-none">
+          <div ref={previewViewportRef} className="h-[calc(100%-2.5rem)] overflow-auto rounded-2xl border border-slate-600/75 bg-slate-950/70 p-2">
+            <div
+              style={{ width: `${previewWidth}px`, zoom: previewScale } as CSSProperties}
+              className="min-h-full max-w-none origin-top-left"
+            >
               <HomeHub settings={previewSettings} projects={projects} previewMode />
             </div>
           </div>
