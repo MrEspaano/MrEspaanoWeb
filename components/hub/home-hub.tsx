@@ -11,8 +11,7 @@ import { ProjectStoryFeed } from "@/components/hub/project-story-feed";
 import { StickyCategoryMorph } from "@/components/hub/sticky-category-morph";
 import { TextRevealSection } from "@/components/hub/text-reveal-section";
 import { normalizeHubDesignConfig } from "@/lib/design-config";
-import { cn, mapStatusBadgeClass } from "@/lib/utils";
-import { STATUS_LABELS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 interface HomeHubProps {
   projects: Project[];
@@ -54,8 +53,6 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
     () => filteredProjects.find((project) => project.slug === selectedSlug) ?? null,
     [filteredProjects, selectedSlug]
   );
-
-  const highlightProject = useMemo(() => filteredProjects[0] ?? projects[0] ?? null, [filteredProjects, projects]);
 
   const heroStats = useMemo(
     () => [
@@ -255,51 +252,31 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
             </div>
           </motion.div>
 
-          {highlightProject ? (
-            <motion.article
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
-              className="glass-elevated rounded-[1.8rem] p-4 sm:p-5"
-            >
-              <div className="relative aspect-[5/4] overflow-hidden rounded-2xl border border-slate-500/70">
-                {highlightProject.visuals.coverUrl ? (
-                  <Image
-                    src={highlightProject.visuals.coverUrl}
-                    alt={highlightProject.title}
-                    fill
-                    sizes="(max-width: 1280px) 100vw, 40vw"
-                    className="hub-media object-cover"
-                    priority
-                  />
-                ) : (
-                  <div className="h-full w-full bg-[radial-gradient(circle_at_16%_18%,rgba(63,142,255,0.4),rgba(14,29,58,0.9)_52%)]" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/55 via-transparent to-transparent" />
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-slate-600/70 bg-slate-950/82 p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h2 className="text-2xl font-semibold text-slate-100">{highlightProject.title}</h2>
-                    <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-300">{highlightProject.shortDescription}</p>
-                  </div>
-                  <span className={mapStatusBadgeClass(highlightProject.status)}>{STATUS_LABELS[highlightProject.status]}</span>
+          <motion.article
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
+            className="glass-elevated rounded-[1.8rem] p-5 sm:p-7"
+          >
+            <p className="text-xs uppercase tracking-[0.24em] text-blue-200/80">Brand</p>
+            <div className="mt-4 flex min-h-[440px] items-center justify-center rounded-2xl border border-slate-600/75 bg-slate-950/80 p-5">
+              {logoVisible ? (
+                <Image
+                  src="/brand/mrespaano-logo.png"
+                  alt="MrEspaano logga"
+                  width={760}
+                  height={760}
+                  className="h-auto w-full max-w-[520px] object-contain"
+                  priority
+                  onError={() => setLogoVisible(false)}
+                />
+              ) : (
+                <div className="flex h-52 w-52 items-center justify-center rounded-full border border-blue-300/45 bg-slate-900/80 text-5xl font-extrabold text-blue-100">
+                  ME
                 </div>
-
-                <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                  <div className="rounded-xl border border-slate-700/70 bg-slate-900/70 px-3 py-2">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Quality</p>
-                    <p className="mt-1 text-sm font-semibold text-slate-100">Editorial + contrast</p>
-                  </div>
-                  <div className="rounded-xl border border-slate-700/70 bg-slate-900/70 px-3 py-2">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Next focus</p>
-                    <p className="mt-1 text-sm font-semibold text-slate-100">{filteredProjects[1]?.title ?? "Bygg vidare"}</p>
-                  </div>
-                </div>
-              </div>
-            </motion.article>
-          ) : null}
+              )}
+            </div>
+          </motion.article>
         </div>
       </section>
 
