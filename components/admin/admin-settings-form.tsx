@@ -453,6 +453,34 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                   step={0.01}
                   onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, opacity: next } }))}
                 />
+              </div>
+            </div>
+
+            <div className="admin-subsurface space-y-5 p-4">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-lg font-semibold text-slate-100">Hero-logga</h2>
+                <button
+                  type="button"
+                  className="glass-chip px-3 py-1 text-xs font-semibold text-slate-200"
+                  onClick={() =>
+                    setDesignConfig((previous) => ({
+                      ...previous,
+                      hero: {
+                        ...previous.hero,
+                        logoOffsetX: 0,
+                        logoOffsetY: 0,
+                        logoScale: 1
+                      }
+                    }))
+                  }
+                >
+                  Återställ
+                </button>
+              </div>
+              <p className="text-xs text-slate-400">
+                Flytta loggan manuellt i preview. Mobil/tablet använder en mjukare offset för att loggan alltid ska vara synlig.
+              </p>
+              <div className="grid gap-4 md:grid-cols-2">
                 <NumberField
                   label="Logo X-offset"
                   value={designConfig.hero.logoOffsetX}
