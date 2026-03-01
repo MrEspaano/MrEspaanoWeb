@@ -6,8 +6,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeHub } from "@/components/hub/home-hub";
-import { DEFAULT_HUB_DESIGN_CONFIG, normalizeHubDesignConfig } from "@/lib/design-config";
-import { HubDesignConfig, HubModuleConfig, HubModuleKey, Project, SiteSettings } from "@/lib/types";
+import { DEFAULT_HUB_DESIGN_CONFIG, normalizeHubDesignConfig, resolveHubDesignForPreset } from "@/lib/design-config";
+import { HubDesignConfig, HubDesignProfile, HubModuleConfig, HubModuleKey, HubViewportPreset, Project, SiteSettings } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 const settingsEditorSchema = z.object({
@@ -23,7 +23,7 @@ const settingsEditorSchema = z.object({
 });
 
 type SettingsEditorValues = z.infer<typeof settingsEditorSchema>;
-type PreviewPreset = "desktop" | "laptop" | "tablet" | "mobile";
+type PreviewPreset = HubViewportPreset;
 
 interface AdminSettingsFormProps {
   settings: SiteSettings;
@@ -73,6 +73,21 @@ function move<T>(array: T[], from: number, to: number) {
   const [picked] = copy.splice(from, 1);
   copy.splice(to, 0, picked);
   return copy;
+}
+
+function cloneProfile(profile: HubDesignProfile): HubDesignProfile {
+  return {
+    global: { ...profile.global },
+    hero: { ...profile.hero },
+    modules: {
+      ...profile.modules,
+      order: [...profile.modules.order],
+      stickyCategoryMorph: { ...profile.modules.stickyCategoryMorph },
+      featured: { ...profile.modules.featured },
+      textReveal: { ...profile.modules.textReveal },
+      storyFeed: { ...profile.modules.storyFeed }
+    }
+  };
 }
 
 export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps) {
@@ -161,13 +176,32 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
   }, [previewFrameWidth, previewWidth]);
   const previewIsTouch = previewPreset === "mobile" || previewPreset === "tablet";
 
+  const activeDesign = useMemo(
+    () => resolveHubDesignForPreset(designConfig, previewPreset),
+    [designConfig, previewPreset]
+  );
+
+  const updateActiveDesign = (patcher: (current: HubDesignProfile) => HubDesignProfile) => {
+    setDesignConfig((previous) => {
+      const current = resolveHubDesignForPreset(previous, previewPreset);
+      const next = patcher(cloneProfile(current));
+      return {
+        ...previous,
+        breakpoints: {
+          ...(previous.breakpoints ?? {}),
+          [previewPreset]: next
+        }
+      };
+    });
+  };
+
   const updateModule = (moduleKey: HubModuleKey, patch: Partial<HubModuleConfig>) => {
-    setDesignConfig((previous) => ({
-      ...previous,
+    updateActiveDesign((current) => ({
+      ...current,
       modules: {
-        ...previous.modules,
+        ...current.modules,
         [moduleKey]: {
-          ...previous.modules[moduleKey],
+          ...current.modules[moduleKey],
           ...patch
         }
       }
@@ -264,17 +298,18 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
 
             <div className="admin-subsurface space-y-5 p-4">
               <h2 className="text-lg font-semibold text-slate-100">Global design</h2>
+              <p className="text-xs text-slate-400">Du redigerar nu: <span className="font-semibold text-slate-200">{previewPreset}</span></p>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <label className="block">
                   <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Display-font</span>
                   <select
-                    value={designConfig.global.displayFont}
+                    value={activeDesign.global.displayFont}
                     onChange={(event) =>
-                      setDesignConfig((previous) => ({
-                        ...previous,
+                      updateActiveDesign((current) => ({
+                        ...current,
                         global: {
-                          ...previous.global,
+                          ...current.global,
                           displayFont: event.target.value as HubDesignConfig["global"]["displayFont"]
                         }
                       }))
@@ -290,12 +325,12 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 <label className="block">
                   <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Brödtext-font</span>
                   <select
-                    value={designConfig.global.bodyFont}
+                    value={activeDesign.global.bodyFont}
                     onChange={(event) =>
-                      setDesignConfig((previous) => ({
-                        ...previous,
+                      updateActiveDesign((current) => ({
+                        ...current,
                         global: {
-                          ...previous.global,
+                          ...current.global,
                           bodyFont: event.target.value as HubDesignConfig["global"]["bodyFont"]
                         }
                       }))
@@ -311,58 +346,38 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
 
               <NumberField
                 label="Max innehållsbredd"
-                value={designConfig.global.contentMaxWidth}
+                value={activeDesign.global.contentMaxWidth}
                 min={960}
                 max={1560}
                 step={10}
                 suffix="px"
-                onChange={(next) =>
-                  setDesignConfig((previous) => ({
-                    ...previous,
-                    global: { ...previous.global, contentMaxWidth: next }
-                  }))
-                }
+                onChange={(next) => updateActiveDesign((current) => ({ ...current, global: { ...current.global, contentMaxWidth: next } }))}
               />
 
               <div className="grid gap-4 md:grid-cols-3">
                 <NumberField
                   label="Media saturation"
-                  value={designConfig.global.mediaSaturation}
+                  value={activeDesign.global.mediaSaturation}
                   min={0.7}
                   max={1.6}
                   step={0.01}
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({
-                      ...previous,
-                      global: { ...previous.global, mediaSaturation: next }
-                    }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, global: { ...current.global, mediaSaturation: next } }))}
                 />
                 <NumberField
                   label="Media contrast"
-                  value={designConfig.global.mediaContrast}
+                  value={activeDesign.global.mediaContrast}
                   min={0.7}
                   max={1.5}
                   step={0.01}
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({
-                      ...previous,
-                      global: { ...previous.global, mediaContrast: next }
-                    }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, global: { ...current.global, mediaContrast: next } }))}
                 />
                 <NumberField
                   label="Media brightness"
-                  value={designConfig.global.mediaBrightness}
+                  value={activeDesign.global.mediaBrightness}
                   min={0.7}
                   max={1.35}
                   step={0.01}
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({
-                      ...previous,
-                      global: { ...previous.global, mediaBrightness: next }
-                    }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, global: { ...current.global, mediaBrightness: next } }))}
                 />
               </div>
             </div>
@@ -371,87 +386,79 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
               <h2 className="text-lg font-semibold text-slate-100">Hero</h2>
               <NumberField
                 label="Hero maxbredd"
-                value={designConfig.hero.maxWidth}
+                value={activeDesign.hero.maxWidth}
                 min={620}
                 max={1440}
                 step={10}
                 suffix="px"
-                onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, maxWidth: next } }))}
+                onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, maxWidth: next } }))}
               />
               <div className="grid gap-4 md:grid-cols-2">
                 <NumberField
                   label="Titel skala"
-                  value={designConfig.hero.titleScale}
+                  value={activeDesign.hero.titleScale}
                   min={0.7}
                   max={1.4}
                   step={0.01}
-                  onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, titleScale: next } }))}
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, titleScale: next } }))}
                 />
                 <NumberField
                   label="Titel maxbredd"
-                  value={designConfig.hero.titleMaxWidth}
+                  value={activeDesign.hero.titleMaxWidth}
                   min={360}
                   max={1400}
                   step={10}
                   suffix="px"
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, titleMaxWidth: next } }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, titleMaxWidth: next } }))}
                 />
                 <NumberField
                   label="Titel radhöjd"
-                  value={designConfig.hero.titleLineHeight}
+                  value={activeDesign.hero.titleLineHeight}
                   min={0.8}
                   max={1.4}
                   step={0.01}
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, titleLineHeight: next } }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, titleLineHeight: next } }))}
                 />
                 <NumberField
                   label="Brödtext skala"
-                  value={designConfig.hero.bodyScale}
+                  value={activeDesign.hero.bodyScale}
                   min={0.7}
                   max={1.3}
                   step={0.01}
-                  onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, bodyScale: next } }))}
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, bodyScale: next } }))}
                 />
                 <NumberField
                   label="Brödtext maxbredd"
-                  value={designConfig.hero.bodyMaxWidth}
+                  value={activeDesign.hero.bodyMaxWidth}
                   min={320}
                   max={1280}
                   step={10}
                   suffix="px"
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, bodyMaxWidth: next } }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, bodyMaxWidth: next } }))}
                 />
                 <NumberField
                   label="Brödtext radhöjd"
-                  value={designConfig.hero.bodyLineHeight}
+                  value={activeDesign.hero.bodyLineHeight}
                   min={1.1}
                   max={2.2}
                   step={0.01}
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, bodyLineHeight: next } }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, bodyLineHeight: next } }))}
                 />
                 <NumberField
                   label="CTA skala"
-                  value={designConfig.hero.ctaScale}
+                  value={activeDesign.hero.ctaScale}
                   min={0.7}
                   max={1.3}
                   step={0.01}
-                  onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, ctaScale: next } }))}
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, ctaScale: next } }))}
                 />
                 <NumberField
                   label="Hero opacity"
-                  value={designConfig.hero.opacity}
+                  value={activeDesign.hero.opacity}
                   min={0.2}
                   max={1}
                   step={0.01}
-                  onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, opacity: next } }))}
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, opacity: next } }))}
                 />
               </div>
             </div>
@@ -462,17 +469,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 <button
                   type="button"
                   className="glass-chip px-3 py-1 text-xs font-semibold text-slate-200"
-                  onClick={() =>
-                    setDesignConfig((previous) => ({
-                      ...previous,
-                      hero: {
-                        ...previous.hero,
-                        logoOffsetX: 0,
-                        logoOffsetY: 0,
-                        logoScale: 1
-                      }
-                    }))
-                  }
+                  onClick={() => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, logoOffsetX: 0, logoOffsetY: 0, logoScale: 1 } }))}
                 >
                   Återställ
                 </button>
@@ -483,33 +480,29 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
               <div className="grid gap-4 md:grid-cols-2">
                 <NumberField
                   label="Logo X-offset"
-                  value={designConfig.hero.logoOffsetX}
+                  value={activeDesign.hero.logoOffsetX}
                   min={-220}
                   max={220}
                   step={1}
                   suffix="px"
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, logoOffsetX: next } }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, logoOffsetX: next } }))}
                 />
                 <NumberField
                   label="Logo Y-offset"
-                  value={designConfig.hero.logoOffsetY}
+                  value={activeDesign.hero.logoOffsetY}
                   min={-220}
                   max={220}
                   step={1}
                   suffix="px"
-                  onChange={(next) =>
-                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, logoOffsetY: next } }))
-                  }
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, logoOffsetY: next } }))}
                 />
                 <NumberField
                   label="Logo skala"
-                  value={designConfig.hero.logoScale}
+                  value={activeDesign.hero.logoScale}
                   min={0.5}
                   max={1.6}
                   step={0.01}
-                  onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, logoScale: next } }))}
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, logoScale: next } }))}
                 />
               </div>
             </div>
@@ -521,12 +514,12 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Text reveal copy</span>
                 <textarea
                   rows={4}
-                  value={designConfig.modules.textRevealCopy}
+                  value={activeDesign.modules.textRevealCopy}
                   onChange={(event) =>
-                    setDesignConfig((previous) => ({
-                      ...previous,
+                    updateActiveDesign((current) => ({
+                      ...current,
                       modules: {
-                        ...previous.modules,
+                        ...current.modules,
                         textRevealCopy: event.target.value
                       }
                     }))
@@ -537,8 +530,8 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
               </label>
 
               <div className="space-y-3">
-                {designConfig.modules.order.map((moduleKey, index) => {
-                  const moduleConfig = designConfig.modules[moduleKey];
+                {activeDesign.modules.order.map((moduleKey, index) => {
+                  const moduleConfig = activeDesign.modules[moduleKey];
 
                   return (
                     <div key={moduleKey} className="rounded-xl border border-slate-700/85 bg-slate-900/66 p-3">
@@ -562,12 +555,9 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                               if (index === 0) {
                                 return;
                               }
-                              setDesignConfig((previous) => ({
-                                ...previous,
-                                modules: {
-                                  ...previous.modules,
-                                  order: move(previous.modules.order, index, index - 1)
-                                }
+                              updateActiveDesign((current) => ({
+                                ...current,
+                                modules: { ...current.modules, order: move(current.modules.order, index, index - 1) }
                               }));
                             }}
                             className="btn-secondary-dark px-2 py-1 text-xs"
@@ -577,15 +567,12 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                           <button
                             type="button"
                             onClick={() => {
-                              if (index === designConfig.modules.order.length - 1) {
+                              if (index === activeDesign.modules.order.length - 1) {
                                 return;
                               }
-                              setDesignConfig((previous) => ({
-                                ...previous,
-                                modules: {
-                                  ...previous.modules,
-                                  order: move(previous.modules.order, index, index + 1)
-                                }
+                              updateActiveDesign((current) => ({
+                                ...current,
+                                modules: { ...current.modules, order: move(current.modules.order, index, index + 1) }
                               }));
                             }}
                             className="btn-secondary-dark px-2 py-1 text-xs"
@@ -708,7 +695,13 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
               style={{ width: `${previewWidth}px`, zoom: previewScale } as CSSProperties}
               className="min-h-full max-w-none origin-top-left"
             >
-              <HomeHub settings={previewSettings} projects={projects} previewMode forceTouchMode={previewIsTouch} />
+              <HomeHub
+                settings={previewSettings}
+                projects={projects}
+                previewMode
+                forceTouchMode={previewIsTouch}
+                forcedViewportPreset={previewPreset}
+              />
             </div>
           </div>
         </div>

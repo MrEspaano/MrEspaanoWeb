@@ -4,13 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react";
-import { HubModuleKey, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
+import { HubModuleKey, HubViewportPreset, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { FeaturedCarousel } from "@/components/hub/featured-carousel";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
 import { ProjectStoryFeed } from "@/components/hub/project-story-feed";
 import { StickyCategoryMorph } from "@/components/hub/sticky-category-morph";
 import { TextRevealSection } from "@/components/hub/text-reveal-section";
-import { normalizeHubDesignConfig } from "@/lib/design-config";
+import { normalizeHubDesignConfig, resolveHubDesignForPreset } from "@/lib/design-config";
 import { cn } from "@/lib/utils";
 
 interface HomeHubProps {
@@ -18,6 +18,7 @@ interface HomeHubProps {
   settings: SiteSettings;
   previewMode?: boolean;
   forceTouchMode?: boolean;
+  forcedViewportPreset?: HubViewportPreset;
 }
 
 function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset: number): CSSProperties {
@@ -29,16 +30,32 @@ function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset
   };
 }
 
-export function HomeHub({ projects, settings, previewMode = false, forceTouchMode = false }: HomeHubProps) {
+export function HomeHub({
+  projects,
+  settings,
+  previewMode = false,
+  forceTouchMode = false,
+  forcedViewportPreset
+}: HomeHubProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategoryFilter>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const { scrollY } = useScroll();
-  const design = normalizeHubDesignConfig(settings.designConfig);
+  const normalized = useMemo(() => normalizeHubDesignConfig(settings.designConfig), [settings.designConfig]);
+  const [viewportPreset, setViewportPreset] = useState<HubViewportPreset>(forcedViewportPreset ?? "desktop");
+  const design = useMemo(
+    () => resolveHubDesignForPreset(normalized, forcedViewportPreset ?? viewportPreset),
+    [normalized, forcedViewportPreset, viewportPreset]
+  );
 
   const energeticMotion = design.global.motionPreset === "high-energy";
   const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   useEffect(() => {
+    if (forcedViewportPreset) {
+      setViewportPreset(forcedViewportPreset);
+      return;
+    }
+
     if (typeof window === "undefined") {
       return;
     }
@@ -48,7 +65,34 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
     apply();
     media.addEventListener("change", apply);
     return () => media.removeEventListener("change", apply);
-  }, []);
+  }, [forcedViewportPreset]);
+
+  useEffect(() => {
+    if (forcedViewportPreset || typeof window === "undefined") {
+      return;
+    }
+
+    const computePreset = () => {
+      const width = window.innerWidth;
+      if (width <= 767) {
+        setViewportPreset("mobile");
+        return;
+      }
+      if (width <= 1023) {
+        setViewportPreset("tablet");
+        return;
+      }
+      if (width <= 1279) {
+        setViewportPreset("laptop");
+        return;
+      }
+      setViewportPreset("desktop");
+    };
+
+    computePreset();
+    window.addEventListener("resize", computePreset);
+    return () => window.removeEventListener("resize", computePreset);
+  }, [forcedViewportPreset]);
 
   const lockMobileLogo = forceTouchMode || isMobileViewport;
 

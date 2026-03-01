@@ -2,14 +2,17 @@ import { z } from "zod";
 import {
   HubBodyFont,
   HubDesignConfig,
+  HubDesignProfile,
   HubDisplayFont,
   HubModuleConfig,
   HubModuleKey,
   HubMotionPreset,
-  HubThemeMode
+  HubThemeMode,
+  HubViewportPreset
 } from "@/lib/types";
 
 const MODULE_KEYS: HubModuleKey[] = ["stickyCategoryMorph", "featured", "textReveal", "storyFeed"];
+const VIEWPORT_KEYS: HubViewportPreset[] = ["desktop", "laptop", "tablet", "mobile"];
 
 const moduleSchema = z.object({
   visible: z.boolean(),
@@ -18,7 +21,7 @@ const moduleSchema = z.object({
   yOffset: z.number().min(-180).max(180)
 });
 
-export const hubDesignConfigSchema = z.object({
+const profileSchema = z.object({
   global: z.object({
     contentMaxWidth: z.number().min(960).max(1560),
     bodyFont: z.enum(["manrope", "inter", "system"]),
@@ -53,6 +56,17 @@ export const hubDesignConfigSchema = z.object({
     textReveal: moduleSchema,
     storyFeed: moduleSchema
   })
+});
+
+export const hubDesignConfigSchema = profileSchema.extend({
+  breakpoints: z
+    .object({
+      desktop: profileSchema.optional(),
+      laptop: profileSchema.optional(),
+      tablet: profileSchema.optional(),
+      mobile: profileSchema.optional()
+    })
+    .optional()
 });
 
 function clamp(value: number, min: number, max: number) {
@@ -103,7 +117,8 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
     featured: { ...defaultModule },
     textReveal: { ...defaultModule },
     storyFeed: { ...defaultModule }
-  }
+  },
+  breakpoints: undefined
 };
 
 function parseBodyFont(value: unknown): HubBodyFont {
@@ -156,45 +171,62 @@ function normalizeOrder(raw: unknown): HubModuleKey[] {
   return merged.slice(0, MODULE_KEYS.length);
 }
 
-export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
-  const value = (raw ?? {}) as Partial<HubDesignConfig>;
+function normalizeProfile(raw: unknown, fallback?: HubDesignProfile): HubDesignProfile {
+  const value = (raw ?? {}) as Partial<HubDesignProfile>;
+  const source = fallback ?? DEFAULT_HUB_DESIGN_CONFIG;
   return {
     global: {
-      contentMaxWidth: clamp(Number(value.global?.contentMaxWidth ?? 1280), 960, 1560),
-      bodyFont: parseBodyFont(value.global?.bodyFont),
-      displayFont: parseDisplayFont(value.global?.displayFont),
-      mediaSaturation: clamp(Number(value.global?.mediaSaturation ?? 1.22), 0.7, 1.6),
-      mediaContrast: clamp(Number(value.global?.mediaContrast ?? 1.17), 0.7, 1.5),
-      mediaBrightness: clamp(Number(value.global?.mediaBrightness ?? 1.06), 0.7, 1.35),
-      themeMode: parseThemeMode(value.global?.themeMode),
-      accentStrength: clamp(Number(value.global?.accentStrength ?? 1), 0.6, 1.6),
-      panelContrast: clamp(Number(value.global?.panelContrast ?? 1), 0.7, 1.5),
-      motionPreset: parseMotionPreset(value.global?.motionPreset)
+      contentMaxWidth: clamp(Number(value.global?.contentMaxWidth ?? source.global.contentMaxWidth), 960, 1560),
+      bodyFont: parseBodyFont(value.global?.bodyFont ?? source.global.bodyFont),
+      displayFont: parseDisplayFont(value.global?.displayFont ?? source.global.displayFont),
+      mediaSaturation: clamp(Number(value.global?.mediaSaturation ?? source.global.mediaSaturation), 0.7, 1.6),
+      mediaContrast: clamp(Number(value.global?.mediaContrast ?? source.global.mediaContrast), 0.7, 1.5),
+      mediaBrightness: clamp(Number(value.global?.mediaBrightness ?? source.global.mediaBrightness), 0.7, 1.35),
+      themeMode: parseThemeMode(value.global?.themeMode ?? source.global.themeMode),
+      accentStrength: clamp(Number(value.global?.accentStrength ?? source.global.accentStrength), 0.6, 1.6),
+      panelContrast: clamp(Number(value.global?.panelContrast ?? source.global.panelContrast), 0.7, 1.5),
+      motionPreset: parseMotionPreset(value.global?.motionPreset ?? source.global.motionPreset)
     },
     hero: {
-      maxWidth: clamp(Number(value.hero?.maxWidth ?? 1320), 620, 1440),
-      titleScale: clamp(Number(value.hero?.titleScale ?? 1), 0.7, 1.4),
-      titleMaxWidth: clamp(Number(value.hero?.titleMaxWidth ?? 980), 360, 1400),
-      titleLineHeight: clamp(Number(value.hero?.titleLineHeight ?? 0.99), 0.8, 1.4),
-      bodyScale: clamp(Number(value.hero?.bodyScale ?? 1), 0.7, 1.3),
-      bodyMaxWidth: clamp(Number(value.hero?.bodyMaxWidth ?? 860), 320, 1280),
-      bodyLineHeight: clamp(Number(value.hero?.bodyLineHeight ?? 1.7), 1.1, 2.2),
-      ctaScale: clamp(Number(value.hero?.ctaScale ?? 1), 0.7, 1.3),
-      opacity: clamp(Number(value.hero?.opacity ?? 1), 0.2, 1),
-      logoOffsetX: clamp(Number(value.hero?.logoOffsetX ?? 0), -220, 220),
-      logoOffsetY: clamp(Number(value.hero?.logoOffsetY ?? 0), -220, 220),
-      logoScale: clamp(Number(value.hero?.logoScale ?? 1), 0.5, 1.6)
+      maxWidth: clamp(Number(value.hero?.maxWidth ?? source.hero.maxWidth), 620, 1440),
+      titleScale: clamp(Number(value.hero?.titleScale ?? source.hero.titleScale), 0.7, 1.4),
+      titleMaxWidth: clamp(Number(value.hero?.titleMaxWidth ?? source.hero.titleMaxWidth), 360, 1400),
+      titleLineHeight: clamp(Number(value.hero?.titleLineHeight ?? source.hero.titleLineHeight), 0.8, 1.4),
+      bodyScale: clamp(Number(value.hero?.bodyScale ?? source.hero.bodyScale), 0.7, 1.3),
+      bodyMaxWidth: clamp(Number(value.hero?.bodyMaxWidth ?? source.hero.bodyMaxWidth), 320, 1280),
+      bodyLineHeight: clamp(Number(value.hero?.bodyLineHeight ?? source.hero.bodyLineHeight), 1.1, 2.2),
+      ctaScale: clamp(Number(value.hero?.ctaScale ?? source.hero.ctaScale), 0.7, 1.3),
+      opacity: clamp(Number(value.hero?.opacity ?? source.hero.opacity), 0.2, 1),
+      logoOffsetX: clamp(Number(value.hero?.logoOffsetX ?? source.hero.logoOffsetX), -220, 220),
+      logoOffsetY: clamp(Number(value.hero?.logoOffsetY ?? source.hero.logoOffsetY), -220, 220),
+      logoScale: clamp(Number(value.hero?.logoScale ?? source.hero.logoScale), 0.5, 1.6)
     },
     modules: {
-      order: normalizeOrder(value.modules?.order),
+      order: normalizeOrder(value.modules?.order ?? source.modules.order),
       textRevealCopy:
         typeof value.modules?.textRevealCopy === "string" && value.modules.textRevealCopy.trim().length >= 20
           ? value.modules.textRevealCopy.trim().slice(0, 400)
-          : DEFAULT_TEXT_REVEAL_COPY,
-      stickyCategoryMorph: normalizeModule(value.modules?.stickyCategoryMorph),
-      featured: normalizeModule(value.modules?.featured),
-      textReveal: normalizeModule(value.modules?.textReveal),
-      storyFeed: normalizeModule(value.modules?.storyFeed)
+          : source.modules.textRevealCopy,
+      stickyCategoryMorph: normalizeModule(value.modules?.stickyCategoryMorph ?? source.modules.stickyCategoryMorph),
+      featured: normalizeModule(value.modules?.featured ?? source.modules.featured),
+      textReveal: normalizeModule(value.modules?.textReveal ?? source.modules.textReveal),
+      storyFeed: normalizeModule(value.modules?.storyFeed ?? source.modules.storyFeed)
     }
   };
+}
+
+export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
+  const value = (raw ?? {}) as Partial<HubDesignConfig>;
+  const base = normalizeProfile(value, DEFAULT_HUB_DESIGN_CONFIG);
+  const breakpoints: Partial<Record<HubViewportPreset, HubDesignProfile>> = {};
+
+  VIEWPORT_KEYS.forEach((key) => {
+    breakpoints[key] = normalizeProfile(value.breakpoints?.[key], base);
+  });
+
+  return { ...base, breakpoints };
+}
+
+export function resolveHubDesignForPreset(config: HubDesignConfig, preset: HubViewportPreset): HubDesignProfile {
+  return config.breakpoints?.[preset] ?? config;
 }

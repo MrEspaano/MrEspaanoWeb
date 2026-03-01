@@ -5,6 +5,7 @@ export type HubDisplayFont = "syne" | "space-grotesk" | "sora";
 export type HubBodyFont = "manrope" | "inter" | "system";
 export type HubThemeMode = "dark-editorial" | "dark-neon" | "hybrid";
 export type HubMotionPreset = "balanced" | "high-energy" | "minimal";
+export type HubViewportPreset = "desktop" | "laptop" | "tablet" | "mobile";
 
 export type ProjectStatus = "live" | "wip" | "archived";
 
@@ -62,7 +63,7 @@ export interface HubModuleConfig {
   yOffset: number;
 }
 
-export interface HubDesignConfig {
+export interface HubDesignProfile {
   global: {
     contentMaxWidth: number;
     bodyFont: HubBodyFont;
@@ -97,6 +98,10 @@ export interface HubDesignConfig {
     textReveal: HubModuleConfig;
     storyFeed: HubModuleConfig;
   };
+}
+
+export interface HubDesignConfig extends HubDesignProfile {
+  breakpoints?: Partial<Record<HubViewportPreset, HubDesignProfile>>;
 }
 
 export interface Profile {
