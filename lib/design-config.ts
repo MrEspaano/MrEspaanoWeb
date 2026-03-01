@@ -37,6 +37,7 @@ const profileSchema = z.object({
     motionPreset: z.enum(["balanced", "high-energy", "minimal"])
   }),
   hero: z.object({
+    heroEyebrow: z.string().min(2).max(80),
     maxWidth: z.number().min(620).max(1440),
     titleScale: z.number().min(0.7).max(1.4),
     titleMaxWidth: z.number().min(360).max(1400),
@@ -102,6 +103,7 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
     motionPreset: "high-energy"
   },
   hero: {
+    heroEyebrow: "Dark editorial showcase",
     maxWidth: 1320,
     titleScale: 1,
     titleMaxWidth: 980,
@@ -214,6 +216,10 @@ function normalizeProfile(raw: unknown, fallback?: HubDesignProfile): HubDesignP
       motionPreset: parseMotionPreset(value.global?.motionPreset ?? source.global.motionPreset)
     },
     hero: {
+      heroEyebrow:
+        typeof value.hero?.heroEyebrow === "string" && value.hero.heroEyebrow.trim().length >= 2
+          ? value.hero.heroEyebrow.trim().slice(0, 80)
+          : source.hero.heroEyebrow,
       maxWidth: clamp(Number(value.hero?.maxWidth ?? source.hero.maxWidth), 620, 1440),
       titleScale: clamp(Number(value.hero?.titleScale ?? source.hero.titleScale), 0.7, 1.4),
       titleMaxWidth: clamp(Number(value.hero?.titleMaxWidth ?? source.hero.titleMaxWidth), 360, 1400),

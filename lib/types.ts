@@ -79,6 +79,7 @@ export interface HubDesignProfile {
     motionPreset: HubMotionPreset;
   };
   hero: {
+    heroEyebrow: string;
     maxWidth: number;
     titleScale: number;
     titleMaxWidth: number;

@@ -384,6 +384,14 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
 
             <div className="admin-subsurface space-y-5 p-4">
               <h2 className="text-lg font-semibold text-slate-100">Hero</h2>
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Hero rubrikrad</span>
+                <input
+                  value={activeDesign.hero.heroEyebrow}
+                  onChange={(event) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, heroEyebrow: event.target.value } }))}
+                  className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                />
+              </label>
               <NumberField
                 label="Hero maxbredd"
                 value={activeDesign.hero.maxWidth}

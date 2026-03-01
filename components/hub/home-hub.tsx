@@ -319,7 +319,7 @@ export function HomeHub({
               </div>
             ) : null}
 
-            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">Dark editorial showcase</p>
+            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">{design.hero.heroEyebrow}</p>
             <h1
               className="mt-3 text-[clamp(2.5rem,12vw,3.8rem)] font-semibold leading-[0.98] text-slate-100 sm:mt-4 sm:text-5xl lg:text-6xl"
               style={{
