@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { CSSProperties, ReactNode, useMemo, useState } from "react";
+import { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react";
 import { HubModuleKey, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { FeaturedCarousel } from "@/components/hub/featured-carousel";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
@@ -37,7 +37,21 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
   const design = normalizeHubDesignConfig(settings.designConfig);
 
   const energeticMotion = design.global.motionPreset === "high-energy";
-  const logoOffsetMultiplier = forceTouchMode ? 0.42 : 1;
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const media = window.matchMedia("(max-width: 767px)");
+    const apply = () => setIsMobileViewport(media.matches);
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, []);
+
+  const lockMobileLogo = forceTouchMode || isMobileViewport;
 
   const orbY1 = useTransform(scrollY, [0, 1200], [0, energeticMotion ? -180 : -120]);
   const orbY2 = useTransform(scrollY, [0, 1200], [0, energeticMotion ? -230 : -150]);
@@ -248,7 +262,9 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
             <div
               className="relative flex min-h-[220px] w-full items-start justify-center p-1 pt-0 sm:min-h-[500px] sm:p-2 sm:pt-2"
               style={{
-                transform: `translate(${design.hero.logoOffsetX * logoOffsetMultiplier}px, ${design.hero.logoOffsetY * logoOffsetMultiplier}px) scale(${design.hero.logoScale})`,
+                transform: lockMobileLogo
+                  ? "translate(0px, 0px) scale(1)"
+                  : `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
                 transformOrigin: "center top"
               }}
             >
