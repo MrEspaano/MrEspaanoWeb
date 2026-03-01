@@ -11,7 +11,7 @@ interface FeaturedCarouselProps {
 }
 
 export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeProgress, setActiveProgress] = useState(0);
   const featured = useMemo(() => projects.slice(0, 10), [projects]);
 
   function handlePointerMove(event: React.MouseEvent<HTMLDivElement>) {
@@ -22,11 +22,8 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
     const rect = event.currentTarget.getBoundingClientRect();
     const relativeX = Math.max(0, Math.min(event.clientX - rect.left, rect.width));
     const progress = rect.width > 0 ? relativeX / rect.width : 0;
-    const nextIndex = Math.min(featured.length - 1, Math.floor(progress * featured.length));
-
-    if (nextIndex !== activeIndex) {
-      setActiveIndex(nextIndex);
-    }
+    const nextProgress = progress * Math.max(0, featured.length - 1);
+    setActiveProgress(nextProgress);
   }
 
   return (
@@ -42,10 +39,11 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
         <div
           className="hidden h-[520px] gap-3 overflow-hidden md:flex"
           onMouseMove={handlePointerMove}
-          onMouseLeave={() => setActiveIndex((current) => Math.min(current, Math.max(0, featured.length - 1)))}
         >
           {featured.map((project, index) => {
-            const isActive = index === activeIndex;
+            const distance = Math.abs(index - activeProgress);
+            const influence = Math.max(0, 1 - Math.min(1, distance));
+            const isActive = influence > 0.72;
             return (
               <motion.article
                 key={project.id}
@@ -53,14 +51,14 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.35 }}
                 animate={{
-                  flex: isActive ? 7 : 1,
-                  opacity: isActive ? 1 : 0.18,
-                  scale: isActive ? 1 : 0.92,
-                  filter: isActive ? "blur(0px)" : "blur(0.7px)"
+                  flex: 1 + influence * 6,
+                  opacity: 0.12 + influence * 0.88,
+                  scale: 0.9 + influence * 0.1,
+                  filter: `blur(${(1 - influence) * 0.8}px)`
                 }}
-                transition={{ duration: 0.32, ease: [0.2, 0.9, 0.2, 1], delay: index * 0.03 }}
-                onMouseEnter={() => setActiveIndex(index)}
-                onFocus={() => setActiveIndex(index)}
+                transition={{ type: "spring", stiffness: 120, damping: 24, mass: 0.7, delay: index * 0.01 }}
+                onMouseEnter={() => setActiveProgress(index)}
+                onFocus={() => setActiveProgress(index)}
                 className="glass-panel relative flex min-w-[68px] flex-col overflow-hidden rounded-3xl"
               >
                 <div className="relative h-full w-full">
@@ -81,7 +79,7 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
                 <motion.div
                   className="absolute inset-x-0 bottom-0 p-5"
                   animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 20 }}
-                  transition={{ duration: 0.22 }}
+                  transition={{ duration: 0.28, ease: [0.2, 0.9, 0.2, 1] }}
                 >
                   <h3 className="text-[1.65rem] font-semibold leading-tight text-slate-100">{project.title}</h3>
                   <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-300">{project.shortDescription}</p>
