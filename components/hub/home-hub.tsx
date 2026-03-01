@@ -195,7 +195,7 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.08, ease: [0.2, 0.9, 0.2, 1] }}
-            className="max-w-4xl"
+            className="order-2 max-w-4xl xl:order-1"
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
             <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">Dark editorial showcase</p>
@@ -241,17 +241,23 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
-            className="relative flex items-start justify-center p-2 pt-0 sm:p-4 sm:pt-2"
+            className="order-1 relative flex items-start justify-center p-2 pt-0 sm:p-4 sm:pt-2 xl:order-2"
           >
             <div className="pointer-events-none absolute inset-0 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_45%,rgba(63,142,255,0.18),transparent_56%)] blur-[2px]" />
-            <div className="relative flex min-h-[500px] w-full items-start justify-center p-2 pt-0 sm:pt-2">
+            <div
+              className="relative flex min-h-[220px] w-full items-start justify-center p-1 pt-0 sm:min-h-[500px] sm:p-2 sm:pt-2"
+              style={{
+                transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
+                transformOrigin: "center top"
+              }}
+            >
               {logoVisible ? (
                 <Image
                   src="/brand/mrespaano-logo.png"
                   alt="MrEspaano logga"
                   width={760}
                   height={760}
-                  className="h-auto w-full max-w-[620px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)]"
+                  className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
                   priority
                   onError={() => setLogoVisible(false)}
                 />

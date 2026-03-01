@@ -85,6 +85,9 @@ export interface HubDesignConfig {
     bodyLineHeight: number;
     ctaScale: number;
     opacity: number;
+    logoOffsetX: number;
+    logoOffsetY: number;
+    logoScale: number;
   };
   modules: {
     order: HubModuleKey[];

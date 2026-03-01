@@ -40,7 +40,10 @@ export const hubDesignConfigSchema = z.object({
     bodyMaxWidth: z.number().min(320).max(1280),
     bodyLineHeight: z.number().min(1.1).max(2.2),
     ctaScale: z.number().min(0.7).max(1.3),
-    opacity: z.number().min(0.2).max(1)
+    opacity: z.number().min(0.2).max(1),
+    logoOffsetX: z.number().min(-220).max(220),
+    logoOffsetY: z.number().min(-220).max(220),
+    logoScale: z.number().min(0.5).max(1.6)
   }),
   modules: z.object({
     order: z.array(z.enum(MODULE_KEYS as [HubModuleKey, ...HubModuleKey[]])).min(4).max(4),
@@ -88,7 +91,10 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
     bodyMaxWidth: 860,
     bodyLineHeight: 1.7,
     ctaScale: 1,
-    opacity: 1
+    opacity: 1,
+    logoOffsetX: 0,
+    logoOffsetY: 0,
+    logoScale: 1
   },
   modules: {
     order: [...MODULE_KEYS],
@@ -174,7 +180,10 @@ export function normalizeHubDesignConfig(raw: unknown): HubDesignConfig {
       bodyMaxWidth: clamp(Number(value.hero?.bodyMaxWidth ?? 860), 320, 1280),
       bodyLineHeight: clamp(Number(value.hero?.bodyLineHeight ?? 1.7), 1.1, 2.2),
       ctaScale: clamp(Number(value.hero?.ctaScale ?? 1), 0.7, 1.3),
-      opacity: clamp(Number(value.hero?.opacity ?? 1), 0.2, 1)
+      opacity: clamp(Number(value.hero?.opacity ?? 1), 0.2, 1),
+      logoOffsetX: clamp(Number(value.hero?.logoOffsetX ?? 0), -220, 220),
+      logoOffsetY: clamp(Number(value.hero?.logoOffsetY ?? 0), -220, 220),
+      logoScale: clamp(Number(value.hero?.logoScale ?? 1), 0.5, 1.6)
     },
     modules: {
       order: normalizeOrder(value.modules?.order),

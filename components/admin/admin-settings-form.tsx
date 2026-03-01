@@ -453,6 +453,36 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                   step={0.01}
                   onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, opacity: next } }))}
                 />
+                <NumberField
+                  label="Logo X-offset"
+                  value={designConfig.hero.logoOffsetX}
+                  min={-220}
+                  max={220}
+                  step={1}
+                  suffix="px"
+                  onChange={(next) =>
+                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, logoOffsetX: next } }))
+                  }
+                />
+                <NumberField
+                  label="Logo Y-offset"
+                  value={designConfig.hero.logoOffsetY}
+                  min={-220}
+                  max={220}
+                  step={1}
+                  suffix="px"
+                  onChange={(next) =>
+                    setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, logoOffsetY: next } }))
+                  }
+                />
+                <NumberField
+                  label="Logo skala"
+                  value={designConfig.hero.logoScale}
+                  min={0.5}
+                  max={1.6}
+                  step={0.01}
+                  onChange={(next) => setDesignConfig((previous) => ({ ...previous, hero: { ...previous.hero, logoScale: next } }))}
+                />
               </div>
             </div>
 
