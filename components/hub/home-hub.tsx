@@ -32,7 +32,6 @@ function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset
 export function HomeHub({ projects, settings, previewMode = false, forceTouchMode = false }: HomeHubProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategoryFilter>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-  const [logoVisible, setLogoVisible] = useState(true);
   const { scrollY } = useScroll();
   const design = normalizeHubDesignConfig(settings.designConfig);
 
@@ -268,21 +267,15 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
                 transformOrigin: "center top"
               }}
             >
-              {logoVisible ? (
-                <Image
-                  src="/brand/mrespaano-logo.png"
-                  alt="MrEspaano logga"
-                  width={760}
-                  height={760}
-                  className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
-                  priority
-                  onError={() => setLogoVisible(false)}
-                />
-              ) : (
-                <div className="flex h-52 w-52 items-center justify-center rounded-full border border-blue-300/45 bg-slate-900/80 text-5xl font-extrabold text-blue-100">
-                  ME
-                </div>
-              )}
+              <Image
+                src="/brand/mrespaano-logo.png"
+                alt="MrEspaano logga"
+                width={760}
+                height={760}
+                unoptimized
+                className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
+                priority
+              />
             </div>
           </motion.article>
         </div>
