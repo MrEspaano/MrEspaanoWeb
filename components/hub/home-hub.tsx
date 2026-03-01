@@ -162,24 +162,24 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           initial={{ opacity: 0, y: -16, scale: 0.99 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.55, ease: [0.2, 0.9, 0.2, 1] }}
-          className="glass-elevated flex items-center justify-between gap-4 rounded-[1.5rem] px-4 py-3 sm:px-6"
+          className="glass-elevated flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] px-4 py-3 sm:flex-nowrap sm:gap-4 sm:px-6"
         >
           <div>
             <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80">Personal Hub</p>
-            <p className="text-lg font-semibold text-slate-100">{settings.displayName}</p>
+            <p className="text-lg font-semibold leading-normal text-slate-100 sm:text-xl">{settings.displayName}</p>
           </div>
 
-          <nav className="flex items-center gap-2">
+          <nav className="flex w-full items-center gap-2 sm:w-auto">
             <Link
               href="/projects"
-              className="glass-chip px-4 py-2 text-sm font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-slate-400/90 hover:bg-slate-800/95"
+              className="glass-chip flex-1 px-4 py-2 text-center text-sm font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-slate-400/90 hover:bg-slate-800/95 sm:flex-none"
             >
               Alla projekt
             </Link>
             {!previewMode ? (
               <Link
                 href="/admin"
-                className="btn-secondary-dark px-4 py-2 text-sm"
+                className="btn-secondary-dark flex-1 px-4 py-2 text-sm sm:flex-none"
               >
                 Admin
               </Link>
@@ -188,7 +188,7 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
         </motion.div>
       </header>
 
-      <section className="section-shell relative z-10 pt-16 sm:pt-20" style={{ opacity: design.hero.opacity }}>
+      <section className="section-shell relative z-10 pt-12 sm:pt-20" style={{ opacity: design.hero.opacity }}>
         <div className="grid items-start gap-10 xl:grid-cols-[1.05fr_0.95fr]">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -197,34 +197,27 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
             className="max-w-4xl"
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
-            <p className="text-xs uppercase tracking-[0.28em] text-blue-200/80">Dark editorial showcase</p>
+            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">Dark editorial showcase</p>
             <h1
-              className="mt-4 text-4xl font-semibold leading-[0.99] text-slate-100 sm:text-5xl lg:text-6xl"
+              className="mt-3 text-[clamp(2.5rem,12vw,3.8rem)] font-semibold leading-[0.98] text-slate-100 sm:mt-4 sm:text-5xl lg:text-6xl"
               style={{
                 maxWidth: `${design.hero.titleMaxWidth}px`,
-                lineHeight: design.hero.titleLineHeight,
-                transform: `scale(${design.hero.titleScale})`,
-                transformOrigin: "left top"
+                lineHeight: design.hero.titleLineHeight
               }}
             >
               {settings.tagline}
             </h1>
             <p
-              className="mt-6 text-lg leading-relaxed text-slate-300"
+              className="mt-5 text-base leading-relaxed text-slate-300 sm:mt-6 sm:text-lg"
               style={{
                 maxWidth: `${design.hero.bodyMaxWidth}px`,
-                lineHeight: design.hero.bodyLineHeight,
-                transform: `scale(${design.hero.bodyScale})`,
-                transformOrigin: "left top"
+                lineHeight: design.hero.bodyLineHeight
               }}
             >
               {settings.bio}
             </p>
 
-            <div
-              className="mt-9 flex flex-wrap items-center gap-3"
-              style={{ transform: `scale(${design.hero.ctaScale})`, transformOrigin: "left center" }}
-            >
+            <div className="mt-7 flex flex-wrap items-center gap-3 sm:mt-9">
               <Link href="#home-feed" className="btn-primary-amber">
                 {settings.heroCtaPrimary}
               </Link>
@@ -233,10 +226,10 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
               </Link>
             </div>
 
-            <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-4">
+            <div className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
               {heroStats.map((item) => (
-                <div key={item.label} className="glass-panel rounded-2xl px-4 py-3">
-                  <p className="text-xl font-semibold text-slate-100">{item.value}</p>
+                <div key={item.label} className="glass-panel min-w-0 rounded-2xl px-4 py-3">
+                  <p className="truncate text-xl font-semibold text-slate-100">{item.value}</p>
                   <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
                 </div>
               ))}

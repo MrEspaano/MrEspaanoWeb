@@ -31,10 +31,10 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
 
   return (
     <section ref={sectionRef} className="section-shell py-16 sm:py-20" aria-label="Text reveal">
-      <div className="glass-elevated rounded-[2rem] p-7 sm:p-11">
-        <p className="text-xs uppercase tracking-[0.28em] text-blue-200/80">Bonus moment</p>
+      <div className="glass-elevated rounded-[2rem] p-6 sm:p-11">
+        <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">Bonus moment</p>
 
-        <motion.p className="mt-5 max-w-[24ch] text-3xl font-semibold leading-[1.14] text-slate-500 sm:text-5xl lg:text-6xl">
+        <motion.p className="mt-4 max-w-none text-[clamp(2rem,11vw,3.2rem)] font-semibold leading-[1.08] text-slate-500 sm:mt-5 sm:max-w-[24ch] sm:text-5xl lg:text-6xl">
           {words.map((word, index) => {
             const start = (index / words.length) * 0.8;
             const end = start + 0.22;

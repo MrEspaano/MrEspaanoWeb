@@ -36,7 +36,7 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
   const backdropFilter = useMotionTemplate`blur(${blur}px)`;
 
   return (
-    <section ref={hostRef} className="relative mt-10 h-[176px] sm:mt-12 sm:h-[190px]" aria-label="Kategoriövergång">
+    <section ref={hostRef} className="relative mt-10 h-[194px] sm:mt-12 sm:h-[190px]" aria-label="Kategoriövergång">
       <div className="section-shell sticky top-6 z-30">
         <motion.div
           style={{
@@ -49,12 +49,12 @@ export function StickyCategoryMorph({ selected, onSelect }: StickyCategoryMorphP
           }}
           className="glass-elevated relative mx-auto max-w-5xl px-4 sm:px-6"
         >
-          <div className="mb-4 flex items-center justify-between gap-4">
-            <p className="text-[10px] uppercase tracking-[0.26em] text-blue-200/70 sm:text-xs">Filtrera projekt</p>
-            <p className="text-[10px] uppercase tracking-[0.26em] text-slate-400 sm:text-xs">Sticky toolbar</p>
+          <div className="mb-3 flex items-center justify-between gap-4 sm:mb-4">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-blue-200/70 sm:text-xs sm:tracking-[0.26em]">Filtrera projekt</p>
+            <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400 sm:text-xs sm:tracking-[0.26em]">Sticky toolbar</p>
           </div>
 
-          <div className="mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <div className="mx-auto flex w-fit max-w-full flex-wrap items-center justify-center gap-2">
             {CATEGORY_OPTIONS.map((option) => (
               <motion.button
                 key={option.value}
