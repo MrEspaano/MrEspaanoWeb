@@ -95,6 +95,7 @@ export function HomeHub({
   }, [forcedViewportPreset]);
 
   const lockMobileLogo = forceTouchMode || isMobileViewport;
+  const showLogoInHero = design.hero.logoPlacement === "hero";
 
   const orbY1 = useTransform(scrollY, [0, 1200], [0, energeticMotion ? -180 : -120]);
   const orbY2 = useTransform(scrollY, [0, 1200], [0, energeticMotion ? -230 : -150]);
@@ -192,6 +193,18 @@ export function HomeHub({
     )
   };
 
+  const logoMedia = (
+    <Image
+      src="/brand/mrespaano-logo.png"
+      alt="MrEspaano logga"
+      width={760}
+      height={760}
+      unoptimized
+      className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
+      priority
+    />
+  );
+
   return (
     <main
       data-theme-mode={design.global.themeMode}
@@ -256,7 +269,7 @@ export function HomeHub({
             className="order-2 max-w-4xl xl:order-1"
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
-            {lockMobileLogo ? (
+            {lockMobileLogo && showLogoInHero ? (
               <div
                 className="mb-6 flex min-h-[140px] w-full items-start justify-center"
                 style={{
@@ -264,15 +277,7 @@ export function HomeHub({
                   transformOrigin: "center top"
                 }}
               >
-                <Image
-                  src="/brand/mrespaano-logo.png"
-                  alt="MrEspaano logga"
-                  width={760}
-                  height={760}
-                  unoptimized
-                  className="h-auto w-full max-w-[240px] object-contain drop-shadow-[0_22px_52px_rgba(40,132,255,0.34)]"
-                  priority
-                />
+                <div className="w-full max-w-[240px] sm:max-w-[620px]">{logoMedia}</div>
               </div>
             ) : null}
 
@@ -315,7 +320,7 @@ export function HomeHub({
             </div>
           </motion.div>
 
-          {!lockMobileLogo ? (
+          {!lockMobileLogo && showLogoInHero ? (
             <motion.article
               initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
@@ -330,15 +335,7 @@ export function HomeHub({
                   transformOrigin: "center top"
                 }}
               >
-                <Image
-                  src="/brand/mrespaano-logo.png"
-                  alt="MrEspaano logga"
-                  width={760}
-                  height={760}
-                  unoptimized
-                  className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
-                  priority
-                />
+                {logoMedia}
               </div>
             </motion.article>
           ) : null}
@@ -348,6 +345,25 @@ export function HomeHub({
       {design.modules.order.map((moduleKey) => (
         <div key={moduleKey}>{modules[moduleKey]}</div>
       ))}
+
+      {design.hero.logoPlacement === "afterModules" ? (
+        <section
+          className="section-shell relative z-10"
+          style={{ marginTop: `${design.hero.logoSectionTop}px` }}
+          aria-label="Logga"
+        >
+          <div className="glass-elevated flex items-center justify-center rounded-[2rem] p-6 sm:p-8">
+            <div
+              style={{
+                transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
+                transformOrigin: "center center"
+              }}
+            >
+              <div className="w-full max-w-[260px] sm:max-w-[560px]">{logoMedia}</div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <ProjectDetailModal
         project={selectedProject}

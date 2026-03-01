@@ -6,6 +6,7 @@ export type HubBodyFont = "manrope" | "inter" | "system";
 export type HubThemeMode = "dark-editorial" | "dark-neon" | "hybrid";
 export type HubMotionPreset = "balanced" | "high-energy" | "minimal";
 export type HubViewportPreset = "desktop" | "laptop" | "tablet" | "mobile";
+export type HubLogoPlacement = "hero" | "afterModules";
 
 export type ProjectStatus = "live" | "wip" | "archived";
 
@@ -89,6 +90,8 @@ export interface HubDesignProfile {
     logoOffsetX: number;
     logoOffsetY: number;
     logoScale: number;
+    logoPlacement: HubLogoPlacement;
+    logoSectionTop: number;
   };
   modules: {
     order: HubModuleKey[];

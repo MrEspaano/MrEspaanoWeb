@@ -4,6 +4,7 @@ import {
   HubDesignConfig,
   HubDesignProfile,
   HubDisplayFont,
+  HubLogoPlacement,
   HubModuleConfig,
   HubModuleKey,
   HubMotionPreset,
@@ -46,7 +47,9 @@ const profileSchema = z.object({
     opacity: z.number().min(0.2).max(1),
     logoOffsetX: z.number().min(-220).max(220),
     logoOffsetY: z.number().min(-220).max(220),
-    logoScale: z.number().min(0.5).max(1.6)
+    logoScale: z.number().min(0.5).max(1.6),
+    logoPlacement: z.enum(["hero", "afterModules"]),
+    logoSectionTop: z.number().min(-120).max(420)
   }),
   modules: z.object({
     order: z.array(z.enum(MODULE_KEYS as [HubModuleKey, ...HubModuleKey[]])).min(4).max(4),
@@ -108,7 +111,9 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
     opacity: 1,
     logoOffsetX: 0,
     logoOffsetY: 0,
-    logoScale: 1
+    logoScale: 1,
+    logoPlacement: "hero",
+    logoSectionTop: 24
   },
   modules: {
     order: [...MODULE_KEYS],
@@ -147,6 +152,10 @@ function parseMotionPreset(value: unknown): HubMotionPreset {
     return value;
   }
   return "high-energy";
+}
+
+function parseLogoPlacement(value: unknown): HubLogoPlacement {
+  return value === "afterModules" ? "afterModules" : "hero";
 }
 
 function normalizeModule(raw: unknown): HubModuleConfig {
@@ -199,7 +208,9 @@ function normalizeProfile(raw: unknown, fallback?: HubDesignProfile): HubDesignP
       opacity: clamp(Number(value.hero?.opacity ?? source.hero.opacity), 0.2, 1),
       logoOffsetX: clamp(Number(value.hero?.logoOffsetX ?? source.hero.logoOffsetX), -220, 220),
       logoOffsetY: clamp(Number(value.hero?.logoOffsetY ?? source.hero.logoOffsetY), -220, 220),
-      logoScale: clamp(Number(value.hero?.logoScale ?? source.hero.logoScale), 0.5, 1.6)
+      logoScale: clamp(Number(value.hero?.logoScale ?? source.hero.logoScale), 0.5, 1.6),
+      logoPlacement: parseLogoPlacement(value.hero?.logoPlacement ?? source.hero.logoPlacement),
+      logoSectionTop: clamp(Number(value.hero?.logoSectionTop ?? source.hero.logoSectionTop), -120, 420)
     },
     modules: {
       order: normalizeOrder(value.modules?.order ?? source.modules.order),

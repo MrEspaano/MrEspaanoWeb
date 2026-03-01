@@ -469,7 +469,19 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 <button
                   type="button"
                   className="glass-chip px-3 py-1 text-xs font-semibold text-slate-200"
-                  onClick={() => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, logoOffsetX: 0, logoOffsetY: 0, logoScale: 1 } }))}
+                  onClick={() =>
+                    updateActiveDesign((current) => ({
+                      ...current,
+                      hero: {
+                        ...current.hero,
+                        logoOffsetX: 0,
+                        logoOffsetY: 0,
+                        logoScale: 1,
+                        logoPlacement: "hero",
+                        logoSectionTop: 24
+                      }
+                    }))
+                  }
                 >
                   Återställ
                 </button>
@@ -478,6 +490,34 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                 Flytta loggan manuellt i preview. Mobil/tablet använder en mjukare offset för att loggan alltid ska vara synlig.
               </p>
               <div className="grid gap-4 md:grid-cols-2">
+                <label className="block">
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Placering</span>
+                  <select
+                    value={activeDesign.hero.logoPlacement}
+                    onChange={(event) =>
+                      updateActiveDesign((current) => ({
+                        ...current,
+                        hero: {
+                          ...current.hero,
+                          logoPlacement: event.target.value as "hero" | "afterModules"
+                        }
+                      }))
+                    }
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                  >
+                    <option value="hero">I hero</option>
+                    <option value="afterModules">Efter moduler</option>
+                  </select>
+                </label>
+                <NumberField
+                  label="Sektion toppmarginal"
+                  value={activeDesign.hero.logoSectionTop}
+                  min={-120}
+                  max={420}
+                  step={1}
+                  suffix="px"
+                  onChange={(next) => updateActiveDesign((current) => ({ ...current, hero: { ...current.hero, logoSectionTop: next } }))}
+                />
                 <NumberField
                   label="Logo X-offset"
                   value={activeDesign.hero.logoOffsetX}
