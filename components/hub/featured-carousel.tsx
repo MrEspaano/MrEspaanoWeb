@@ -14,6 +14,7 @@ interface FeaturedCarouselProps {
 export function FeaturedCarousel({ projects, forceTouchMode = false }: FeaturedCarouselProps) {
   const [activeProgress, setActiveProgress] = useState(0);
   const [interactiveMode, setInteractiveMode] = useState(false);
+  const [lockedIndex, setLockedIndex] = useState<number | null>(null);
   const featured = useMemo(() => projects.slice(0, 10), [projects]);
 
   useEffect(() => {
@@ -29,6 +30,10 @@ export function FeaturedCarousel({ projects, forceTouchMode = false }: FeaturedC
   }, [forceTouchMode]);
 
   function handlePointerMove(event: React.MouseEvent<HTMLDivElement>) {
+    if (lockedIndex !== null) {
+      return;
+    }
+
     if (!featured.length) {
       return;
     }
@@ -51,9 +56,10 @@ export function FeaturedCarousel({ projects, forceTouchMode = false }: FeaturedC
 
       <div className="glass-elevated rounded-[2rem] p-3 sm:p-4">
         {interactiveMode ? (
-          <div className="hidden h-[520px] gap-3 overflow-hidden md:flex" onMouseMove={handlePointerMove}>
+          <div className="hidden h-[520px] gap-3 overflow-hidden md:flex" onMouseMove={handlePointerMove} onMouseLeave={() => setLockedIndex(null)}>
             {featured.map((project, index) => {
-              const distance = Math.abs(index - activeProgress);
+              const focusValue = lockedIndex ?? activeProgress;
+              const distance = Math.abs(index - focusValue);
               const influence = Math.max(0, 1 - Math.min(1, distance));
               const isActive = influence > 0.72;
               return (
@@ -69,7 +75,12 @@ export function FeaturedCarousel({ projects, forceTouchMode = false }: FeaturedC
                     filter: `blur(${(1 - influence) * 0.8}px)`
                   }}
                   transition={{ type: "spring", stiffness: 120, damping: 24, mass: 0.7, delay: index * 0.01 }}
-                  onMouseEnter={() => setActiveProgress(index)}
+                  onMouseEnter={() => {
+                    setLockedIndex(index);
+                    setActiveProgress(index);
+                  }}
+                  onMouseMove={() => setLockedIndex(index)}
+                  onMouseLeave={() => setLockedIndex(null)}
                   onFocus={() => setActiveProgress(index)}
                   className="glass-panel relative flex min-w-[68px] flex-col overflow-hidden rounded-3xl"
                 >
