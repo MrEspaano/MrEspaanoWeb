@@ -257,7 +257,13 @@ export function HomeHub({
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
             {lockMobileLogo ? (
-              <div className="mb-6 flex min-h-[140px] w-full items-start justify-center">
+              <div
+                className="mb-6 flex min-h-[140px] w-full items-start justify-center"
+                style={{
+                  transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
+                  transformOrigin: "center top"
+                }}
+              >
                 <Image
                   src="/brand/mrespaano-logo.png"
                   alt="MrEspaano logga"
