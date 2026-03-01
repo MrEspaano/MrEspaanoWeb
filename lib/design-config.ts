@@ -4,6 +4,7 @@ import {
   HubDesignConfig,
   HubDesignProfile,
   HubDisplayFont,
+  HubLogoFlowAnchor,
   HubLogoPlacement,
   HubModuleConfig,
   HubModuleKey,
@@ -48,7 +49,8 @@ const profileSchema = z.object({
     logoOffsetX: z.number().min(-220).max(220),
     logoOffsetY: z.number().min(-220).max(220),
     logoScale: z.number().min(0.5).max(1.6),
-    logoPlacement: z.enum(["hero", "afterModules"]),
+    logoPlacement: z.enum(["hero", "flow"]),
+    logoFlowAnchor: z.enum(["beforeAll", "afterSticky", "afterFeatured", "afterTextReveal", "afterStoryFeed", "afterAll"]),
     logoSectionTop: z.number().min(-120).max(420)
   }),
   modules: z.object({
@@ -113,6 +115,7 @@ export const DEFAULT_HUB_DESIGN_CONFIG: HubDesignConfig = {
     logoOffsetY: 0,
     logoScale: 1,
     logoPlacement: "hero",
+    logoFlowAnchor: "afterAll",
     logoSectionTop: 24
   },
   modules: {
@@ -155,7 +158,21 @@ function parseMotionPreset(value: unknown): HubMotionPreset {
 }
 
 function parseLogoPlacement(value: unknown): HubLogoPlacement {
-  return value === "afterModules" ? "afterModules" : "hero";
+  return value === "flow" || value === "afterModules" ? "flow" : "hero";
+}
+
+function parseLogoFlowAnchor(value: unknown): HubLogoFlowAnchor {
+  if (
+    value === "beforeAll" ||
+    value === "afterSticky" ||
+    value === "afterFeatured" ||
+    value === "afterTextReveal" ||
+    value === "afterStoryFeed" ||
+    value === "afterAll"
+  ) {
+    return value;
+  }
+  return "afterAll";
 }
 
 function normalizeModule(raw: unknown): HubModuleConfig {
@@ -210,6 +227,7 @@ function normalizeProfile(raw: unknown, fallback?: HubDesignProfile): HubDesignP
       logoOffsetY: clamp(Number(value.hero?.logoOffsetY ?? source.hero.logoOffsetY), -220, 220),
       logoScale: clamp(Number(value.hero?.logoScale ?? source.hero.logoScale), 0.5, 1.6),
       logoPlacement: parseLogoPlacement(value.hero?.logoPlacement ?? source.hero.logoPlacement),
+      logoFlowAnchor: parseLogoFlowAnchor(value.hero?.logoFlowAnchor ?? source.hero.logoFlowAnchor),
       logoSectionTop: clamp(Number(value.hero?.logoSectionTop ?? source.hero.logoSectionTop), -120, 420)
     },
     modules: {

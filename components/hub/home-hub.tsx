@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { CSSProperties, ReactNode, useEffect, useMemo, useState } from "react";
+import { CSSProperties, Fragment, ReactNode, useEffect, useMemo, useState } from "react";
 import { HubModuleKey, HubViewportPreset, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { FeaturedCarousel } from "@/components/hub/featured-carousel";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
@@ -205,6 +205,44 @@ export function HomeHub({
     />
   );
 
+  const logoFlowSection = (
+    <section
+      className="section-shell relative z-10"
+      style={{ marginTop: `${design.hero.logoSectionTop}px` }}
+      aria-label="Logga"
+    >
+      <div className="glass-elevated flex items-center justify-center rounded-[2rem] p-6 sm:p-8">
+        <div
+          style={{
+            transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
+            transformOrigin: "center center"
+          }}
+        >
+          <div className="w-full max-w-[260px] sm:max-w-[560px]">{logoMedia}</div>
+        </div>
+      </div>
+    </section>
+  );
+
+  const orderedModules = design.modules.order;
+  const flowInsertIndex = (() => {
+    switch (design.hero.logoFlowAnchor) {
+      case "beforeAll":
+        return 0;
+      case "afterSticky":
+        return orderedModules.indexOf("stickyCategoryMorph") + 1;
+      case "afterFeatured":
+        return orderedModules.indexOf("featured") + 1;
+      case "afterTextReveal":
+        return orderedModules.indexOf("textReveal") + 1;
+      case "afterStoryFeed":
+        return orderedModules.indexOf("storyFeed") + 1;
+      default:
+        return orderedModules.length;
+    }
+  })();
+  const clampedFlowInsertIndex = Math.max(0, Math.min(orderedModules.length, flowInsertIndex));
+
   return (
     <main
       data-theme-mode={design.global.themeMode}
@@ -342,28 +380,13 @@ export function HomeHub({
         </div>
       </section>
 
-      {design.modules.order.map((moduleKey) => (
-        <div key={moduleKey}>{modules[moduleKey]}</div>
+      {design.hero.logoPlacement === "flow" && clampedFlowInsertIndex === 0 ? logoFlowSection : null}
+      {orderedModules.map((moduleKey, index) => (
+        <Fragment key={moduleKey}>
+          <div>{modules[moduleKey]}</div>
+          {design.hero.logoPlacement === "flow" && clampedFlowInsertIndex === index + 1 ? logoFlowSection : null}
+        </Fragment>
       ))}
-
-      {design.hero.logoPlacement === "afterModules" ? (
-        <section
-          className="section-shell relative z-10"
-          style={{ marginTop: `${design.hero.logoSectionTop}px` }}
-          aria-label="Logga"
-        >
-          <div className="glass-elevated flex items-center justify-center rounded-[2rem] p-6 sm:p-8">
-            <div
-              style={{
-                transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
-                transformOrigin: "center center"
-              }}
-            >
-              <div className="w-full max-w-[260px] sm:max-w-[560px]">{logoMedia}</div>
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       <ProjectDetailModal
         project={selectedProject}

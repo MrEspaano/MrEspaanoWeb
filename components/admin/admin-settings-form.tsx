@@ -478,6 +478,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                         logoOffsetY: 0,
                         logoScale: 1,
                         logoPlacement: "hero",
+                        logoFlowAnchor: "afterAll",
                         logoSectionTop: 24
                       }
                     }))
@@ -499,14 +500,43 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
                         ...current,
                         hero: {
                           ...current.hero,
-                          logoPlacement: event.target.value as "hero" | "afterModules"
+                          logoPlacement: event.target.value as "hero" | "flow"
                         }
                       }))
                     }
                     className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
                   >
                     <option value="hero">I hero</option>
-                    <option value="afterModules">Efter moduler</option>
+                    <option value="flow">I sidflödet (mellan moduler)</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Ankare i flödet</span>
+                  <select
+                    value={activeDesign.hero.logoFlowAnchor}
+                    onChange={(event) =>
+                      updateActiveDesign((current) => ({
+                        ...current,
+                        hero: {
+                          ...current.hero,
+                          logoFlowAnchor: event.target.value as
+                            | "beforeAll"
+                            | "afterSticky"
+                            | "afterFeatured"
+                            | "afterTextReveal"
+                            | "afterStoryFeed"
+                            | "afterAll"
+                        }
+                      }))
+                    }
+                    className="glass-input w-full px-3 py-2 text-sm focus:border-amber-300/70 focus:outline-none"
+                  >
+                    <option value="beforeAll">Före alla moduler</option>
+                    <option value="afterSticky">Efter Filtrera projekt</option>
+                    <option value="afterFeatured">Efter Utvalda projekt</option>
+                    <option value="afterTextReveal">Efter Bonus moment</option>
+                    <option value="afterStoryFeed">Efter Projekt-feed</option>
+                    <option value="afterAll">Efter alla moduler</option>
                   </select>
                 </label>
                 <NumberField
