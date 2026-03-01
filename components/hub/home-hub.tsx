@@ -17,6 +17,7 @@ interface HomeHubProps {
   projects: Project[];
   settings: SiteSettings;
   previewMode?: boolean;
+  forceTouchMode?: boolean;
 }
 
 function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset: number): CSSProperties {
@@ -28,7 +29,7 @@ function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset
   };
 }
 
-export function HomeHub({ projects, settings, previewMode = false }: HomeHubProps) {
+export function HomeHub({ projects, settings, previewMode = false, forceTouchMode = false }: HomeHubProps) {
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategoryFilter>("all");
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const [logoVisible, setLogoVisible] = useState(true);
@@ -98,7 +99,7 @@ export function HomeHub({ projects, settings, previewMode = false }: HomeHubProp
           design.modules.featured.yOffset
         )}
       >
-        <FeaturedCarousel projects={filteredProjects} />
+        <FeaturedCarousel projects={filteredProjects} forceTouchMode={forceTouchMode} />
       </div>
     ),
     textReveal: (

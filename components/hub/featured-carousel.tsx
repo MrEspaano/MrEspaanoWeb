@@ -8,9 +8,10 @@ import { Project } from "@/lib/types";
 
 interface FeaturedCarouselProps {
   projects: Project[];
+  forceTouchMode?: boolean;
 }
 
-export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
+export function FeaturedCarousel({ projects, forceTouchMode = false }: FeaturedCarouselProps) {
   const [activeProgress, setActiveProgress] = useState(0);
   const [interactiveMode, setInteractiveMode] = useState(false);
   const featured = useMemo(() => projects.slice(0, 10), [projects]);
@@ -21,11 +22,11 @@ export function FeaturedCarousel({ projects }: FeaturedCarouselProps) {
     }
 
     const media = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const apply = () => setInteractiveMode(media.matches);
+    const apply = () => setInteractiveMode(media.matches && !forceTouchMode);
     apply();
     media.addEventListener("change", apply);
     return () => media.removeEventListener("change", apply);
-  }, []);
+  }, [forceTouchMode]);
 
   function handlePointerMove(event: React.MouseEvent<HTMLDivElement>) {
     if (!featured.length) {

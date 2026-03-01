@@ -159,6 +159,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
     const available = Math.max(300, previewFrameWidth - 16);
     return Math.min(1, available / previewWidth);
   }, [previewFrameWidth, previewWidth]);
+  const previewIsTouch = previewPreset === "mobile" || previewPreset === "tablet";
 
   const updateModule = (moduleKey: HubModuleKey, patch: Partial<HubModuleConfig>) => {
     setDesignConfig((previous) => ({
@@ -649,7 +650,7 @@ export function AdminSettingsForm({ settings, projects }: AdminSettingsFormProps
               style={{ width: `${previewWidth}px`, zoom: previewScale } as CSSProperties}
               className="min-h-full max-w-none origin-top-left"
             >
-              <HomeHub settings={previewSettings} projects={projects} previewMode />
+              <HomeHub settings={previewSettings} projects={projects} previewMode forceTouchMode={previewIsTouch} />
             </div>
           </div>
         </div>
