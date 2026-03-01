@@ -212,6 +212,20 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
             className="order-2 max-w-4xl xl:order-1"
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
+            {lockMobileLogo ? (
+              <div className="mb-6 flex min-h-[140px] w-full items-start justify-center">
+                <Image
+                  src="/brand/mrespaano-logo.png"
+                  alt="MrEspaano logga"
+                  width={760}
+                  height={760}
+                  unoptimized
+                  className="h-auto w-full max-w-[240px] object-contain drop-shadow-[0_22px_52px_rgba(40,132,255,0.34)]"
+                  priority
+                />
+              </div>
+            ) : null}
+
             <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">Dark editorial showcase</p>
             <h1
               className="mt-3 text-[clamp(2.5rem,12vw,3.8rem)] font-semibold leading-[0.98] text-slate-100 sm:mt-4 sm:text-5xl lg:text-6xl"
@@ -251,33 +265,33 @@ export function HomeHub({ projects, settings, previewMode = false, forceTouchMod
             </div>
           </motion.div>
 
-          <motion.article
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
-            className="order-1 relative flex items-start justify-center p-2 pt-0 sm:p-4 sm:pt-2 xl:order-2"
-          >
-            <div className="pointer-events-none absolute inset-0 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_45%,rgba(63,142,255,0.18),transparent_56%)] blur-[2px]" />
-            <div
-              className="relative flex min-h-[220px] w-full items-start justify-center p-1 pt-0 sm:min-h-[500px] sm:p-2 sm:pt-2"
-              style={{
-                transform: lockMobileLogo
-                  ? "translate(0px, 0px) scale(1)"
-                  : `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
-                transformOrigin: "center top"
-              }}
+          {!lockMobileLogo ? (
+            <motion.article
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
+              className="order-1 relative flex items-start justify-center p-2 pt-0 sm:p-4 sm:pt-2 xl:order-2"
             >
-              <Image
-                src="/brand/mrespaano-logo.png"
-                alt="MrEspaano logga"
-                width={760}
-                height={760}
-                unoptimized
-                className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
-                priority
-              />
-            </div>
-          </motion.article>
+              <div className="pointer-events-none absolute inset-0 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_45%,rgba(63,142,255,0.18),transparent_56%)] blur-[2px]" />
+              <div
+                className="relative flex min-h-[220px] w-full items-start justify-center p-1 pt-0 sm:min-h-[500px] sm:p-2 sm:pt-2"
+                style={{
+                  transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
+                  transformOrigin: "center top"
+                }}
+              >
+                <Image
+                  src="/brand/mrespaano-logo.png"
+                  alt="MrEspaano logga"
+                  width={760}
+                  height={760}
+                  unoptimized
+                  className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
+                  priority
+                />
+              </div>
+            </motion.article>
+          ) : null}
         </div>
       </section>
 
