@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowDownRight, ArrowUpRight, Github, Layers3, Linkedin, Mail, Sparkles } from "lucide-react";
 import { CSSProperties, Fragment, ReactNode, useEffect, useMemo, useState } from "react";
 import { HubModuleKey, HubViewportPreset, Project, ProjectCategoryFilter, SiteSettings } from "@/lib/types";
 import { FeaturedCarousel } from "@/components/hub/featured-carousel";
@@ -30,6 +31,20 @@ function toModuleStyle(visible: boolean, opacity: number, scale: number, yOffset
   };
 }
 
+const SOCIAL_ICON = {
+  github: Github,
+  linkedin: Linkedin,
+  x: Sparkles,
+  email: Mail
+} as const;
+
+const SOCIAL_LABEL = {
+  github: "Github",
+  linkedin: "LinkedIn",
+  x: "Updates",
+  email: "Kontakt"
+} as const;
+
 export function HomeHub({
   projects,
   settings,
@@ -48,24 +63,6 @@ export function HomeHub({
   );
 
   const energeticMotion = design.global.motionPreset === "high-energy";
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-
-  useEffect(() => {
-    if (forcedViewportPreset) {
-      setViewportPreset(forcedViewportPreset);
-      return;
-    }
-
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const media = window.matchMedia("(max-width: 767px)");
-    const apply = () => setIsMobileViewport(media.matches);
-    apply();
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
-  }, [forcedViewportPreset]);
 
   useEffect(() => {
     if (forcedViewportPreset || typeof window === "undefined") {
@@ -94,9 +91,6 @@ export function HomeHub({
     return () => window.removeEventListener("resize", computePreset);
   }, [forcedViewportPreset]);
 
-  const lockMobileLogo = forceTouchMode || isMobileViewport;
-  const showLogoInHero = design.hero.logoPlacement === "hero";
-
   const orbY1 = useTransform(scrollY, [0, 1200], [0, energeticMotion ? -180 : -120]);
   const orbY2 = useTransform(scrollY, [0, 1200], [0, energeticMotion ? -230 : -150]);
   const orbScale = useTransform(scrollY, [0, 1000], [1, energeticMotion ? 1.32 : 1.2]);
@@ -109,6 +103,11 @@ export function HomeHub({
     return projects.filter((project) => project.category === selectedCategory);
   }, [projects, selectedCategory]);
 
+  const sortedProjects = useMemo(
+    () => [...projects].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    [projects]
+  );
+
   const selectedProject = useMemo(
     () => filteredProjects.find((project) => project.slug === selectedSlug) ?? null,
     [filteredProjects, selectedSlug]
@@ -116,12 +115,55 @@ export function HomeHub({
 
   const heroStats = useMemo(
     () => [
-      { value: `${projects.length}+`, label: "Projekt" },
-      { value: `${projects.filter((project) => project.status === "live").length}+`, label: "Live" },
-      { value: `${projects.flatMap((project) => project.tags).length}+`, label: "Taggar" },
-      { value: "24/7", label: "Iteration" }
+      { value: `${projects.length}+`, label: "Utvalda case" },
+      { value: `${projects.filter((project) => project.status === "live").length}+`, label: "Live just nu" },
+      { value: `${new Set(projects.flatMap((project) => project.category)).size}`, label: "Format" },
+      { value: `${new Set(projects.flatMap((project) => project.techStack)).size}+`, label: "Tekniker" }
     ],
     [projects]
+  );
+
+  const latestProject = sortedProjects[0] ?? null;
+  const topTags = useMemo(() => {
+    const counts = new Map<string, number>();
+    projects.forEach((project) => {
+      project.tags.forEach((tag) => counts.set(tag, (counts.get(tag) ?? 0) + 1));
+    });
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([tag]) => tag);
+  }, [projects]);
+
+  const updatedLabel = useMemo(() => {
+    const value = new Date(settings.updatedAt);
+    if (Number.isNaN(value.getTime())) {
+      return null;
+    }
+
+    return new Intl.DateTimeFormat("sv-SE", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }).format(value);
+  }, [settings.updatedAt]);
+
+  const socialLinks = useMemo(
+    () =>
+      (Object.entries(settings.socialLinks) as Array<[string, string | undefined]>)
+        .filter(([, href]) => Boolean(href))
+        .slice(0, 4)
+        .map(([key, href]) => {
+          const typedKey = key as keyof typeof SOCIAL_ICON;
+          const Icon = SOCIAL_ICON[typedKey] ?? Sparkles;
+          return {
+            key,
+            href: href as string,
+            label: SOCIAL_LABEL[typedKey] ?? key,
+            Icon
+          };
+        }),
+    [settings.socialLinks]
   );
 
   const displayFontClass = {
@@ -187,7 +229,7 @@ export function HomeHub({
           projects={filteredProjects.slice(0, 8)}
           onOpenProject={setSelectedSlug}
           title="Projekt-feed"
-          subtitle="Scrollen styr progressionen: aktivt kort lyfts fram med tydligare layout, skarpare metadata och cinematiska rörelser."
+          subtitle="En mer redaktionell översikt där aktivt case lyfts fram med tydligare rytm, större visualitet och bättre känsla i övergångarna."
         />
       </div>
     )
@@ -200,9 +242,74 @@ export function HomeHub({
       width={760}
       height={760}
       unoptimized
-      className="h-auto w-full max-w-[280px] object-contain drop-shadow-[0_26px_60px_rgba(40,132,255,0.38)] sm:max-w-[620px]"
+      className="h-auto w-full max-w-[300px] object-contain drop-shadow-[0_32px_82px_rgba(40,132,255,0.34)] sm:max-w-[620px]"
       priority
     />
+  );
+
+  const logoShowcase = (
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 0.12, ease: [0.2, 0.9, 0.2, 1] }}
+      className="relative"
+    >
+      <div className="glass-elevated relative overflow-hidden rounded-[2.25rem] p-4 sm:p-6">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(91,155,255,0.22),transparent_34%),radial-gradient(circle_at_72%_74%,rgba(255,149,72,0.14),transparent_30%)]" />
+
+        <div className="relative flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/75">Signature frame</p>
+            <p className="mt-1 text-sm font-medium text-slate-300">Identitet, rörelse och utvalda case</p>
+          </div>
+          <div className="glass-chip flex items-center gap-2 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-slate-200">
+            <Layers3 size={12} />
+            Premium edit
+          </div>
+        </div>
+
+        <div className="relative mt-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(9,17,34,0.8),rgba(6,12,24,0.92))] px-4 py-8 sm:px-8 sm:py-10">
+          <div className="absolute left-1/2 top-[18%] h-56 w-56 -translate-x-1/2 rounded-full bg-blue-500/24 blur-[110px]" />
+          <div className="absolute left-[14%] top-[64%] h-32 w-32 rounded-full bg-cyan-400/12 blur-[82px]" />
+          <div className="absolute right-[12%] top-[22%] h-36 w-36 rounded-full bg-amber-400/16 blur-[84px]" />
+
+          <div
+            className="relative mx-auto flex min-h-[300px] max-w-[420px] items-center justify-center"
+            style={{
+              transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
+              transformOrigin: "center center"
+            }}
+          >
+            {logoMedia}
+          </div>
+
+          <div className="absolute left-4 top-4 max-w-[190px] rounded-[1.4rem] border border-white/12 bg-slate-950/58 p-3 shadow-[0_24px_44px_rgba(2,8,23,0.32)] backdrop-blur-xl sm:left-6 sm:top-6">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400">At a glance</p>
+            <p className="mt-2 text-2xl font-semibold text-slate-50">{projects.length}</p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-300">Projekt kuraterade för appar, spel och web.</p>
+          </div>
+
+          {latestProject ? (
+            <div className="absolute bottom-4 left-4 max-w-[220px] rounded-[1.5rem] border border-blue-300/18 bg-blue-500/10 p-3 shadow-[0_24px_44px_rgba(2,8,23,0.32)] backdrop-blur-xl sm:bottom-6 sm:left-6">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-blue-100/72">Senaste case</p>
+              <p className="mt-2 text-base font-semibold text-slate-50">{latestProject.title}</p>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-slate-300">{latestProject.shortDescription}</p>
+            </div>
+          ) : null}
+
+          <div className="absolute bottom-4 right-4 max-w-[180px] rounded-[1.5rem] border border-white/12 bg-slate-950/62 p-3 shadow-[0_24px_44px_rgba(2,8,23,0.32)] backdrop-blur-xl sm:bottom-6 sm:right-6">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400">Domäner</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {["Apps", "Sites", "Games"].map((item) => (
+                <span key={item} className="rounded-full border border-white/12 px-2.5 py-1 text-[11px] text-slate-200">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.article>
   );
 
   const logoFlowSection = (
@@ -211,16 +318,7 @@ export function HomeHub({
       style={{ marginTop: `${design.hero.logoSectionTop}px` }}
       aria-label="Logga"
     >
-      <div className="glass-elevated flex items-center justify-center rounded-[2rem] p-6 sm:p-8">
-        <div
-          style={{
-            transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
-            transformOrigin: "center center"
-          }}
-        >
-          <div className="w-full max-w-[260px] sm:max-w-[560px]">{logoMedia}</div>
-        </div>
-      </div>
+      {logoShowcase}
     </section>
   );
 
@@ -260,77 +358,86 @@ export function HomeHub({
     >
       <motion.div
         style={{ y: orbY1, scale: orbScale }}
-        className="pointer-events-none absolute -top-28 left-[6%] h-[24rem] w-[24rem] rounded-full bg-blue-500/24 blur-[104px]"
+        className="pointer-events-none absolute -top-24 left-[4%] h-[28rem] w-[28rem] rounded-full bg-blue-500/22 blur-[120px]"
       />
       <motion.div
         style={{ y: orbY2, scale: orbScale }}
-        className="pointer-events-none absolute -top-24 right-[4%] h-[24rem] w-[24rem] rounded-full bg-amber-500/22 blur-[118px]"
+        className="pointer-events-none absolute -top-24 right-[2%] h-[26rem] w-[26rem] rounded-full bg-amber-500/20 blur-[120px]"
       />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[760px] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.05),transparent_56%)]" />
 
       <header className="section-shell relative z-20 pt-7 sm:pt-10">
         <motion.div
           initial={{ opacity: 0, y: -16, scale: 0.99 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.55, ease: [0.2, 0.9, 0.2, 1] }}
-          className="glass-elevated flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] px-4 py-3 sm:flex-nowrap sm:gap-4 sm:px-6"
+          className="glass-elevated flex flex-wrap items-center justify-between gap-3 rounded-[1.7rem] px-4 py-3 sm:flex-nowrap sm:gap-4 sm:px-6"
         >
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80">Personal Hub</p>
-            <p className="text-lg font-semibold leading-normal text-slate-100 sm:text-xl">{settings.displayName}</p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+              <Sparkles size={18} className="text-amber-200" />
+            </div>
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80">Personal hub</p>
+              <p className="text-lg font-semibold leading-normal text-slate-100 sm:text-xl">{settings.displayName}</p>
+            </div>
           </div>
 
-          <nav className="flex w-full items-center gap-2 sm:w-auto">
-            <Link
-              href="/projects"
-              className="glass-chip flex-1 px-4 py-2 text-center text-sm font-semibold text-slate-100 transition hover:-translate-y-0.5 hover:border-slate-400/90 hover:bg-slate-800/95 sm:flex-none"
-            >
-              Alla projekt
-            </Link>
-            {!previewMode ? (
+          <div className="flex w-full flex-wrap items-center justify-between gap-2 sm:w-auto sm:justify-end">
+            <div className="glass-chip hidden px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-slate-300 md:block">
+              High fidelity portfolio system
+            </div>
+            <nav className="flex w-full items-center gap-2 sm:w-auto">
               <Link
-                href="/admin"
-                className="btn-secondary-dark flex-1 px-4 py-2 text-sm sm:flex-none"
+                href="/projects"
+                className="glass-chip flex-1 px-4 py-2 text-center text-sm font-semibold text-slate-100 transition hover:-translate-y-0.5 sm:flex-none"
               >
-                Admin
+                Alla projekt
               </Link>
-            ) : null}
-          </nav>
+              {!previewMode ? (
+                <Link href="/admin" className="btn-secondary-dark flex-1 px-4 py-2 text-sm sm:flex-none">
+                  Admin
+                </Link>
+              ) : null}
+            </nav>
+          </div>
         </motion.div>
       </header>
 
       <section className="section-shell relative z-10 pt-12 sm:pt-20" style={{ opacity: design.hero.opacity }}>
-        <div className="grid items-start gap-10 xl:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,1.02fr)_minmax(420px,0.98fr)] xl:gap-12">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.08, ease: [0.2, 0.9, 0.2, 1] }}
-            className="order-2 max-w-4xl xl:order-1"
+            transition={{ duration: 0.65, delay: 0.08, ease: [0.2, 0.9, 0.2, 1] }}
+            className="max-w-4xl"
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
-            {lockMobileLogo && showLogoInHero ? (
-              <div
-                className="mb-6 flex min-h-[140px] w-full items-start justify-center"
-                style={{
-                  transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
-                  transformOrigin: "center top"
-                }}
-              >
-                <div className="w-full max-w-[240px] sm:max-w-[620px]">{logoMedia}</div>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-blue-100/85">
+                {design.hero.heroEyebrow}
               </div>
-            ) : null}
+              {updatedLabel ? (
+                <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-slate-300">
+                  Uppdaterad {updatedLabel}
+                </div>
+              ) : null}
+            </div>
 
-            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">{design.hero.heroEyebrow}</p>
             <h1
-              className="mt-3 text-[clamp(2.5rem,12vw,3.8rem)] font-semibold leading-[0.98] text-slate-100 sm:mt-4 sm:text-5xl lg:text-6xl"
+              className="mt-5 text-[clamp(3.2rem,10vw,6.8rem)] font-semibold leading-[0.92] text-slate-100"
               style={{
                 maxWidth: `${design.hero.titleMaxWidth}px`,
                 lineHeight: design.hero.titleLineHeight
               }}
             >
-              {settings.tagline}
+              <span className="bg-[linear-gradient(180deg,#ffffff_0%,#dfe8ff_44%,#9db8ff_100%)] bg-clip-text text-transparent">
+                {settings.tagline}
+              </span>
             </h1>
+
             <p
-              className="mt-5 text-base leading-relaxed text-slate-300 sm:mt-6 sm:text-lg"
+              className="mt-6 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg"
               style={{
                 maxWidth: `${design.hero.bodyMaxWidth}px`,
                 lineHeight: design.hero.bodyLineHeight
@@ -339,44 +446,65 @@ export function HomeHub({
               {settings.bio}
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-3 sm:mt-9">
-              <Link href="#home-feed" className="btn-primary-amber">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="#home-feed" className="btn-primary-amber gap-2">
                 {settings.heroCtaPrimary}
+                <ArrowDownRight size={16} />
               </Link>
-              <Link href="/projects" className="btn-secondary-dark">
+              <Link href="/projects" className="btn-secondary-dark gap-2">
                 {settings.heroCtaSecondary}
+                <ArrowUpRight size={16} />
               </Link>
             </div>
 
-            <div className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
-              {heroStats.map((item) => (
-                <div key={item.label} className="glass-panel min-w-0 rounded-2xl px-4 py-3">
-                  <p className="truncate text-xl font-semibold text-slate-100">{item.value}</p>
-                  <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
+            {socialLinks.length ? (
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                {socialLinks.map(({ key, href, label, Icon }) => (
+                  <Link
+                    key={key}
+                    href={href}
+                    target={href.startsWith("mailto:") ? undefined : "_blank"}
+                    rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
+                    className="glass-chip inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-200 transition hover:-translate-y-0.5"
+                  >
+                    <Icon size={15} />
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
+
+            <div className="mt-9 grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
+              <div className="glass-panel rounded-[2rem] p-5 sm:p-6">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/80">Art direction</p>
+                <p className="mt-3 max-w-2xl text-xl font-semibold leading-tight text-slate-100 sm:text-2xl">
+                  En mer fokuserad showcase med tydlig rytm, tätare typografi och mer självsäker komposition.
+                </p>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                  Målet är att varje sektion ska kännas kuraterad: mer ljus, bättre hierarki och mer övertygande materialitet i paneler, media och CTA-ytor.
+                </p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {topTags.map((tag) => (
+                    <span key={tag} className="glass-chip px-3 py-1.5 text-xs font-medium text-slate-200">
+                      #{tag}
+                    </span>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {heroStats.map((item) => (
+                  <div key={item.label} className="glass-panel min-w-0 rounded-[1.6rem] px-4 py-4">
+                    <p className="truncate text-[1.9rem] font-semibold leading-none text-slate-100">{item.value}</p>
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
-          {!lockMobileLogo && showLogoInHero ? (
-            <motion.article
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.58, delay: 0.16, ease: [0.2, 0.9, 0.2, 1] }}
-              className="order-1 relative flex items-start justify-center p-2 pt-0 sm:p-4 sm:pt-2 xl:order-2"
-            >
-              <div className="pointer-events-none absolute inset-0 rounded-[2.2rem] bg-[radial-gradient(circle_at_50%_45%,rgba(63,142,255,0.18),transparent_56%)] blur-[2px]" />
-              <div
-                className="relative flex min-h-[220px] w-full items-start justify-center p-1 pt-0 sm:min-h-[500px] sm:p-2 sm:pt-2"
-                style={{
-                  transform: `translate(${design.hero.logoOffsetX}px, ${design.hero.logoOffsetY}px) scale(${design.hero.logoScale})`,
-                  transformOrigin: "center top"
-                }}
-              >
-                {logoMedia}
-              </div>
-            </motion.article>
-          ) : null}
+          {design.hero.logoPlacement === "hero" ? logoShowcase : null}
         </div>
       </section>
 

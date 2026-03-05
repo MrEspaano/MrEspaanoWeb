@@ -18,11 +18,11 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start 80%", "end 20%"]
+    offset: ["start 78%", "end 18%"]
   });
 
   const clip = useTransform(scrollYProgress, [0, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
-  const shine = useTransform(scrollYProgress, [0, 1], [0.8, 1.16]);
+  const shine = useTransform(scrollYProgress, [0, 1], [0.84, 1.18]);
   const shineFilter = useMotionTemplate`brightness(${shine})`;
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
@@ -31,36 +31,53 @@ export function TextRevealSection({ text }: TextRevealSectionProps) {
 
   return (
     <section ref={sectionRef} className="section-shell py-16 sm:py-20" aria-label="Text reveal">
-      <div className="glass-elevated rounded-[2rem] p-6 sm:p-11">
-        <p className="text-[11px] uppercase tracking-[0.24em] text-blue-200/80 sm:text-xs sm:tracking-[0.28em]">Bonus moment</p>
+      <div className="glass-elevated overflow-hidden rounded-[2.2rem] p-6 sm:p-10 lg:p-12">
+        <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-10">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/78">Manifest</p>
+            <p className="mt-3 text-2xl font-semibold leading-tight text-slate-100 sm:text-3xl">
+              Rörelse som leder ögat, inte stjäl uppmärksamheten.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">
+              Textsektionen får en tydligare redaktionell roll med starkare typografi, mer rymd och en renare reveal.
+            </p>
 
-        <motion.p className="mt-4 max-w-none text-[clamp(2rem,11vw,3.2rem)] font-semibold leading-[1.08] text-slate-500 sm:mt-5 sm:max-w-[24ch] sm:text-5xl lg:text-6xl">
-          {words.map((word, index) => {
-            const start = (index / words.length) * 0.8;
-            const end = start + 0.22;
-            const localProgress = clamp((progress - start) / (end - start));
+            <div className="mt-6 rounded-[1.4rem] border border-white/10 bg-slate-950/34 p-4">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Reveal progress</p>
+              <p className="mt-2 text-3xl font-semibold text-slate-100">{Math.round(progress * 100)}%</p>
+            </div>
+          </div>
 
-            return (
-              <span
-                key={`${word}-${index}`}
-                className="inline-block"
-                style={{
-                  opacity: 0.66 + localProgress * 0.34,
-                  color: `rgba(226, 236, 255, ${0.42 + localProgress * 0.58})`,
-                  transform: `translateY(${(1 - localProgress) * 8}px)`,
-                  marginRight: "0.34em"
-                }}
-              >
-                {word}
-              </span>
-            );
-          })}
-        </motion.p>
+          <div>
+            <motion.p className="max-w-[18ch] text-[clamp(2.2rem,8vw,5.2rem)] font-semibold leading-[1.02] text-slate-500">
+              {words.map((word, index) => {
+                const start = (index / words.length) * 0.78;
+                const end = start + 0.24;
+                const localProgress = clamp((progress - start) / (end - start));
 
-        <motion.div
-          className="mt-8 h-[2px] rounded-full bg-gradient-to-r from-amber-400/90 via-orange-300/85 to-blue-400/75"
-          style={{ clipPath: clip, filter: shineFilter }}
-        />
+                return (
+                  <span
+                    key={`${word}-${index}`}
+                    className="inline-block"
+                    style={{
+                      opacity: 0.34 + localProgress * 0.66,
+                      color: `rgba(230, 238, 255, ${0.3 + localProgress * 0.7})`,
+                      transform: `translateY(${(1 - localProgress) * 10}px)`,
+                      marginRight: "0.32em"
+                    }}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
+            </motion.p>
+
+            <motion.div
+              className="mt-8 h-[3px] rounded-full bg-gradient-to-r from-amber-300 via-orange-300 to-blue-400"
+              style={{ clipPath: clip, filter: shineFilter }}
+            />
+          </div>
+        </div>
       </div>
     </section>
   );

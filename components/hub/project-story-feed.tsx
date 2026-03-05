@@ -39,47 +39,99 @@ export function ProjectStoryFeed({ projects, onOpenProject, title, subtitle }: P
     return (activeIndex + 1) / projects.length;
   }, [activeIndex, projects.length]);
 
+  const activeProject = projects[activeIndex] ?? null;
+
   return (
     <section ref={sectionRef} className="relative py-16 sm:py-20" aria-label={title ?? "Projektfeed"}>
       <div className="section-shell">
-        {(title || subtitle) && (
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
-            <div>
-              {title ? <h2 className="text-3xl font-semibold text-slate-100 sm:text-4xl">{title}</h2> : null}
-              {subtitle ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">{subtitle}</p> : null}
+        <div className="grid gap-6 xl:grid-cols-[340px_minmax(0,1fr)] xl:gap-8">
+          <div className="xl:sticky xl:top-24 xl:h-fit">
+            <div className="glass-elevated rounded-[2rem] p-5 sm:p-6">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/78">Story feed</p>
+              {title ? <h2 className="mt-3 text-3xl font-semibold text-slate-100 sm:text-4xl">{title}</h2> : null}
+              {subtitle ? (
+                <p className="mt-3 text-sm leading-relaxed text-slate-300 sm:text-base">{subtitle}</p>
+              ) : null}
+
+              <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-slate-950/42 p-4">
+                <div className="flex items-end justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Aktiv position</p>
+                    <p className="mt-2 text-3xl font-semibold text-slate-100">
+                      {String(Math.min(activeIndex + 1, Math.max(projects.length, 1))).padStart(2, "0")}
+                    </p>
+                  </div>
+                  <div className="glass-chip px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-slate-200">
+                    {projects.length} case
+                  </div>
+                </div>
+
+                <div className="mt-5 h-1.5 rounded-full bg-slate-800/90">
+                  <motion.div
+                    className="h-full rounded-full bg-gradient-to-r from-amber-300 via-orange-300 to-blue-400"
+                    animate={{ width: `${activeProgress * 100}%` }}
+                    transition={{ duration: 0.3, ease: [0.2, 0.9, 0.2, 1] }}
+                  />
+                </div>
+
+                {activeProject ? (
+                  <div className="mt-5">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-blue-100/72">Nu i fokus</p>
+                    <p className="mt-2 text-lg font-semibold text-slate-100">{activeProject.title}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-300">{activeProject.shortDescription}</p>
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="mt-5 space-y-2.5">
+                {projects.slice(0, 5).map((project, index) => (
+                  <div
+                    key={project.id}
+                    className={`rounded-[1.2rem] border px-4 py-3 transition ${
+                      index === activeIndex
+                        ? "border-blue-300/30 bg-blue-500/10 text-slate-100"
+                        : "border-white/8 bg-slate-950/28 text-slate-400"
+                    }`}
+                  >
+                    <p className="text-[11px] uppercase tracking-[0.18em]">{String(index + 1).padStart(2, "0")}</p>
+                    <p className="mt-1 text-sm font-medium">{project.title}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <p className="glass-chip px-4 py-2 text-xs uppercase tracking-[0.17em] text-slate-300">Scroll-driven</p>
-          </div>
-        )}
-
-        <div className="glass-elevated relative rounded-[2rem] p-3 sm:p-4">
-          <div className="absolute right-3 top-8 hidden h-[84%] w-px overflow-hidden rounded-full bg-slate-700/85 lg:block">
-            <motion.div
-              className="w-full origin-top bg-gradient-to-b from-amber-400/90 via-orange-400/80 to-blue-400/80"
-              animate={{ height: `${activeProgress * 100}%` }}
-              transition={{ duration: 0.32, ease: [0.2, 0.9, 0.2, 1] }}
-            />
           </div>
 
-          <div className="space-y-5 [scroll-snap-type:y_proximity]">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0.42, y: 26 }}
-                animate={{
-                  opacity: index === activeIndex ? 1 : 0.84,
-                  y: index === activeIndex ? 0 : 10
-                }}
-                transition={{ duration: 0.36, ease: [0.2, 0.9, 0.2, 1] }}
-              >
-                <ProjectCard
-                  project={project}
-                  active={index === activeIndex}
-                  onOpen={onOpenProject}
-                  emphasize={index <= 1}
-                />
-              </motion.div>
-            ))}
+          <div className="glass-elevated relative rounded-[2rem] p-3 sm:p-4">
+            {projects.length ? (
+              <div className="space-y-5 [scroll-snap-type:y_proximity]">
+                {projects.map((project, index) => (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0.42, y: 26 }}
+                    animate={{
+                      opacity: index === activeIndex ? 1 : 0.84,
+                      y: index === activeIndex ? 0 : 10
+                    }}
+                    transition={{ duration: 0.36, ease: [0.2, 0.9, 0.2, 1] }}
+                  >
+                    <ProjectCard
+                      project={project}
+                      active={index === activeIndex}
+                      onOpen={onOpenProject}
+                      emphasize={index <= 1}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="glass-panel rounded-[1.75rem] px-6 py-12 text-center">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-blue-100/78">Empty state</p>
+                <h3 className="mt-3 text-2xl font-semibold text-slate-100">Ingen träff för nuvarande filter</h3>
+                <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                  Justera sökningen eller filtren för att visa projekt i feeden igen.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

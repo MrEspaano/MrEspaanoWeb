@@ -9,6 +9,8 @@
   --accent: 33 95% 57%;
   --card: 223 38% 12%;
   --line: 220 36% 22%;
+  --glow-blue: rgba(70, 143, 255, 0.34);
+  --glow-amber: rgba(255, 164, 66, 0.28);
 }
 
 * {
@@ -20,15 +22,19 @@ body {
   max-width: 100vw;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   position: relative;
   min-height: 100vh;
   font-family: var(--body-font, "Manrope"), "Avenir Next", "Segoe UI", "SF Pro Text", sans-serif;
-  background-image:
-    radial-gradient(circle at 5% 10%, rgba(43, 106, 255, 0.24), transparent 48%),
-    radial-gradient(circle at 96% 6%, rgba(255, 121, 41, 0.24), transparent 42%),
-    radial-gradient(circle at 58% 88%, rgba(28, 157, 255, 0.22), transparent 56%),
-    linear-gradient(160deg, #070b16 0%, #0c1226 55%, #0f172d 100%);
+  background:
+    radial-gradient(circle at 8% 14%, rgba(66, 126, 255, 0.24), transparent 34%),
+    radial-gradient(circle at 88% 10%, rgba(255, 144, 54, 0.22), transparent 28%),
+    radial-gradient(circle at 52% 88%, rgba(41, 164, 255, 0.15), transparent 34%),
+    linear-gradient(160deg, #050913 0%, #09101f 38%, #0c1629 62%, #07111f 100%);
   background-attachment: fixed;
 }
 
@@ -38,22 +44,45 @@ body::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 8% 22%, rgba(61, 124, 232, 0.2), transparent 38%),
-    radial-gradient(ellipse at 85% 17%, rgba(255, 148, 54, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.03)),
     linear-gradient(
-      140deg,
-      rgba(255, 255, 255, 0.02) 12%,
-      transparent 14%,
-      transparent 44%,
-      rgba(255, 255, 255, 0.03) 46%,
-      transparent 48%,
-      transparent 76%,
-      rgba(255, 255, 255, 0.02) 78%,
-      transparent 80%
+      135deg,
+      rgba(255, 255, 255, 0.032) 0,
+      rgba(255, 255, 255, 0.032) 1px,
+      transparent 1px,
+      transparent 84px
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 120px
     );
+  opacity: 0.62;
   mix-blend-mode: screen;
-  opacity: 0.88;
   z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 100%),
+    radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 100%);
+  background-size: 168px 168px, 224px 224px;
+  opacity: 0.18;
+  z-index: 0;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
 }
 
 h1,
@@ -63,13 +92,18 @@ h4,
 h5,
 h6 {
   font-family: var(--display-font, "Sora"), "Syne", "Avenir Next Condensed", "Segoe UI", sans-serif;
-  letter-spacing: -0.022em;
-  line-height: 1.03;
+  letter-spacing: -0.028em;
+  line-height: 1.02;
 }
 
 ::selection {
   background-color: rgba(255, 175, 92, 0.38);
   color: #0f1526;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(255, 204, 120, 0.8);
+  outline-offset: 2px;
 }
 
 ::-webkit-scrollbar {
@@ -88,76 +122,100 @@ h6 {
 @layer components {
   .panel-solid {
     @apply relative overflow-hidden border bg-slate-950;
-    border-color: rgba(71, 85, 105, 0.8);
-    background-color: rgba(2, 6, 23, 0.78);
+    border-color: rgba(86, 102, 130, 0.74);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 28%),
+      linear-gradient(165deg, rgba(4, 10, 24, 0.96), rgba(8, 16, 34, 0.92));
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      inset 0 -1px 0 rgba(14, 25, 50, 0.35),
-      0 24px 64px rgba(2, 8, 24, 0.46);
+      inset 0 -1px 0 rgba(8, 18, 36, 0.42),
+      0 30px 80px rgba(2, 8, 24, 0.48);
   }
 
   .panel-elevated {
     @apply relative overflow-hidden border bg-slate-900;
-    border-color: rgba(100, 116, 139, 0.85);
-    background-color: rgba(15, 23, 42, 0.86);
+    border-color: rgba(108, 125, 154, 0.78);
+    background:
+      radial-gradient(circle at top left, rgba(69, 139, 255, 0.12), transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%),
+      linear-gradient(160deg, rgba(13, 22, 44, 0.94), rgba(9, 16, 31, 0.9));
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 -1px 0 rgba(12, 22, 44, 0.48),
-      0 28px 72px rgba(3, 8, 23, 0.56);
+      inset 0 -1px 0 rgba(11, 22, 44, 0.48),
+      0 34px 90px rgba(2, 8, 23, 0.58);
   }
 
   .panel-interactive {
-    @apply relative overflow-hidden border bg-slate-950 transition duration-300 ease-out hover:-translate-y-0.5;
-    border-color: rgba(71, 85, 105, 0.8);
-    background-color: rgba(2, 6, 23, 0.78);
+    @apply relative overflow-hidden border bg-slate-950 transition duration-300 ease-out hover:-translate-y-1;
+    border-color: rgba(86, 102, 130, 0.74);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 26%),
+      linear-gradient(170deg, rgba(4, 10, 24, 0.96), rgba(11, 20, 37, 0.9));
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      0 28px 72px rgba(3, 8, 23, 0.62);
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 28px 72px rgba(3, 8, 23, 0.58);
   }
 
   .panel-interactive:hover {
-    border-color: rgba(100, 116, 139, 0.9);
-    background-color: rgba(15, 23, 42, 0.82);
+    border-color: rgba(124, 144, 176, 0.92);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 34px 90px rgba(3, 8, 23, 0.68),
+      0 0 0 1px rgba(255, 255, 255, 0.03);
   }
 
   .btn-primary-amber {
-    @apply inline-flex items-center justify-center rounded-full border bg-amber-400 px-5 py-2.5 text-sm font-semibold text-slate-900 transition duration-200;
-    border-color: rgba(254, 215, 170, 0.7);
-    background-color: rgba(251, 191, 36, 0.92);
+    @apply inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold text-slate-950 transition duration-200;
+    border-color: rgba(255, 220, 180, 0.86);
+    background:
+      linear-gradient(180deg, rgba(255, 240, 210, 0.9), rgba(255, 190, 74, 0.98) 28%, rgba(244, 148, 48, 0.96));
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.55),
-      0 16px 30px rgba(255, 149, 38, 0.26);
+      inset 0 1px 0 rgba(255, 255, 255, 0.62),
+      0 18px 36px rgba(255, 149, 38, 0.28),
+      0 0 0 1px rgba(255, 214, 163, 0.22);
   }
 
   .btn-primary-amber:hover {
     transform: translateY(-1px);
-    background-color: rgba(251, 165, 74, 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.72),
+      0 22px 42px rgba(255, 149, 38, 0.34),
+      0 0 0 1px rgba(255, 214, 163, 0.28);
   }
 
   .btn-secondary-dark {
-    @apply inline-flex items-center justify-center rounded-full border bg-slate-900 px-5 py-2.5 text-sm font-semibold text-slate-100 transition duration-200;
-    border-color: rgba(100, 116, 139, 0.8);
-    background-color: rgba(15, 23, 42, 0.72);
+    @apply inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm font-semibold text-slate-100 transition duration-200;
+    border-color: rgba(112, 130, 160, 0.76);
+    background:
+      linear-gradient(180deg, rgba(28, 40, 68, 0.94), rgba(13, 20, 37, 0.9));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 14px 28px rgba(2, 8, 24, 0.32);
   }
 
   .btn-secondary-dark:hover {
     transform: translateY(-1px);
-    border-color: rgba(148, 163, 184, 0.9);
-    background-color: rgba(24, 36, 66, 0.92);
+    border-color: rgba(153, 170, 198, 0.86);
+    background:
+      linear-gradient(180deg, rgba(33, 48, 82, 0.98), rgba(18, 27, 49, 0.94));
   }
 
   .badge-status {
     @apply rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em];
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
   .glass-panel {
-    @apply relative overflow-hidden border bg-slate-950 backdrop-blur-[2px];
-    border-color: rgba(71, 85, 105, 0.8);
-    background-color: rgba(2, 6, 23, 0.78);
+    @apply relative overflow-hidden border bg-slate-950 backdrop-blur-md;
+    border-color: rgba(86, 102, 130, 0.72);
+    background:
+      radial-gradient(circle at top left, rgba(74, 141, 255, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%),
+      rgba(5, 10, 23, 0.7);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      inset 0 -1px 0 rgba(11, 22, 42, 0.5),
-      0 18px 44px rgba(2, 8, 23, 0.48);
+      inset 0 -1px 0 rgba(11, 22, 42, 0.44),
+      0 20px 54px rgba(2, 8, 23, 0.46);
   }
 
   .glass-panel::before {
@@ -165,20 +223,22 @@ h6 {
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 26%);
-    opacity: 1;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), transparent 22%);
     pointer-events: none;
-    z-index: 0;
   }
 
   .glass-elevated {
-    @apply relative overflow-hidden border bg-slate-900 backdrop-blur-[3px];
-    border-color: rgba(100, 116, 139, 0.85);
-    background-color: rgba(15, 23, 42, 0.86);
+    @apply relative overflow-hidden border bg-slate-900 backdrop-blur-xl;
+    border-color: rgba(108, 125, 154, 0.78);
+    background:
+      radial-gradient(circle at top left, rgba(69, 139, 255, 0.12), transparent 26%),
+      radial-gradient(circle at top right, rgba(255, 158, 71, 0.1), transparent 22%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 22%),
+      rgba(9, 15, 29, 0.8);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.11),
-      inset 0 -1px 0 rgba(11, 22, 44, 0.52),
-      0 26px 68px rgba(2, 8, 23, 0.58);
+      inset 0 -1px 0 rgba(11, 22, 44, 0.54),
+      0 36px 92px rgba(2, 8, 23, 0.56);
   }
 
   .glass-elevated::after {
@@ -187,7 +247,7 @@ h6 {
     inset: 0;
     background:
       radial-gradient(circle at 18% 8%, rgba(68, 135, 255, 0.16), transparent 30%),
-      radial-gradient(circle at 88% 14%, rgba(255, 143, 41, 0.14), transparent 26%);
+      radial-gradient(circle at 88% 14%, rgba(255, 143, 41, 0.12), transparent 26%);
     pointer-events: none;
     z-index: 0;
   }
@@ -199,42 +259,66 @@ h6 {
   }
 
   .glass-chip {
-    @apply rounded-full border bg-slate-900 text-slate-200 backdrop-blur-[1px] transition;
-    border-color: rgba(71, 85, 105, 0.9);
-    background-color: rgba(15, 23, 42, 0.86);
+    @apply rounded-full border text-slate-200 backdrop-blur-md transition;
+    border-color: rgba(108, 125, 154, 0.7);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 36%),
+      rgba(15, 23, 42, 0.72);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      0 12px 26px rgba(3, 8, 20, 0.34);
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 12px 26px rgba(3, 8, 20, 0.28);
+  }
+
+  .glass-chip:hover {
+    border-color: rgba(156, 173, 201, 0.86);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 36%),
+      rgba(21, 31, 57, 0.84);
   }
 
   .glass-input {
-    @apply rounded-2xl border bg-slate-900 text-slate-100 placeholder:text-slate-400 backdrop-blur-[2px];
-    border-color: rgba(71, 85, 105, 0.85);
-    background-color: rgba(15, 23, 42, 0.8);
+    @apply rounded-2xl border text-slate-100 placeholder:text-slate-400 backdrop-blur-md transition;
+    border-color: rgba(86, 102, 130, 0.82);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%),
+      rgba(14, 21, 39, 0.76);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 12px 26px rgba(3, 8, 20, 0.3);
+      0 12px 26px rgba(3, 8, 20, 0.28);
+  }
+
+  .glass-input:focus {
+    border-color: rgba(255, 205, 127, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 4px rgba(255, 178, 91, 0.1),
+      0 20px 36px rgba(3, 8, 20, 0.34);
   }
 
   .admin-surface {
-    @apply relative overflow-hidden border bg-slate-900 backdrop-blur-[3px];
-    border-color: rgba(100, 116, 139, 0.85);
-    background-color: rgba(15, 23, 42, 0.86);
+    @apply relative overflow-hidden border bg-slate-900 backdrop-blur-xl;
+    border-color: rgba(108, 125, 154, 0.82);
+    background:
+      radial-gradient(circle at top left, rgba(69, 139, 255, 0.11), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 22%),
+      rgba(9, 15, 29, 0.82);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.11),
       inset 0 -1px 0 rgba(11, 22, 44, 0.52),
       0 26px 68px rgba(2, 8, 23, 0.56);
   }
 
   .admin-subsurface {
     @apply rounded-2xl border bg-slate-900;
-    border-color: rgba(71, 85, 105, 0.8);
-    background-color: rgba(15, 23, 42, 0.58);
+    border-color: rgba(86, 102, 130, 0.78);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 24%),
+      rgba(15, 23, 42, 0.5);
   }
 
   .section-shell {
     @apply mx-auto w-full px-4 sm:px-6 lg:px-10;
-    max-width: var(--hub-max-width, 1280px);
+    max-width: var(--hub-max-width, 1360px);
   }
 
   .hover-lift {
@@ -243,10 +327,12 @@ h6 {
 }
 
 .hub-root {
-  --hub-max-width: 1280px;
+  --hub-max-width: 1360px;
   --hub-media-saturation: 1.22;
   --hub-media-contrast: 1.17;
   --hub-media-brightness: 1.06;
+  --hub-accent-strength: 1;
+  --hub-panel-contrast: 1;
   font-family: var(--hub-body-font, var(--body-font, "Manrope")), "Avenir Next", "Segoe UI", "SF Pro Text", sans-serif;
   color: #e6edf9;
 }

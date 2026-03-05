@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowLeft, Search } from "lucide-react";
 import { CSSProperties, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
@@ -121,39 +122,59 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
       }
     >
       <section className="section-shell">
-        <div className="glass-elevated rounded-[2rem] p-6 sm:p-8">
-          <p className="text-xs uppercase tracking-[0.28em] text-blue-200/80">Projektöversikt</p>
-          <h1 className="mt-3 text-4xl font-semibold leading-tight text-slate-100 sm:text-5xl">{settings.displayName} / Projekt</h1>
-          <p className="mt-4 max-w-3xl text-slate-300">
-            Filtrera efter kategori och tags, sök i titel och metadata, och öppna projekt i modal eller full route.
-          </p>
+        <div className="glass-elevated overflow-hidden rounded-[2.2rem] p-6 sm:p-8">
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/78">Project index</p>
+              <h1 className="mt-3 text-[clamp(2.4rem,6vw,5rem)] font-semibold leading-[0.94] text-slate-100">
+                {settings.displayName} / Projekt
+              </h1>
+              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                En mer redaktionell översikt för sök, filtrering och snabb projektgranskning. Samma visuella språk som
+                startsidan, men med tydligare arbetsyta för browsing.
+              </p>
 
-          <div className="mt-7 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
-            <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Sök</span>
-              <input
-                value={query}
-                onChange={(event) => updateSearchParams({ q: event.target.value || null, project: null })}
-                placeholder="Sök på titel eller tag..."
-                className="glass-input w-full px-4 py-3 text-sm focus:border-amber-300/70 focus:outline-none"
-              />
-            </label>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Link href="/" className="btn-secondary-dark gap-2 px-4 py-2 text-sm">
+                  <ArrowLeft size={16} />
+                  Till startsidan
+                </Link>
+                <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-slate-300">
+                  {filtered.length} matchande projekt
+                </div>
+              </div>
+            </div>
 
-            <label className="block">
-              <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Sortera</span>
-              <select
-                value={sort}
-                onChange={(event) => updateSearchParams({ sort: event.target.value, project: null })}
-                className="glass-input w-full px-4 py-3 text-sm focus:border-amber-300/70 focus:outline-none"
-              >
-                <option value="newest">Nyast först</option>
-                <option value="oldest">Äldst först</option>
-                <option value="status">Status</option>
-              </select>
-            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Sök</span>
+                <div className="glass-input flex items-center gap-3 px-4 py-3">
+                  <Search size={16} className="text-slate-400" />
+                  <input
+                    value={query}
+                    onChange={(event) => updateSearchParams({ q: event.target.value || null, project: null })}
+                    placeholder="Titel, beskrivning eller tag..."
+                    className="w-full bg-transparent text-sm outline-none"
+                  />
+                </div>
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">Sortera</span>
+                <select
+                  value={sort}
+                  onChange={(event) => updateSearchParams({ sort: event.target.value, project: null })}
+                  className="glass-input w-full px-4 py-3 text-sm focus:outline-none"
+                >
+                  <option value="newest">Nyast först</option>
+                  <option value="oldest">Äldst först</option>
+                  <option value="status">Status</option>
+                </select>
+              </label>
+            </div>
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-7 flex flex-wrap gap-2">
             {(["all", "app", "game", "site"] as ProjectCategoryFilter[]).map((value) => {
               const label = value === "all" ? "Alla" : CATEGORY_LABELS[value];
               return (
@@ -165,7 +186,7 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
                     "glass-chip px-4 py-2 text-sm font-semibold transition",
                     value === category
                       ? "border-amber-300/70 bg-amber-400/85 text-slate-900"
-                      : "text-slate-200 hover:-translate-y-0.5 hover:border-slate-400/90 hover:bg-slate-800/95"
+                      : "text-slate-200 hover:-translate-y-0.5"
                   )}
                 >
                   {label}
@@ -187,20 +208,13 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
                     "glass-chip px-3 py-1.5 text-xs font-medium transition",
                     selected
                       ? "border-blue-300/45 bg-blue-500/18 text-blue-100"
-                      : "text-slate-300 hover:-translate-y-0.5 hover:border-slate-400/90 hover:bg-slate-800/95"
+                      : "text-slate-300 hover:-translate-y-0.5"
                   )}
                 >
                   #{tag}
                 </button>
               );
             })}
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <p className="text-sm text-slate-300">{filtered.length} projekt matchar filtreringen</p>
-            <Link href="/" className="btn-secondary-dark px-4 py-1.5 text-xs">
-              Till startsidan
-            </Link>
           </div>
         </div>
       </section>
@@ -209,7 +223,7 @@ export function ProjectsExplorer({ projects, settings }: ProjectsExplorerProps) 
         projects={filtered}
         onOpenProject={(slug) => updateSearchParams({ project: slug })}
         title="Projekt-feed"
-        subtitle="Scrollen styr progressionen och aktivt kort får tydlig prioritet med skarpare kontrast och snabbare transitions."
+        subtitle="Aktivt kort får prioritet med mer luft, bättre kontrast och tydligare informationsrytm genom hela flödet."
       />
 
       <ProjectDetailModal

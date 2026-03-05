@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { ProjectDetailSurface } from "@/components/hub/project-detail-surface";
 import { getProjectBySlug } from "@/lib/supabase/queries";
 
@@ -18,9 +19,12 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
   return (
     <main className="relative min-h-screen pb-20 pt-10 sm:pt-16">
       <div className="section-shell mb-8">
-        <Link href="/projects" className="btn-secondary-dark px-4 py-2 text-sm">
-          Tillbaka till projekt
-        </Link>
+        <div className="glass-elevated rounded-[1.8rem] p-4 sm:p-5">
+          <Link href="/projects" className="btn-secondary-dark inline-flex gap-2 px-4 py-2 text-sm">
+            <ArrowLeft size={16} />
+            Tillbaka till projekt
+          </Link>
+        </div>
       </div>
       <div className="section-shell">
         <ProjectDetailSurface project={project} mode="route" />
