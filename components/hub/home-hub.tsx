@@ -11,6 +11,8 @@ import { ProjectDetailModal } from "@/components/hub/project-detail-modal";
 import { ProjectStoryFeed } from "@/components/hub/project-story-feed";
 import { StickyCategoryMorph } from "@/components/hub/sticky-category-morph";
 import { TextRevealSection } from "@/components/hub/text-reveal-section";
+import { LiquidButton } from "@/components/ui/liquid-glass-button";
+import { WebGLShader } from "@/components/ui/web-gl-shader";
 import { normalizeHubDesignConfig, resolveHubDesignForPreset } from "@/lib/design-config";
 import { cn } from "@/lib/utils";
 
@@ -410,96 +412,115 @@ export function HomeHub({
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.08, ease: [0.2, 0.9, 0.2, 1] }}
-            className="max-w-4xl"
+            className="relative overflow-hidden rounded-[2.4rem] border border-white/10 bg-[linear-gradient(180deg,rgba(7,14,28,0.82),rgba(4,9,20,0.94))] p-6 shadow-[0_40px_120px_rgba(2,8,23,0.45)] sm:p-8 lg:p-10"
             style={{ maxWidth: `${design.hero.maxWidth}px` }}
           >
-            <div className="flex flex-wrap items-center gap-2.5">
-              <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-blue-100/85">
-                {design.hero.heroEyebrow}
-              </div>
-              {updatedLabel ? (
-                <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-slate-300">
-                  Uppdaterad {updatedLabel}
+            <div className="absolute inset-0">
+              <WebGLShader />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.09),transparent_34%),linear-gradient(180deg,rgba(3,8,23,0.2),rgba(3,8,23,0.88)_64%,rgba(3,8,23,0.98))]" />
+            </div>
+
+            <div className="absolute -left-16 top-8 h-40 w-40 rounded-full bg-blue-500/20 blur-[80px]" />
+            <div className="absolute right-0 top-0 h-48 w-48 rounded-full bg-amber-400/15 blur-[96px]" />
+
+            <div className="relative">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-blue-100/85">
+                  {design.hero.heroEyebrow}
                 </div>
-              ) : null}
-            </div>
-
-            <h1
-              className="mt-5 text-[clamp(3.2rem,10vw,6.8rem)] font-semibold leading-[0.92] text-slate-100"
-              style={{
-                maxWidth: `${design.hero.titleMaxWidth}px`,
-                lineHeight: design.hero.titleLineHeight
-              }}
-            >
-              <span className="bg-[linear-gradient(180deg,#ffffff_0%,#dfe8ff_44%,#9db8ff_100%)] bg-clip-text text-transparent">
-                {settings.tagline}
-              </span>
-            </h1>
-
-            <p
-              className="mt-6 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg"
-              style={{
-                maxWidth: `${design.hero.bodyMaxWidth}px`,
-                lineHeight: design.hero.bodyLineHeight
-              }}
-            >
-              {settings.bio}
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="#home-feed" className="btn-primary-amber gap-2">
-                {settings.heroCtaPrimary}
-                <ArrowDownRight size={16} />
-              </Link>
-              <Link href="/projects" className="btn-secondary-dark gap-2">
-                {settings.heroCtaSecondary}
-                <ArrowUpRight size={16} />
-              </Link>
-            </div>
-
-            {socialLinks.length ? (
-              <div className="mt-6 flex flex-wrap gap-2.5">
-                {socialLinks.map(({ key, href, label, Icon }) => (
-                  <Link
-                    key={key}
-                    href={href}
-                    target={href.startsWith("mailto:") ? undefined : "_blank"}
-                    rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
-                    className="glass-chip inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-200 transition hover:-translate-y-0.5"
-                  >
-                    <Icon size={15} />
-                    {label}
-                  </Link>
-                ))}
+                <div className="glass-chip flex items-center gap-2 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-emerald-200">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  </span>
+                  Available for new projects
+                </div>
+                {updatedLabel ? (
+                  <div className="glass-chip px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-slate-300">
+                    Uppdaterad {updatedLabel}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
 
-            <div className="mt-9 grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
-              <div className="glass-panel rounded-[2rem] p-5 sm:p-6">
-                <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/80">Art direction</p>
-                <p className="mt-3 max-w-2xl text-xl font-semibold leading-tight text-slate-100 sm:text-2xl">
-                  En mer fokuserad showcase med tydlig rytm, tätare typografi och mer självsäker komposition.
-                </p>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
-                  Målet är att varje sektion ska kännas kuraterad: mer ljus, bättre hierarki och mer övertygande materialitet i paneler, media och CTA-ytor.
-                </p>
+              <h1
+                className="mt-6 max-w-[12ch] text-[clamp(3.4rem,10vw,7.2rem)] font-extrabold leading-[0.88] text-slate-100"
+                style={{
+                  maxWidth: `${Math.min(design.hero.titleMaxWidth, 760)}px`,
+                  lineHeight: design.hero.titleLineHeight
+                }}
+              >
+                <span className="bg-[linear-gradient(180deg,#ffffff_0%,#eef4ff_38%,#c2d3ff_68%,#8fb0ff_100%)] bg-clip-text text-transparent">
+                  {settings.tagline}
+                </span>
+              </h1>
 
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {topTags.map((tag) => (
-                    <span key={tag} className="glass-chip px-3 py-1.5 text-xs font-medium text-slate-200">
-                      #{tag}
-                    </span>
+              <p
+                className="mt-6 max-w-2xl text-sm leading-relaxed text-slate-200/90 sm:text-base lg:text-lg"
+                style={{
+                  maxWidth: `${design.hero.bodyMaxWidth}px`,
+                  lineHeight: design.hero.bodyLineHeight
+                }}
+              >
+                {settings.bio}
+              </p>
+
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                <LiquidButton asChild size="xl" className="border border-white/20 text-white">
+                  <Link href="#home-feed">
+                    {settings.heroCtaPrimary}
+                    <ArrowDownRight size={18} />
+                  </Link>
+                </LiquidButton>
+                <Link href="/projects" className="btn-secondary-dark gap-2">
+                  {settings.heroCtaSecondary}
+                  <ArrowUpRight size={16} />
+                </Link>
+              </div>
+
+              {socialLinks.length ? (
+                <div className="mt-6 flex flex-wrap gap-2.5">
+                  {socialLinks.map(({ key, href, label, Icon }) => (
+                    <Link
+                      key={key}
+                      href={href}
+                      target={href.startsWith("mailto:") ? undefined : "_blank"}
+                      rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
+                      className="glass-chip inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-200 transition hover:-translate-y-0.5"
+                    >
+                      <Icon size={15} />
+                      {label}
+                    </Link>
                   ))}
                 </div>
-              </div>
+              ) : null}
 
-              <div className="grid grid-cols-2 gap-3">
-                {heroStats.map((item) => (
-                  <div key={item.label} className="glass-panel min-w-0 rounded-[1.6rem] px-4 py-4">
-                    <p className="truncate text-[1.9rem] font-semibold leading-none text-slate-100">{item.value}</p>
-                    <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
+              <div className="mt-10 grid gap-4 lg:grid-cols-[minmax(0,1.06fr)_minmax(280px,0.94fr)]">
+                <div className="glass-panel rounded-[2rem] p-5 sm:p-6">
+                  <p className="text-[11px] uppercase tracking-[0.24em] text-blue-100/80">Design is everything</p>
+                  <p className="mt-3 max-w-2xl text-xl font-semibold leading-tight text-slate-100 sm:text-2xl">
+                    Skarpare berättande, djupare materialitet och en hero som känns byggd för att sälja in ditt bästa arbete direkt.
+                  </p>
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                    Shader-bakgrunden skapar rörelse, medan CTA och informationskort håller upplevelsen tydlig och användbar på både mobil och desktop.
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {topTags.map((tag) => (
+                      <span key={tag} className="glass-chip px-3 py-1.5 text-xs font-medium text-slate-200">
+                        #{tag}
+                      </span>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {heroStats.map((item) => (
+                    <div key={item.label} className="glass-panel min-w-0 rounded-[1.6rem] px-4 py-4">
+                      <p className="truncate text-[1.9rem] font-semibold leading-none text-slate-100">{item.value}</p>
+                      <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
